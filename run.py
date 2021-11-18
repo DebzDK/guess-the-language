@@ -32,11 +32,13 @@ input_mode = InputMode.USER.value
 difficulty_level = Difficulty.EASY.value
 enable_hints = True
 
+
 def display_title():
     """
     Prints title to console
     """
     print(TITLE)
+
 
 def display_main_menu():
     """
@@ -45,6 +47,7 @@ def display_main_menu():
     print('-- PLAY [1]')
     print('-- GAME OPTIONS [2]')
     print('-- QUIT [Q]')
+
 
 def process_main_menu_selection(input):
     """
@@ -58,12 +61,14 @@ def process_main_menu_selection(input):
     elif quit_game(input):
         raise SystemExit()
 
+
 def display_game_options_menu():
     """
     Prints game manu options to console
     """
     game_options_str = '---- Input mode [1]: {}\n---- Difficulty [2]: {}\n---- Enable hints [3]: {}\n-- Return to main menu [4]'
     print(game_options_str.format(InputMode.get_description(input_mode), Difficulty.get_description(difficulty_level), enable_hints))
+
 
 def process_game_option(input):
     """
@@ -83,6 +88,7 @@ def process_game_option(input):
         display_main_menu()
         return True
 
+
 def await_input(prompt, execute = None, update_terminal = None):
     """
     Awaits input, gives a prompt, executes a function based on input
@@ -98,6 +104,7 @@ def await_input(prompt, execute = None, update_terminal = None):
                 break
         else:
             break
+
 
 def start_game():
     """
@@ -118,6 +125,7 @@ def start_game():
 
     print(f'\nYou guessed {num_of_correct_answers}/{num_of_questions_asked} languages correctly...\nBetter luck next time.\n')
 
+
 def validate_sentence(input):
     """
     Validates sentences to ensure it adheres to the character limit for the current difficulty level
@@ -128,6 +136,7 @@ def validate_sentence(input):
         return False
     return True
 
+
 def is_game_over(question_count):
     """
     Returns True if the user has been asked the total number of questions for
@@ -135,8 +144,10 @@ def is_game_over(question_count):
     """
     return question_count == NUMBER_OF_QUESTIONS_PER_DIFFICULTY_LEVEL[difficulty_level] 
 
+
 def quit_game(input):
     return input.lower() in QUIT_COMMANDS
+
 
 def main():
     """
@@ -145,5 +156,6 @@ def main():
     display_title()
     display_main_menu()
     await_input('Select menu option: ', process_main_menu_selection)
+
 
 main()
