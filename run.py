@@ -29,6 +29,8 @@ input_mode = InputMode.USER.value
 difficulty = Difficulty.EASY.value
 enable_hints = True
 
+quit_commands = ['q', 'quit']
+
 def display_title():
     """
     Prints title to console
@@ -41,7 +43,7 @@ def display_main_menu():
     """
     print('-- PLAY [1]')
     print('-- GAME OPTIONS [2]')
-    print('-- QUIT [3]')
+    print('-- QUIT [Q]')
 
 def process_main_menu_selection(input):
     """
@@ -50,6 +52,8 @@ def process_main_menu_selection(input):
     if input == '2':
         display_game_options_menu()
         await_input('Select game option: ', process_game_option, display_game_options_menu)
+    elif quit_game(input):
+        raise SystemExit()
 
 def display_game_options_menu():
     """
@@ -88,6 +92,9 @@ def await_input(prompt, execute, update_terminal = None):
             update_terminal()
         elif stopLoop == True:
             break
+
+def quit_game(input):
+    return input.lower() in quit_commands
 
 def main():
     """
