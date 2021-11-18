@@ -74,7 +74,7 @@ def process_game_option(input):
     if input == '1':
         input_mode = input_mode + 1 if input_mode < 3 else 1
     elif input == '2':
-        difficulty = difficulty + 1 if difficulty < 4 else 1
+        difficulty = difficulty + 1 if difficulty < 3 else 1
     elif input == '3':
         enable_hints = not enable_hints
     elif input == '4':
