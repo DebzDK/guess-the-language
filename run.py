@@ -33,7 +33,6 @@ def display_title():
     """
     Prints title to console
     """
-    global title
     print(title)
 
 def display_main_menu():
