@@ -40,8 +40,14 @@ def display_main_menu():
     """
     Prints main manu options to console
     """
-    print('-- PLAY')
-    print('-- GAME OPTIONS')
+    print('-- PLAY [1]')
+    print('-- GAME OPTIONS [2]')
+
+    while True:
+        userInput = input('Select menu option: ')
+
+        if userInput == '2':
+            display_game_options_menu()
 
 def display_game_options_menu():
     """
