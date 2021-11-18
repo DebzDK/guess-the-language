@@ -56,6 +56,5 @@ def main():
     """
     display_title()
     display_main_menu()
-    display_game_options_menu()
 
 main()
