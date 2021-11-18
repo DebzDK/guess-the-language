@@ -48,7 +48,7 @@ def display_game_options_menu():
     Prints game manu options to console
     """
     game_options_str = '---- Input mode: {}\n---- Difficulty: {}\n---- Enable hints: {}'
-    print(game_options_str.format(InputMode(input_mode).name, Difficulty(difficulty).name, enable_hints))
+    print(game_options_str.format(InputMode.get_description(input_mode), Difficulty.get_description(difficulty), enable_hints))
 
 def main():
     """
