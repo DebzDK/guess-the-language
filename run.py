@@ -81,17 +81,20 @@ def process_game_option(input):
         display_main_menu()
         return True
 
-def await_input(prompt, execute, update_terminal = None):
+def await_input(prompt, execute = None, update_terminal = None):
     """
     Awaits input, gives a prompt, executes a function based on input
     and calls a function to update the terminal if provided
     """
     while True:
         userInput = input(prompt)
-        stopLoop = execute(userInput)
-        if (not stopLoop and update_terminal != None):
-            update_terminal()
-        elif stopLoop == True:
+        if execute is not None:
+            stopLoop = execute(userInput)
+            if (not stopLoop and update_terminal != None):
+                update_terminal()
+            elif stopLoop == True:
+                break
+        else:
             break
 
 def quit_game(input):
