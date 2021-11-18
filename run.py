@@ -89,7 +89,7 @@ def process_game_option(input):
         return True
 
 
-def await_input(prompt, execute = None, update_terminal = None):
+def await_input(prompt, execute=None, update_terminal=None):
     """
     Awaits input, gives a prompt, executes a function based on input
     and calls a function to update the terminal if provided
