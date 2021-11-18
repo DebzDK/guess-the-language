@@ -105,13 +105,25 @@ def start_game():
     """
     global input_mode
     num_of_questions_asked = 0
+    character_limit = CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+    
     while not is_game_over(num_of_questions_asked):
         if input_mode == 1:
             print(f'\nQuestion {num_of_questions_asked + 1}\n')
-            await_input('Enter a sentence:\n')
+            await_input(f'Enter a sentence (no longer than {character_limit} characters long):\n', validate_sentence)
             num_of_questions_asked += 1
         else:
             break
+
+def validate_sentence(input):
+    """
+    Validates sentences to ensure it adheres to the character limit for the current difficulty level
+    """
+    input = input.strip()
+    str_len = len(input)
+    if str_len == 0 or str_len > CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]:
+        return False
+    return True
 
 def is_game_over(question_count):
     """
