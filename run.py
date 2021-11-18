@@ -105,8 +105,9 @@ def start_game():
     """
     global input_mode
     num_of_questions_asked = 0
+    num_of_correct_answers = 0
     character_limit = CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
-    
+
     while not is_game_over(num_of_questions_asked):
         if input_mode == 1:
             print(f'\nQuestion {num_of_questions_asked + 1}\n')
@@ -114,6 +115,8 @@ def start_game():
             num_of_questions_asked += 1
         else:
             break
+
+    print(f'\nYou guessed {num_of_correct_answers}/{num_of_questions_asked} languages correctly...\nBetter luck next time.\n')
 
 def validate_sentence(input):
     """
