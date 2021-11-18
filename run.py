@@ -53,8 +53,25 @@ def display_game_options_menu():
     """
     Prints game manu options to console
     """
-    game_options_str = '---- Input mode: {}\n---- Difficulty: {}\n---- Enable hints: {}'
+    global input_mode
+    global difficulty
+    global enable_hints
+
+    game_options_str = '---- Input mode [1]: {}\n---- Difficulty [2]: {}\n---- Enable hints [3]: {}'
     print(game_options_str.format(InputMode.get_description(input_mode), Difficulty.get_description(difficulty), enable_hints))
+
+    while True:
+        userInput = input('Select game option to toggle: ')
+
+        if userInput == '1':
+            input_mode = input_mode + 1 if input_mode < 3 else 1
+        elif userInput == '2':
+            difficulty = difficulty + 1 if difficulty < 4 else 1
+        elif userInput == '3':
+            enable_hints = not enable_hints
+
+        game_options_str = '---- Input mode [1]: {}\n---- Difficulty [2]: {}\n---- Enable hints [3]: {}'
+        print(game_options_str.format(InputMode.get_description(input_mode), Difficulty.get_description(difficulty), enable_hints))
 
 def main():
     """
