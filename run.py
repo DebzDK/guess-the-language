@@ -43,8 +43,6 @@ def display_main_menu():
     print('-- GAME OPTIONS [2]')
     print('-- QUIT [3]')
 
-    await_input('Select menu option: ', process_main_menu_selection)
-
 def process_main_menu_selection(input):
     """
     Displays game menu options if user input is as expected value
@@ -75,6 +73,7 @@ def process_game_option(input):
     elif input == '3':
         enable_hints = not enable_hints
     elif input == '4':
+        display_main_menu()
         return True
 
 def await_input(prompt, execute, update_terminal = None):
@@ -96,5 +95,6 @@ def main():
     """
     display_title()
     display_main_menu()
+    await_input('Select menu option: ', process_main_menu_selection)
 
 main()
