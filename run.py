@@ -98,9 +98,9 @@ def await_input(prompt, execute=None, update_terminal=None):
         userInput = input(prompt)
         if execute is not None:
             stopLoop = execute(userInput)
-            if (not stopLoop and update_terminal != None):
+            if (stopLoop is not True and update_terminal is not None):
                 update_terminal()
-            elif stopLoop == True:
+            elif stopLoop:
                 break
         else:
             break
