@@ -32,11 +32,13 @@ input_mode = InputMode.USER.value
 difficulty_level = Difficulty.EASY.value
 enable_hints = True
 
+
 def display_title():
     """
     Prints title to console
     """
     print(TITLE)
+
 
 def display_main_menu():
     """
@@ -46,6 +48,7 @@ def display_main_menu():
     print('-- GAME OPTIONS [2]')
     print('-- QUIT [Q]')
 
+
 def process_main_menu_selection(input):
     """
     Displays game menu options if user input is as expected value
@@ -54,16 +57,28 @@ def process_main_menu_selection(input):
         start_game()
     elif input == '2':
         display_game_options_menu()
-        await_input('Select game option: ', process_game_option, display_game_options_menu)
+        await_input('Select game option: ',
+                    process_game_option,
+                    display_game_options_menu)
     elif quit_game(input):
         raise SystemExit()
+
 
 def display_game_options_menu():
     """
     Prints game manu options to console
     """
-    game_options_str = '---- Input mode [1]: {}\n---- Difficulty [2]: {}\n---- Enable hints [3]: {}\n-- Return to main menu [4]'
-    print(game_options_str.format(InputMode.get_description(input_mode), Difficulty.get_description(difficulty_level), enable_hints))
+    game_options_str = (
+        '---- Input mode [1]: {}\n'
+        '---- Difficulty [2]: {}\n'
+        '---- Enable hints [3]: {}\n'
+        '-- Return to main menu [4]'
+    )
+    print(game_options_str.format(
+                            InputMode.get_description(input_mode),
+                            Difficulty.get_description(difficulty_level),
+                            enable_hints))
+
 
 def process_game_option(input):
     """
@@ -83,7 +98,8 @@ def process_game_option(input):
         display_main_menu()
         return True
 
-def await_input(prompt, execute = None, update_terminal = None):
+
+def await_input(prompt, execute=None, update_terminal=None):
     """
     Awaits input, gives a prompt, executes a function based on input
     and calls a function to update the terminal if provided
@@ -92,12 +108,13 @@ def await_input(prompt, execute = None, update_terminal = None):
         userInput = input(prompt)
         if execute is not None:
             stopLoop = execute(userInput)
-            if (not stopLoop and update_terminal != None):
+            if (stopLoop is not True and update_terminal is not None):
                 update_terminal()
-            elif stopLoop == True:
+            elif stopLoop:
                 break
         else:
             break
+
 
 def start_game():
     """
@@ -111,32 +128,44 @@ def start_game():
     while not is_game_over(num_of_questions_asked):
         if input_mode == 1:
             print(f'\nQuestion {num_of_questions_asked + 1}\n')
-            await_input(f'Enter a sentence (no longer than {character_limit} characters long):\n', validate_sentence)
+            await_input(("Enter a sentence"
+                        f" (no longer than {character_limit} characters"
+                        " long):\n"),
+                        validate_sentence)
             num_of_questions_asked += 1
         else:
             break
 
-    print(f'\nYou guessed {num_of_correct_answers}/{num_of_questions_asked} languages correctly...\nBetter luck next time.\n')
+    print((f'\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}'
+            ' languages correctly...'
+            '\nBetter luck next time.\n'))
+
 
 def validate_sentence(input):
     """
-    Validates sentences to ensure it adheres to the character limit for the current difficulty level
+    Validates sentences to ensure it adheres to the character limit
+    for the current difficulty level
     """
     input = input.strip()
     str_len = len(input)
-    if str_len == 0 or str_len > CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]:
+    if str_len == 0 or \
+            str_len > CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]:
         return False
     return True
+
 
 def is_game_over(question_count):
     """
     Returns True if the user has been asked the total number of questions for
     the game's set difficult level, otherwise False
     """
-    return question_count == NUMBER_OF_QUESTIONS_PER_DIFFICULTY_LEVEL[difficulty_level] 
+    question_limit = NUMBER_OF_QUESTIONS_PER_DIFFICULTY_LEVEL[difficulty_level]
+    return question_count == question_limit
+
 
 def quit_game(input):
     return input.lower() in QUIT_COMMANDS
+
 
 def main():
     """
@@ -145,5 +174,6 @@ def main():
     display_title()
     display_main_menu()
     await_input('Select menu option: ', process_main_menu_selection)
+
 
 main()
