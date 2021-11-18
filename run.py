@@ -130,7 +130,7 @@ def start_game():
             print(f'\nQuestion {num_of_questions_asked + 1}\n')
             await_input(("Enter a sentence"
                         f" (no longer than {character_limit} characters"
-                        "long):\n"),
+                        " long):\n"),
                         validate_sentence)
             num_of_questions_asked += 1
         else:
