@@ -50,7 +50,9 @@ def process_main_menu_selection(input):
     """
     Displays game menu options if user input is as expected value
     """
-    if input == '2':
+    if input == '1':
+        start_game()
+    elif input == '2':
         display_game_options_menu()
         await_input('Select game option: ', process_game_option, display_game_options_menu)
     elif quit_game(input):
@@ -96,6 +98,27 @@ def await_input(prompt, execute = None, update_terminal = None):
                 break
         else:
             break
+
+def start_game():
+    """
+    Runs the game loop
+    """
+    global input_mode
+    num_of_questions_asked = 0
+    while not is_game_over(num_of_questions_asked):
+        if input_mode == 1:
+            print(f'\nQuestion {num_of_questions_asked + 1}\n')
+            await_input('Enter a sentence:\n')
+            num_of_questions_asked += 1
+        else:
+            break
+
+def is_game_over(question_count):
+    """
+    Returns True if the user has been asked the total number of questions for
+    the game's set difficult level, otherwise False
+    """
+    return question_count == NUMBER_OF_QUESTIONS_PER_DIFFICULTY_LEVEL[difficulty_level] 
 
 def quit_game(input):
     return input.lower() in QUIT_COMMANDS
