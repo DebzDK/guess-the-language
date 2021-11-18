@@ -68,12 +68,12 @@ def display_game_options_menu():
     """
     Prints game manu options to console
     """
-    game_options_str = '''
-    ---- Input mode [1]: {}
-    ---- Difficulty [2]: {}
-    ---- Enable hints [3]: {}
-    -- Return to main menu [4]
-    '''
+    game_options_str = (
+        '---- Input mode [1]: {}\n'
+        '---- Difficulty [2]: {}\n'
+        '---- Enable hints [3]: {}\n'
+        '-- Return to main menu [4]'
+    )
     print(game_options_str.format(
                             InputMode.get_description(input_mode),
                             Difficulty.get_description(difficulty_level),
@@ -128,19 +128,17 @@ def start_game():
     while not is_game_over(num_of_questions_asked):
         if input_mode == 1:
             print(f'\nQuestion {num_of_questions_asked + 1}\n')
-            await_input(f'''
-                    Enter a sentence
-                     (no longer than {character_limit} characters long):
-                    ''', validate_sentence)
+            await_input(("Enter a sentence"
+                        f" (no longer than {character_limit} characters"
+                        "long):\n"),
+                        validate_sentence)
             num_of_questions_asked += 1
         else:
             break
 
-    print(f'''
-        \nYou guessed {num_of_correct_answers}/{num_of_questions_asked}
-        languages correctly...
-        Better luck next time.\n
-        ''')
+    print((f'\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}'
+            ' languages correctly...'
+            '\nBetter luck next time.\n'))
 
 
 def validate_sentence(input):
@@ -150,8 +148,8 @@ def validate_sentence(input):
     """
     input = input.strip()
     str_len = len(input)
-    if str_len == 0 or
-    str_len > CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]:
+    if str_len == 0 or \
+            str_len > CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]:
         return False
     return True
 
