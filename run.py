@@ -124,14 +124,24 @@ def start_game():
     num_of_questions_asked = 0
     num_of_correct_answers = 0
     character_limit = CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+    if input_mode == 2:
+        print((
+            "\nSince you've chosen to play with file input,"
+            " please make sure that each sentence in your file"
+            " is on a new line.\n"))
+        sentences = read_from_file()
 
     while not is_game_over(num_of_questions_asked):
+        print(f'\nQuestion {num_of_questions_asked + 1}\n')
+
         if input_mode == 1:
-            print(f'\nQuestion {num_of_questions_asked + 1}\n')
             await_input(("Enter a sentence"
                         f" (no longer than {character_limit} characters"
                         " long):\n"),
                         validate_sentence)
+            num_of_questions_asked += 1
+        elif input_mode == 2:
+            print(sentences[num_of_questions_asked])
             num_of_questions_asked += 1
         else:
             break
@@ -139,6 +149,23 @@ def start_game():
     print((f'\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}'
             ' languages correctly...'
             '\nBetter luck next time.\n'))
+
+
+def read_from_file():
+    """
+    Reads sentences from file
+    """
+    sentences = []
+    while len(sentences) == 0:
+        path_or_filename = input(
+            '\nEnter the name or path of the file you wish to read from: ')
+        try:
+            with open(path_or_filename) as file:
+                for line in file:
+                    sentences.append(line)
+        except FileNotFoundError as e:
+            print("\nUh oh... Looks like that file doesn't exist.")
+    return sentences
 
 
 def validate_sentence(input):
