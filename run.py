@@ -43,11 +43,19 @@ def display_main_menu():
     print('-- PLAY')
     print('-- GAME OPTIONS')
 
+def display_game_options_menu():
+    """
+    Prints game manu options to console
+    """
+    game_options_str = '---- Input mode: {}\n---- Difficulty: {}\n---- Enable hints: {}'
+    print(game_options_str.format(InputMode(input_mode).name, Difficulty(difficulty).name, enable_hints))
+
 def main():
     """
     Runs display and game functions
     """
     display_title()
     display_main_menu()
+    display_game_options_menu()
 
 main()
