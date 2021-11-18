@@ -1,7 +1,10 @@
 from inputmode import InputMode
 from difficulty import Difficulty
 
-title = """
+NUMBER_OF_QUESTIONS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
+CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
+QUIT_COMMANDS = ['q', 'quit']
+TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
  ________   __  __   _______   ______   ______
@@ -29,13 +32,11 @@ input_mode = InputMode.USER.value
 difficulty = Difficulty.EASY.value
 enable_hints = True
 
-quit_commands = ['q', 'quit']
-
 def display_title():
     """
     Prints title to console
     """
-    print(title)
+    print(TITLE)
 
 def display_main_menu():
     """
@@ -94,7 +95,7 @@ def await_input(prompt, execute, update_terminal = None):
             break
 
 def quit_game(input):
-    return input.lower() in quit_commands
+    return input.lower() in QUIT_COMMANDS
 
 def main():
     """
