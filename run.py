@@ -170,8 +170,10 @@ def start_game():
         sentences = read_from_file()
 
     while (not is_game_over(num_of_questions_asked) and
-            (input_mode == 2 and num_of_questions_asked < len(sentences))):
-        print(f"\nQuestion {num_of_questions_asked + 1}\n")
+            ((input_mode != 2) or
+                (input_mode == 2 and
+                    num_of_questions_asked < len(sentences)))):
+        print(f'\nQuestion {num_of_questions_asked + 1}\n')
 
         if input_mode == 1:
             await_input(
