@@ -209,7 +209,7 @@ def read_from_file():
             with open(path_or_filename) as file:
                 for line in file:
                     stripped_line = line.strip()
-                    if (len(stripped_line) > 0 and
+                    if (stripped_line and
                             is_viable_for_translation(stripped_line)):
                         sentences.append(stripped_line)
 
