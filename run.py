@@ -138,20 +138,27 @@ def start_game():
         print(f"\nQuestion {num_of_questions_asked + 1}\n")
 
         if input_mode == 1:
-            await_input(("Enter a sentence"
-                        f" (no longer than {character_limit} characters"
-                        " long):\n"),
-                        is_viable_for_translation)
-            num_of_questions_asked += 1
+            await_input(
+                (
+                    "Enter a sentence"
+                    f" (no longer than {character_limit} characters"
+                    " long):\n"
+                ),
+                is_viable_for_translation
+            )
         elif input_mode == 2:
             print(sentences[num_of_questions_asked])
             num_of_questions_asked += 1
         else:
             break
 
-    print((f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
+    print(
+        (
+            f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
             " languages correctly..."
-            "\nBetter luck next time.\n"))
+            "\nBetter luck next time.\n"
+        )
+    )
 
 
 def read_from_file():
