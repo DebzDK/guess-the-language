@@ -106,12 +106,12 @@ def await_input(prompt, execute=None, update_terminal=None):
     and calls a function to update the terminal if provided
     """
     while True:
-        userInput = input(prompt)
+        user_input = input(prompt)
         if execute is not None:
-            stopLoop = execute(userInput)
-            if (stopLoop is not True and update_terminal is not None):
+            stop_loop = execute(user_input)
+            if (stop_loop is not True and update_terminal is not None):
                 update_terminal()
-            elif stopLoop:
+            elif stop_loop:
                 break
         else:
             break
