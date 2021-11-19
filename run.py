@@ -1,3 +1,40 @@
+"""
+AUTHOR: Deborah Dike
+I hereby certify that this program is entirely my own work.
+
+----------------------------------------------------------------------
+    'G u e s s  T h e  L a n g u a g e' - A language-guessing game
+----------------------------------------------------------------------
+
+    INTRO
+
+    'Guess The Language' is a language-guessing game that takes
+    sentences from a .txt file, user input, or auto-generated data and
+    translates them into another language.
+    Its quiz-like fashion aims to introduce people to the beauty of
+    language in a fun way and show how the differences between
+    languages can range from tiny to quite big.
+    
+    The site will be targeted toward people who have an interest in or
+    are curious about languages. This site will also be useful for
+    people who want to see the capability of a translation tool other
+    than Google Translate.
+
+    USAGE
+
+        python3 run.py
+
+    which should allow a user to play the game and, at the end of the
+    program, output the total number of correct guesses.
+
+    The program can also be run by opening it in a version of Python
+    IDLE and pressing F5.
+
+    MORE INFO
+
+    Further information can be found in the project's README file.
+----------------------------------------------------------------------
+"""
 import re
 from inputmode import InputMode
 from difficulty import Difficulty
@@ -200,8 +237,8 @@ def is_viable_for_translation(user_input):
 
 def is_game_over(question_count):
     """
-    Returns True if the user has been asked the total number of questions for
-    the game's set difficult level, otherwise False
+    Returns True if the user has been asked the total number of
+    questions for the game's set difficult level, otherwise False
     """
     question_limit = NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
     return question_count == question_limit
