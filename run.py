@@ -14,7 +14,7 @@ I hereby certify that this program is entirely my own work.
     Its quiz-like fashion aims to introduce people to the beauty of
     language in a fun way and show how the differences between
     languages can range from tiny to quite big.
-    
+
     The site will be targeted toward people who have an interest in or
     are curious about languages. This site will also be useful for
     people who want to see the capability of a translation tool other
