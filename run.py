@@ -1,10 +1,36 @@
+"""'Guess The Language' - A language-guessing game program
+
+Author
+----------
+Deborah Dike
+
+Usage
+----------
+To run the code, use:
+    python3 run.py
+
+which should allow a user to play the game and, at the end of the
+program, output the total number of correct guesses.
+
+The program can also be run by opening it in a version of Python
+IDLE and pressing F5.
+
+Note
+----------
+Further information can be found in the project's README file.
+.. 'Guess The Language' project README:
+    https://github.com/DebzDK/guess-the-language#guess-the-language
+
+----------------------------------------------------------------------
+"""
+import re
+from typing import Any, Callable, List
 from inputmode import InputMode
 from difficulty import Difficulty
-import re
 
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
-CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
-QUIT_COMMANDS = ['q', 'quit']
+CHAR_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
+QUIT_COMMANDS = ["q", "quit"]
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -35,45 +61,51 @@ enable_hints = True
 
 
 def display_title():
-    """
-    Prints title to console
-    """
+    """Prints title to terminal."""
     print(TITLE)
 
 
 def display_main_menu():
-    """
-    Prints main manu options to console
-    """
-    print('-- PLAY [1]')
-    print('-- GAME OPTIONS [2]')
-    print('-- QUIT [Q]')
+    """Print main manu options to terminal."""
+    print("-- PLAY [1]")
+    print("-- GAME OPTIONS [2]")
+    print("-- QUIT [Q]")
 
 
-def process_main_menu_selection(input):
+def process_main_menu_selection(user_input: str):
+    """Display game menu options according to user input.
+
+    Checks if user input corresponds to a main menu option and processes
+    accordingly.
+
+    Parameters
+    ----------
+    user_input
+        The value typed by the user.
+
+    Raises
+    -------
+    SystemExit
+        If the user has entered a command to quit the game
     """
-    Displays game menu options if user input is as expected value
-    """
-    if input == '1':
+    if user_input == "1":
         start_game()
-    elif input == '2':
+    elif user_input == "2":
         display_game_options_menu()
-        await_input('Select game option: ',
+        await_input("Select game option: ",
                     process_game_option,
                     display_game_options_menu)
-    elif quit_game(input):
+    elif is_quit_command(user_input):
         raise SystemExit()
 
 
 def display_game_options_menu():
-    """
-    Prints game manu options to console
-    """
+    """Print game menu options to console."""
     game_options_str = (
-        '---- Input mode [1]: {}\n'
-        '---- Difficulty [2]: {}\n'
-        '---- Enable hints [3]: {}\n'
-        '-- Return to main menu [4]'
+        "---- Input mode [1]: {}\n"
+        "---- Difficulty [2]: {}\n"
+        "---- Enable hints [3]: {}\n"
+        "-- Return to main menu [4]"
     )
     print(game_options_str.format(
                             InputMode.get_description(input_mode),
@@ -81,50 +113,75 @@ def display_game_options_menu():
                             enable_hints))
 
 
-def process_game_option(input):
-    """
-    Toggles game option based on user input and current settings
-    """
-    global input_mode
-    global difficulty_level
-    global enable_hints
+def process_game_option(user_input: str):
+    """Toggle game option based on user input and current settings.
 
-    if input == '1':
+    Checks if user input corresponds to a game option and processes
+    accordingly.
+
+    Parameters
+    ----------
+    user_input
+        The value typed by the user.
+
+    Returns
+    -------
+    bool
+        True if the user has chosen to return to the main menu, otherwise
+        False.
+    """
+    global input_mode, difficulty_level, enable_hints
+
+    if user_input == "1":
         input_mode = input_mode + 1 if input_mode < 3 else 1
-    elif input == '2':
+    elif user_input == "2":
         difficulty_level = difficulty_level + 1 if difficulty_level < 3 else 1
-    elif input == '3':
+    elif user_input == "3":
         enable_hints = not enable_hints
-    elif input == '4':
+    elif user_input == "4":
         display_main_menu()
         return True
+    return False
 
 
-def await_input(prompt, execute=None, update_terminal=None):
-    """
-    Awaits input, gives a prompt, executes a function based on input
-    and calls a function to update the terminal if provided
+def await_input(prompt: str, process: Callable[[str], Any] = None,
+                update_terminal: Callable[[str], Any] = None):
+    """Prompt user for input, process input if required
+    and update the terminal or exit the loop as needed.
+
+    Continuously waits for user input and executes functions based on input
+    as required until the feedback loop is exited.
+
+    Parameters
+    ----------
+    prompt
+        The text to display to the user to indicate the desired type of input.
+    process
+        The function to call process user input.
+    update_terminal
+        The function to call to print changes made by calling process()
+        to the terminal.
     """
     while True:
-        userInput = input(prompt)
-        if execute is not None:
-            stopLoop = execute(userInput)
-            if (stopLoop is not True and update_terminal is not None):
+        user_input = input(prompt)
+        if process is not None:
+            stop_loop = process(user_input)
+            if (stop_loop is not True and
+                    update_terminal is not None):
                 update_terminal()
-            elif stopLoop:
+            elif stop_loop:
                 break
         else:
             break
 
 
 def start_game():
-    """
-    Runs the game loop
-    """
+    """Run the game loop."""
     global input_mode
     num_of_questions_asked = 0
     num_of_correct_answers = 0
-    character_limit = CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+    character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+
     if input_mode == 2:
         print((
             "\nSince you've chosen to play with file input,"
@@ -139,80 +196,134 @@ def start_game():
         print(f'\nQuestion {num_of_questions_asked + 1}\n')
 
         if input_mode == 1:
-            await_input(("Enter a sentence"
-                        f" (no longer than {character_limit} characters"
-                        " long):\n"),
-                        is_viable_for_translation)
-            num_of_questions_asked += 1
+            await_input(
+                (
+                    "Enter a sentence"
+                    f" (no longer than {character_limit} characters"
+                    " long):\n"
+                ),
+                is_viable_for_translation
+            )
         elif input_mode == 2:
             print(sentences[num_of_questions_asked])
             num_of_questions_asked += 1
         else:
             break
 
-    print((f'\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}'
-            ' languages correctly...'
-            '\nBetter luck next time.\n'))
+    print(
+        (
+            f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
+            " languages correctly..."
+            "\nBetter luck next time.\n"
+        )
+    )
 
 
-def read_from_file():
-    """
-    Reads sentences from file
+def read_from_file() -> List[str]:
+    """Read lines from a file.
+
+    Reads from file, line by line, and adds each line to sentences list
+    if the line passes validation.
+
+    Returns
+    ----------
+    List[str]
+        A populated list of strings if there are viable lines of text in a
+        given file, otherwise an empty one.
     """
     sentences = []
     while len(sentences) == 0:
         path_or_filename = input(
-            '\nEnter the name or path of the file you wish to read from: ')
+            "\nEnter the name or path of the file you wish to read from: ")
         try:
             with open(path_or_filename) as file:
                 for line in file:
                     stripped_line = line.strip()
-                    if (len(stripped_line) > 0 and
+                    if (stripped_line and
                             is_viable_for_translation(stripped_line)):
                         sentences.append(stripped_line)
 
                     if (len(sentences) ==
                             NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]):
                         break
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             print("\nUh oh... Looks like that file doesn't exist.")
     return sentences
 
 
-def is_viable_for_translation(input):
+def is_viable_for_translation(user_input) -> bool:
+    """Check if user input are viable for translation.
+
+    Ensures that input adheres to the character limit for the current
+    difficulty level in order for the chosen API's character limit to not be
+    exceeded.
+    .. A detailed explanation can be found in the project's README:
+        https://github.com/DebzDK/guess-the-language#features
+
+    Returns
+    ----------
+    bool
+        True if user input is viable for translation, otherwise False
     """
-    Validates sentences to ensure it adheres to the character limit
-    for the current difficulty level
-    """
-    input = input.strip()
-    str_len = len(input)
-    if str_len == 0 or \
-            re.search("^[^A-Za-z0-9]+", input) or \
-            str_len > CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]:
+    user_input = user_input.strip()
+    str_len = len(user_input)
+    if (str_len == 0 or
+            re.search("^[^A-Za-z0-9]+", user_input) or
+            str_len > CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]):
         return False
     return True
 
 
-def is_game_over(question_count):
+def is_game_over(question_count: int) -> bool:
+    """Check if the game is over.
+
+    Determines whether or not the game is over based on the game's
+    difficulty level (easy, normal, hard or beast):
+        - Easy and normal difficulty level = 5 questions
+        - Hard difficulty level = 10 questions
+        - BEAST difficulty level = 26 questions (all available languages in
+            chosen API)
+
+    A detailed explanation can be found at:
+        https://github.com/DebzDK/guess-the-language#features
+
+    Parameters
+    ----------
+    question_count
+        The number of questions that have been asked so far in the game
+
+    Returns
+    ----------
+    bool
+        True if all questions have been asked
     """
-    Returns True if the user has been asked the total number of questions for
-    the game's set difficult level, otherwise False
-    """
-    question_limit = NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
-    return question_count == question_limit
+    return question_count == NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
 
 
-def quit_game(input):
-    return input.lower() in QUIT_COMMANDS
+def is_quit_command(user_input) -> bool:
+    """Check if user has given a quit command.
+
+    Determines whether or not the given input is one of the pre-set
+    quit commands.
+
+    Parameters
+    ----------
+    question_count
+        The number of questions that have been asked so far in the game
+
+    Returns
+    ----------
+    bool
+        True if all questions have been asked
+    """
+    return user_input.lower() in QUIT_COMMANDS
 
 
 def main():
-    """
-    Runs display and game functions
-    """
+    """Run display and game functions."""
     display_title()
     display_main_menu()
-    await_input('Select menu option: ', process_main_menu_selection)
+    await_input("Select menu option: ", process_main_menu_selection)
 
 
 main()
