@@ -89,7 +89,7 @@ def process_main_menu_selection(user_input: str):
         If the user has entered a command to quit the game
     """
     if user_input == "1":
-        start_game()
+        run_game()
     elif user_input == "2":
         display_game_options_menu()
         await_input("Select game option: ",
@@ -165,17 +165,17 @@ def await_input(prompt: str, process: Callable[[str], Any] = None,
     while True:
         user_input = input(prompt)
         if process is not None:
-            stop_loop = process(user_input)
-            if (stop_loop is not True and
+            end_loop = process(user_input)
+            if (end_loop is not True and
                     update_terminal is not None):
                 update_terminal()
-            elif stop_loop:
+            elif end_loop:
                 break
         else:
             break
 
 
-def start_game():
+def run_game():
     """Run the game loop."""
     global input_mode
     num_of_questions_asked = 0
