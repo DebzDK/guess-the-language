@@ -1,0 +1,3 @@
+// subset of easy mode sentences
+Hello.
+How are you?
