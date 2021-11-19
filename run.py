@@ -1,7 +1,7 @@
 from inputmode import InputMode
 from difficulty import Difficulty
 
-NUMBER_OF_QUESTIONS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
+NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
 CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
 QUIT_COMMANDS = ['q', 'quit']
 TITLE = """
@@ -138,7 +138,7 @@ def start_game():
             await_input(("Enter a sentence"
                         f" (no longer than {character_limit} characters"
                         " long):\n"),
-                        validate_sentence)
+                        is_viable_for_translation)
             num_of_questions_asked += 1
         elif input_mode == 2:
             print(sentences[num_of_questions_asked])
@@ -162,13 +162,20 @@ def read_from_file():
         try:
             with open(path_or_filename) as file:
                 for line in file:
-                    sentences.append(line)
+                    stripped_line = line.strip()
+                    if (len(stripped_line) > 0 and
+                            is_viable_for_translation(stripped_line)):
+                        sentences.append(stripped_line)
+
+                    if (len(sentences) ==
+                            NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]):
+                        break
         except FileNotFoundError as e:
             print("\nUh oh... Looks like that file doesn't exist.")
     return sentences
 
 
-def validate_sentence(input):
+def is_viable_for_translation(input):
     """
     Validates sentences to ensure it adheres to the character limit
     for the current difficulty level
@@ -186,7 +193,7 @@ def is_game_over(question_count):
     Returns True if the user has been asked the total number of questions for
     the game's set difficult level, otherwise False
     """
-    question_limit = NUMBER_OF_QUESTIONS_PER_DIFFICULTY_LEVEL[difficulty_level]
+    question_limit = NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
     return question_count == question_limit
 
 
