@@ -1,6 +1,6 @@
+import re
 from inputmode import InputMode
 from difficulty import Difficulty
-import re
 
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
 CHAR_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
@@ -85,9 +85,7 @@ def process_game_option(user_input):
     """
     Toggles game option based on user input and current settings
     """
-    global input_mode
-    global difficulty_level
-    global enable_hints
+    global input_mode, difficulty_level, enable_hints
 
     if user_input == "1":
         input_mode = input_mode + 1 if input_mode < 3 else 1
