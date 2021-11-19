@@ -99,8 +99,20 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
 * Game
     * Where the magic happens
+        Once a user starts a game, based on the chosen difficulty level and corresponding character limit (as outlined above), they are either prompted for direct input, file input, or presented with auto-generated sentences as input.
+        
+        The cases are as follows:
+        * *User input* - the input is validated per question to ensure it meets the set criteria for translation.
 
-        TODO: Add GIF once built
+        * *File input* - the same is true here but with the extra step of using auto-generated values in addition to those extracted from the file if there aren't enough viable sentences for translation. If there are more lines of text than required in the file, the rest are ignored.
+
+        * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
+
+        After the appropriate input step is taken, the game proceeds translating the sentence, presenting it to a user in another language, and prompting the user to take a guess.
+
+        Finally, a tally of the total number of correct guesses are displayed and the game ends.
+
+        TODO: Add GIFs for each case once translation work is done
 
 ### Future features
 
@@ -149,7 +161,6 @@ Each feature listed below was chosen to provide users with a clear, logical path
     * TODO: Add test results once tested
 
 * Accessibility
-
     * Manual foreground and background colour testing
         * General text
             Contrast Ratio: <b>[21:1](https://webaim.org/resources/contrastchecker/?fcolor=FFFFFF&bcolor=000000)</b>
