@@ -50,18 +50,18 @@ def display_main_menu():
     print("-- QUIT [Q]")
 
 
-def process_main_menu_selection(input):
+def process_main_menu_selection(user_input):
     """
     Displays game menu options if user input is as expected value
     """
-    if input == "1":
+    if user_input == "1":
         start_game()
-    elif input == "2":
+    elif user_input == "2":
         display_game_options_menu()
         await_input("Select game option: ",
                     process_game_option,
                     display_game_options_menu)
-    elif quit_game(input):
+    elif quit_game(user_input):
         raise SystemExit()
 
 
@@ -81,7 +81,7 @@ def display_game_options_menu():
                             enable_hints))
 
 
-def process_game_option(input):
+def process_game_option(user_input):
     """
     Toggles game option based on user input and current settings
     """
@@ -89,13 +89,13 @@ def process_game_option(input):
     global difficulty_level
     global enable_hints
 
-    if input == "1":
+    if user_input == "1":
         input_mode = input_mode + 1 if input_mode < 3 else 1
-    elif input == "2":
+    elif user_input == "2":
         difficulty_level = difficulty_level + 1 if difficulty_level < 3 else 1
-    elif input == "3":
+    elif user_input == "3":
         enable_hints = not enable_hints
-    elif input == "4":
+    elif user_input == "4":
         display_main_menu()
         return True
 
@@ -178,15 +178,15 @@ def read_from_file():
     return sentences
 
 
-def is_viable_for_translation(input):
+def is_viable_for_translation(user_input):
     """
     Validates sentences to ensure it adheres to the character limit
     for the current difficulty level
     """
-    input = input.strip()
-    str_len = len(input)
+    user_input = user_input.strip()
+    str_len = len(user_input)
     if (str_len == 0 or
-            re.search("^[^A-Za-z0-9]+", input) or
+            re.search("^[^A-Za-z0-9]+", user_input) or
             str_len > CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]):
         return False
     return True
@@ -201,8 +201,8 @@ def is_game_over(question_count):
     return question_count == question_limit
 
 
-def quit_game(input):
-    return input.lower() in QUIT_COMMANDS
+def quit_game(user_input):
+    return user_input.lower() in QUIT_COMMANDS
 
 
 def main():
