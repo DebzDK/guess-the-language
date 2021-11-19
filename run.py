@@ -1,5 +1,6 @@
 from inputmode import InputMode
 from difficulty import Difficulty
+import re
 
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
 CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
@@ -184,6 +185,7 @@ def is_viable_for_translation(input):
     input = input.strip()
     str_len = len(input)
     if str_len == 0 or \
+            re.search("^[^A-Za-z0-9]+", input) or \
             str_len > CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]:
         return False
     return True
