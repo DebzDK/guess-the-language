@@ -180,7 +180,7 @@ def read_from_file():
                     if (len(sentences) ==
                             NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]):
                         break
-        except FileNotFoundError as e:
+        except FileNotFoundError:
             print("\nUh oh... Looks like that file doesn't exist.")
     return sentences
 
