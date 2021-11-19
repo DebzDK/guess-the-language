@@ -7,7 +7,7 @@ class InputMode(Enum):
     AUTO = 3
 
     @classmethod
-    def get_description(self, mode):
+    def get_description(cls, mode):
         """
         Returns the description for a given input mode
         """

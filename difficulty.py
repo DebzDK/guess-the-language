@@ -8,7 +8,7 @@ class Difficulty(Enum):
     BEAST = 3
 
     @classmethod
-    def get_description(self, difficulty):
+    def get_description(cls, difficulty):
         """
         Returns the description for a given input mode
         """
