@@ -61,7 +61,7 @@ def process_main_menu_selection(user_input):
         await_input("Select game option: ",
                     process_game_option,
                     display_game_options_menu)
-    elif quit_game(user_input):
+    elif is_quit_command(user_input):
         raise SystemExit()
 
 
@@ -209,7 +209,10 @@ def is_game_over(question_count):
     return question_count == question_limit
 
 
-def quit_game(user_input):
+def is_quit_command(user_input):
+    """
+    Returns true if parameter value is a quit command
+    """
     return user_input.lower() in QUIT_COMMANDS
 
 
