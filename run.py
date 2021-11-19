@@ -3,7 +3,7 @@ from difficulty import Difficulty
 import re
 
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
-CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
+CHAR_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
 QUIT_COMMANDS = ["q", "quit"]
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ def start_game():
     global input_mode
     num_of_questions_asked = 0
     num_of_correct_answers = 0
-    character_limit = CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+    character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
 
     if input_mode == 2:
         print((
@@ -185,9 +185,9 @@ def is_viable_for_translation(input):
     """
     input = input.strip()
     str_len = len(input)
-    if str_len == 0 or \
-            re.search("^[^A-Za-z0-9]+", input) or \
-            str_len > CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]:
+    if (str_len == 0 or
+            re.search("^[^A-Za-z0-9]+", input) or
+            str_len > CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]):
         return False
     return True
 
