@@ -98,6 +98,7 @@ def process_game_option(user_input):
     elif user_input == "4":
         display_main_menu()
         return True
+    return None
 
 
 def await_input(prompt, execute=None, update_terminal=None):
