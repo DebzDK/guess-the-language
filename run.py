@@ -4,7 +4,7 @@ import re
 
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
 CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
-QUIT_COMMANDS = ['q', 'quit']
+QUIT_COMMANDS = ["q", "quit"]
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -45,20 +45,20 @@ def display_main_menu():
     """
     Prints main manu options to console
     """
-    print('-- PLAY [1]')
-    print('-- GAME OPTIONS [2]')
-    print('-- QUIT [Q]')
+    print("-- PLAY [1]")
+    print("-- GAME OPTIONS [2]")
+    print("-- QUIT [Q]")
 
 
 def process_main_menu_selection(input):
     """
     Displays game menu options if user input is as expected value
     """
-    if input == '1':
+    if input == "1":
         start_game()
-    elif input == '2':
+    elif input == "2":
         display_game_options_menu()
-        await_input('Select game option: ',
+        await_input("Select game option: ",
                     process_game_option,
                     display_game_options_menu)
     elif quit_game(input):
@@ -70,10 +70,10 @@ def display_game_options_menu():
     Prints game manu options to console
     """
     game_options_str = (
-        '---- Input mode [1]: {}\n'
-        '---- Difficulty [2]: {}\n'
-        '---- Enable hints [3]: {}\n'
-        '-- Return to main menu [4]'
+        "---- Input mode [1]: {}\n"
+        "---- Difficulty [2]: {}\n"
+        "---- Enable hints [3]: {}\n"
+        "-- Return to main menu [4]"
     )
     print(game_options_str.format(
                             InputMode.get_description(input_mode),
@@ -89,13 +89,13 @@ def process_game_option(input):
     global difficulty_level
     global enable_hints
 
-    if input == '1':
+    if input == "1":
         input_mode = input_mode + 1 if input_mode < 3 else 1
-    elif input == '2':
+    elif input == "2":
         difficulty_level = difficulty_level + 1 if difficulty_level < 3 else 1
-    elif input == '3':
+    elif input == "3":
         enable_hints = not enable_hints
-    elif input == '4':
+    elif input == "4":
         display_main_menu()
         return True
 
@@ -125,6 +125,7 @@ def start_game():
     num_of_questions_asked = 0
     num_of_correct_answers = 0
     character_limit = CHARACTER_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+
     if input_mode == 2:
         print((
             "\nSince you've chosen to play with file input,"
@@ -134,7 +135,7 @@ def start_game():
 
     while (not is_game_over(num_of_questions_asked) and
             (input_mode == 2 and num_of_questions_asked < len(sentences))):
-        print(f'\nQuestion {num_of_questions_asked + 1}\n')
+        print(f"\nQuestion {num_of_questions_asked + 1}\n")
 
         if input_mode == 1:
             await_input(("Enter a sentence"
@@ -148,9 +149,9 @@ def start_game():
         else:
             break
 
-    print((f'\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}'
-            ' languages correctly...'
-            '\nBetter luck next time.\n'))
+    print((f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
+            " languages correctly..."
+            "\nBetter luck next time.\n"))
 
 
 def read_from_file():
@@ -160,7 +161,7 @@ def read_from_file():
     sentences = []
     while len(sentences) == 0:
         path_or_filename = input(
-            '\nEnter the name or path of the file you wish to read from: ')
+            "\nEnter the name or path of the file you wish to read from: ")
         try:
             with open(path_or_filename) as file:
                 for line in file:
@@ -210,7 +211,7 @@ def main():
     """
     display_title()
     display_main_menu()
-    await_input('Select menu option: ', process_main_menu_selection)
+    await_input("Select menu option: ", process_main_menu_selection)
 
 
 main()
