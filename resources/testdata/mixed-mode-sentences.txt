@@ -1,0 +1,23 @@
+//TOO LONG FOR ALL MODES (> 40 chars)
+You take the blue pill - the story ends, you wake up in your bed and believe whatever you want to believe.
+You take the red pill - you stay in wonderland, and I show you how deep the rabbit hole goes.
+I think it's a half-gram heavy on the back end.
+Sister, they don't know what to do with just one of me.
+JARVIS, make a note. Remind me not to wake up in the morning ever again.
+
+You get hurt, hurt ’em back. You get killed… walk it off.
+// TOO LONG FOR EASY AND NORMAL MODE (> 30 chars)
+// VALID FOR HARD MODE
+What are you doing this weekend?
+I'm going to a birthday party tomorrow.
+I have plans with my family this week.
+Nevermind. We can find some time later.
+Let's go have dinner at a restaurant.
+
+// VALID FOR ALL MODES
+Hello.
+How are you?
+Welcome!
+Happy birthday!
+Thank you.
+I love you.
