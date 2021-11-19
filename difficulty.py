@@ -1,6 +1,4 @@
-"""
-Enum to represent difficulty levels
-"""
+"""Enum to represent difficulty levels"""
 from enum import Enum
 
 
