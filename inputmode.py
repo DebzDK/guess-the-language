@@ -13,7 +13,6 @@ class InputMode(Enum):
         """
         if mode == 2:
             return 'Load sentences from text file'
-        elif mode == 3:
+        if mode == 3:
             return 'Auto-generate sentences'
-        else:
-            return 'Enter sentence to translate (default)'
+        return 'Enter sentence to translate (default)'
