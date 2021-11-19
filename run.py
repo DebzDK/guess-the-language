@@ -236,7 +236,7 @@ def read_from_file() -> List[str]:
         path_or_filename = input(
             "\nEnter the name or path of the file you wish to read from: ")
         try:
-            with open(path_or_filename) as file:
+            with open(path_or_filename, encoding="utf-8") as file:
                 for line in file:
                     stripped_line = line.strip()
                     if (stripped_line and
