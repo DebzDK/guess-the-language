@@ -1,3 +1,6 @@
+"""
+Enum to represent input mode
+"""
 from enum import Enum
 
 
