@@ -40,8 +40,8 @@ class Word():
         return ('<Word value: "%s" parts_of_speech: %s>'
                 % (self._value, self._parts_of_speech))
 
-    # Use of decorator to get _value
+    # Use of decorator to access _value
     @property
     def value(self):
-        """Get _value"""
+        """Getter method for value property"""
         return self._value
