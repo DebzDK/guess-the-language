@@ -24,16 +24,6 @@ class Sentence():
     translate() -> str:
         Translates sentence into another language
     """
-
-    def __repr__(self):
-        """Modify object string representation"""
-        return ('<Sentence value: "%s" lang: %s>'
-                % (self._value, self._lang))
-
-    def __str__(self) -> str:
-        """Modify object string representation using when printing"""
-        return self._value
-
     def __init__(
             self, parts: List[Word], lang='English',
             ending_punctuation="."):
@@ -54,6 +44,15 @@ class Sentence():
         sentence = (' '.join([word.value for word in parts]) +
                     ending_punctuation)
         self._value = sentence
+
+    def __str__(self) -> str:
+        """Modify object string representation using when printing"""
+        return self._value
+
+    def __repr__(self):
+        """Modify object string representation"""
+        return ('<Sentence value: "%s" lang: %s>'
+                % (self._value, self._lang))
 
     # TODO: Create TranslationHelper class and complete this function
     def translate(self) -> str:
