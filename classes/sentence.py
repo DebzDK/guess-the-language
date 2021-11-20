@@ -1,5 +1,6 @@
 """Class to represent a sentence"""
 from typing import List
+from classes.word import Word
 
 
 class Sentence():
@@ -13,7 +14,7 @@ class Sentence():
         string of characters that make up sentence
     _lang : str
         language of sentence
-    _parts : List[str]
+    _parts : List[Word]
         list of objects representing the sentences and its structure
     _ending_punctuation: str
         punctuation symbol to end sentence with
@@ -36,12 +37,13 @@ class Sentence():
         return self._value
 
     def __init__(
-            self, parts: List[str], lang='English',
+            self, parts: List[Word], lang='English',
             ending_punctuation="."):
         self._lang = lang
         self._ending_punctuation = ending_punctuation
         self._parts = parts
-        sentence = (' '.join(parts) + ending_punctuation)
+        sentence = (' '.join([word.value for word in parts]) +
+                    ending_punctuation)
         self._value = sentence
 
     # TODO: Create TranslationHelper class and complete this function
