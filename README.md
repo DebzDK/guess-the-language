@@ -16,6 +16,12 @@ Before jumping into the design process, requirements needed to be specified in o
 
 !['Guess The Language' flowchart](documentation/screenshots/evidence/flow-chart.png)
 
+While implementing the basic functions of the game, it was necessary to start thinking about how to model the various components of the game in order to separate concerns. This was, initially, a difficult task until I remembered a tool that would help with breaking down the processes - a [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Unified_Modeling_Language) diagram.
+
+After this brainwave, a structural UML diagram, a.k.a [a class diagram](https://en.wikipedia.org/wiki/Class_diagram#General_relationship), was created as shown below.
+
+!['Guess The Language' class diagram](documentation/screenshots/evidence/class-diagram.png)
+
 ### Planning and execution
 
 Agile practices were used to carry out this project and documented in Trello [planning/design board](https://trello.com/b/JGCCLlNB/project-planning-design) and [dev board](https://trello.com/b/TsXKTw7W/project-development) and [Github Projects](https://github.com/DebzDK/guess-the-language/projects/1).
