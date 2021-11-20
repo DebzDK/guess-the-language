@@ -25,20 +25,29 @@ class Sentence():
         Translates sentence into another language
     """
 
-    # Overrides __repr__ to modify string representation of the object
-    # that contains all of its information
     def __repr__(self):
+        """Modify object string representation"""
         return ('<Sentence value: "%s" lang: %s>'
                 % (self._value, self._lang))
 
-    # Overrides __str__ to modify 'informal' representation
-    # (used when printing the object)
     def __str__(self) -> str:
+        """Modify object string representation using when printing"""
         return self._value
 
     def __init__(
             self, parts: List[Word], lang='English',
             ending_punctuation="."):
+        """Initialise the object with the passed parameters
+
+        Parameters
+        ----------
+        parts
+            list of Words that make up the sentence
+        lang: str
+            The language that the sentence is in (defaults to English)
+        ending_punctuation: str:
+            The punctuation that ends the sentence
+        """
         self._lang = lang
         self._ending_punctuation = ending_punctuation
         self._parts = parts
