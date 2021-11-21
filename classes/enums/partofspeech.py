@@ -139,3 +139,25 @@ class PartOfSpeech(Enum):
         else:
             return False
         return True
+
+    def can_follow_preposition(self, part_of_speech) -> bool:
+        """Checks if the current argument is a preposition and the one given as
+        an argument can follow it.
+
+        Parameters
+        ----------
+        part_of_speech
+            The following part of speech to evaluate.
+
+        Returns
+        ----------
+        bool
+            Returns True if the current part of speech is a preposition and the
+            one to follow is a part of speech that can come after it.
+        """
+        if self.value == PartOfSpeech.PREPOSITION.value:
+            if part_of_speech != PartOfSpeech.NOUN.value:
+                return False
+        else:
+            return False
+        return True
