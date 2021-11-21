@@ -17,3 +17,29 @@ class PartOfSpeech(Enum):
     ADVERB = "adverb"
     CONJUNCTION = "conjunction"
     PREPOSITION = "preposition"
+
+    def can_follow_article_or_noun(self, part_of_speech: str) -> bool:
+        """Checks if the current part of speech is an article or noun and the
+        one given as an argument can follow it.
+
+        Parameters
+        ----------
+        part_of_speech
+            The following part of speech to evaluate.
+
+        Returns
+        ----------
+        bool
+            Returns True if the current part of speech is an article and the
+            one to follow is a part of speech that can come after it.
+        """
+        if self.value in (
+                PartOfSpeech.DEFINITE_ARTICLE.value,
+                PartOfSpeech.INDEFINITE_ARTICLE.value,
+                PartOfSpeech.AMOUNT.value):
+            if part_of_speech not in (
+                    PartOfSpeech.NOUN.value, PartOfSpeech.ADJECTIVE.value):
+                return False
+        else:
+            return False
+        return True
