@@ -6,6 +6,13 @@ class Language(Enum):
     """
     Enum type to represent all available target languages
     offered by the DeepL Translator API.
+
+    ...
+
+    Methods
+    -------
+    get_user_friendly_form(mode):
+        Gets a user-friendly version of the language text
     """
     BULGARIAN = "BG"
     CZECH = "CZ"
@@ -32,3 +39,13 @@ class Language(Enum):
     SLOVENIAN = "SL"
     SWEDISH = "SV"
     CHINESE = "ZH"
+
+    def get_user_friendly_name(self) -> str:
+        """Gets the name of language, e.g: ENGLISH --> English
+
+        Returns
+        ----------
+        str
+            The name of the language.
+        """
+        return self.name.lower().capitalize()
