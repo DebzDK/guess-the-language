@@ -100,7 +100,8 @@ class PartOfSpeech(Enum):
             return False
         return True
 
-    def _can_follow_personal_pronoun_or_noun(self, part_of_speech: str) -> bool:
+    def _can_follow_personal_pronoun_or_noun(
+            self, part_of_speech: str) -> bool:
         """Checks if the current argument is a personal pronoun or a noun and
         the one given as an argument can follow it.
 
