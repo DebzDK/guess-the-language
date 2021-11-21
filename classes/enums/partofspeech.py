@@ -3,7 +3,15 @@ from enum import Enum
 
 
 class PartOfSpeech(Enum):
-    """Enum type to represent all handled parts of speech."""
+    """Enum type to represent all handled parts of speech.
+
+    ...
+
+    Methods
+    -------
+    can_follow() -> bool:
+        Returns True if one part of speech can follow another, otherwise False.
+    """
     DEFINITE_ARTICLE = "definite_article"
     INDEFINITE_ARTICLE = "indefinite_article"
     PERSONAL_PRONOUN = "personal_pronoun"
@@ -18,7 +26,29 @@ class PartOfSpeech(Enum):
     CONJUNCTION = "conjunction"
     PREPOSITION = "preposition"
 
-    def can_follow_article_or_noun(self, part_of_speech: str) -> bool:
+    def can_follow(self, part_of_speech) -> bool:
+        """Checks if one part of speech can follow another.
+
+        Parameters
+        ----------
+        part_of_speech
+            The following part of speech to evaluate.
+
+        Returns
+        ----------
+        bool
+            Returns True if the following part of speech can come after the
+            current, otherwise False.
+        """
+        if (self._can_follow_article_or_noun(part_of_speech) or
+                self._can_follow_verb(part_of_speech) or
+                self._can_follow_personal_pronoun_or_noun(part_of_speech) or
+                self._can_follow_adverb(part_of_speech) or
+                self._can_follow_adjective(part_of_speech)):
+            return True
+        return False
+
+    def _can_follow_article_or_noun(self, part_of_speech: str) -> bool:
         """Checks if the current part of speech is an article or noun and the
         one given as an argument can follow it.
 
@@ -44,7 +74,7 @@ class PartOfSpeech(Enum):
             return False
         return True
 
-    def can_follow_verb(self, part_of_speech: str) -> bool:
+    def _can_follow_verb(self, part_of_speech: str) -> bool:
         """Checks if the current part of speech is a verb and the one given as
         an argument can follow it.
 
@@ -70,7 +100,7 @@ class PartOfSpeech(Enum):
             return False
         return True
 
-    def can_follow_personal_pronoun_or_noun(self, part_of_speech: str) -> bool:
+    def _can_follow_personal_pronoun_or_noun(self, part_of_speech: str) -> bool:
         """Checks if the current argument is a personal pronoun or a noun and
         the one given as an argument can follow it.
 
@@ -93,7 +123,7 @@ class PartOfSpeech(Enum):
             return False
         return True
 
-    def can_follow_adverb(self, part_of_speech: str) -> bool:
+    def _can_follow_adverb(self, part_of_speech: str) -> bool:
         """Checks if the current argument is an adverb and the one given as an
         argument can follow it.
 
@@ -117,7 +147,7 @@ class PartOfSpeech(Enum):
             return False
         return True
 
-    def can_follow_adjective(self, part_of_speech) -> bool:
+    def _can_follow_adjective(self, part_of_speech) -> bool:
         """Checks if the current argument is an adjective and the one given as
         an argument can follow it.
 
@@ -140,7 +170,7 @@ class PartOfSpeech(Enum):
             return False
         return True
 
-    def can_follow_preposition(self, part_of_speech) -> bool:
+    def _can_follow_preposition(self, part_of_speech) -> bool:
         """Checks if the current argument is a preposition and the one given as
         an argument can follow it.
 
@@ -162,7 +192,7 @@ class PartOfSpeech(Enum):
             return False
         return True
 
-    def can_follow_object_pronoun(self, part_of_speech) -> bool:
+    def _can_follow_object_pronoun(self, part_of_speech) -> bool:
         """Checks if the first argument is an object pronoun and the one given as
         an argument can follow it.
 
