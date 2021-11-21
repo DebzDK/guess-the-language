@@ -1,5 +1,5 @@
 """Class used to represent a word"""
-from typing import List
+from classes.enums.partofspeech import PartOfSpeech
 
 
 class Word():
@@ -9,27 +9,27 @@ class Word():
 
     Attributes
     ----------
-    _part_of_speech: List[str]
-        Parts of speech that the word falls under.
+    _part_of_speech: PartOfSpeech
+        Part of speech that the word falls under.
     _value : str
         The word.
     """
 
     # Constructor
-    def __init__(self, value: str, parts_of_speech: List[str]):
+    def __init__(self, value: str, part_of_speech: PartOfSpeech):
         """Initialise the object with the passed parameters.
 
         Parameters
         ----------
         value
             The word.
-        parts_of_speech
-            The parts of speech that the word falls under.
+        part_of_speech
+            The part of speech that the word falls under.
         """
         # A single word cannot have spaces
         # so we strip them to be on the safeside
         self._value = value.replace(" ", "")
-        self._parts_of_speech = part_of_speech
+        self._part_of_speech = part_of_speech
 
     def __str__(self):
         """Modify object string representation using when printing."""
@@ -37,8 +37,8 @@ class Word():
 
     def __repr__(self):
         """Modify object string representation."""
-        return ('<Word value: "%s" parts_of_speech: %s>'
-                % (self._value, self._parts_of_speech))
+        return ('<Word value: "%s" part_of_speech: %s>'
+                % (self._value, self._part_of_speech.name))
 
     # Use of decorator to access _value
     @property
