@@ -11,7 +11,7 @@ class Language(Enum):
 
     Methods
     -------
-    get_user_friendly_form(mode):
+    get_user_friendly_name(mode):
         Gets a user-friendly version of the language text
     """
     BULGARIAN = "BG"
