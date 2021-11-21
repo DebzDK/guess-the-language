@@ -11,13 +11,13 @@ class Sentence():
     Attributes
     ----------
     _value: str
-        String of characters that make up sentence.
+        The string of characters that make up sentence.
     _lang : str
-        Language of sentence.
+        The language the sentence is in.
     _parts : List[Word]
-        List of objects representing the sentences and its structure.
+        The list of objects representing the sentences and its structure.
     _ending_punctuation: str
-        Punctuation symbol to end sentence with.
+        The punctuation symbol to end sentence with.
 
     Methods
     -------
@@ -32,7 +32,7 @@ class Sentence():
         Parameters
         ----------
         parts
-            List of Words that make up the sentence.
+            The list of Words that make up the sentence.
         lang: str
             The language that the sentence is in (defaults to English).
         ending_punctuation: str:
