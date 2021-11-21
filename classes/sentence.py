@@ -1,6 +1,7 @@
 """Class to represent a sentence"""
 from typing import List
 from classes.word import Word
+from classes.enums.language import Language
 
 
 class Sentence():
@@ -12,7 +13,7 @@ class Sentence():
     ----------
     _value: str
         The string of characters that make up sentence.
-    _lang : str
+    _lang : Language
         The language the sentence is in.
     _parts : List[Word]
         The list of objects representing the sentences and its structure.
@@ -25,7 +26,7 @@ class Sentence():
         Translates sentence into another language.
     """
     def __init__(
-            self, parts: List[Word], lang='English',
+            self, parts: List[Word], lang=Language.ENGLISH,
             ending_punctuation="."):
         """Initialise the object with the passed parameters.
 
@@ -33,7 +34,7 @@ class Sentence():
         ----------
         parts
             The list of Words that make up the sentence.
-        lang: str
+        lang: Language
             The language that the sentence is in (defaults to English).
         ending_punctuation: str:
             The punctuation that ends the sentence.
@@ -52,7 +53,13 @@ class Sentence():
     def __repr__(self):
         """Modify object string representation."""
         return ('<Sentence value: "%s" lang: %s>'
-                % (self._value, self._lang))
+                % (self._value, self.lang))
+
+    # Use of decorator to access _lang
+    @property
+    def lang(self):
+        """Getter method for lang property"""
+        return self._lang.get_user_friendly_name()
 
     # TODO: Create TranslationHelper class and complete this function
     def translate(self) -> str:
