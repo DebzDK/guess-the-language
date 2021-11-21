@@ -250,7 +250,8 @@ class GameDictionary():
         if not specificity:
             specificity = random.choice(list(potential_words_by_spec.keys()))
 
-        return random.choice(potential_words_by_spec.get(specificity))
+        random_word = random.choice(potential_words_by_spec.get(specificity))
+        return random_word
 
     @staticmethod
     def _get_search_criteria(part_of_speech: PartOfSpeech) -> tuple:
