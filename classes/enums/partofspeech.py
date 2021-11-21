@@ -92,3 +92,27 @@ class PartOfSpeech(Enum):
         else:
             return False
         return True
+
+    def can_follow_adverb(self, part_of_speech: str) -> bool:
+        """Checks if the current argument is an adverb and the one given as an
+        argument can follow it.
+
+        Parameters
+        ----------
+        part_of_speech
+            The following part of speech to evaluate.
+
+        Returns
+        ----------
+        bool
+            Returns True if the current part of speech is an adverb and the one
+            to follow is a part of speech that can come after it.
+        """
+        if self.value == PartOfSpeech.ADVERB.value:
+            if part_of_speech not in (
+                    PartOfSpeech.ADJECTIVE.value,
+                    PartOfSpeech.CONJUNCTION.value):
+                return False
+        else:
+            return False
+        return True
