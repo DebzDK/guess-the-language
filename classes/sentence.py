@@ -11,32 +11,32 @@ class Sentence():
     Attributes
     ----------
     _value: str
-        string of characters that make up sentence
+        String of characters that make up sentence.
     _lang : str
-        language of sentence
+        Language of sentence.
     _parts : List[Word]
-        list of objects representing the sentences and its structure
+        List of objects representing the sentences and its structure.
     _ending_punctuation: str
-        punctuation symbol to end sentence with
+        Punctuation symbol to end sentence with.
 
     Methods
     -------
     translate() -> str:
-        Translates sentence into another language
+        Translates sentence into another language.
     """
     def __init__(
             self, parts: List[Word], lang='English',
             ending_punctuation="."):
-        """Initialise the object with the passed parameters
+        """Initialise the object with the passed parameters.
 
         Parameters
         ----------
         parts
-            list of Words that make up the sentence
+            List of Words that make up the sentence.
         lang: str
-            The language that the sentence is in (defaults to English)
+            The language that the sentence is in (defaults to English).
         ending_punctuation: str:
-            The punctuation that ends the sentence
+            The punctuation that ends the sentence.
         """
         self._lang = lang
         self._ending_punctuation = ending_punctuation
@@ -46,17 +46,17 @@ class Sentence():
         self._value = sentence
 
     def __str__(self) -> str:
-        """Modify object string representation using when printing"""
+        """Modify object string representation using when printing."""
         return self._value
 
     def __repr__(self):
-        """Modify object string representation"""
+        """Modify object string representation."""
         return ('<Sentence value: "%s" lang: %s>'
                 % (self._value, self._lang))
 
     # TODO: Create TranslationHelper class and complete this function
     def translate(self) -> str:
-        """Returns a translation"""
+        """Returns a translation."""
         return self._value + " has been translated to: Bonjour!"
 
     # TODO: If time allows, implement Text-to-speech functionality using
