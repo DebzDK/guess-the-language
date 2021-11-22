@@ -27,6 +27,8 @@ import re
 from typing import Any, Callable, List
 from inputmode import InputMode
 from difficulty import Difficulty
+from classes.sentencegenerator import SentenceGenerator
+
 
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
 CHAR_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
@@ -207,6 +209,10 @@ def run_game():
             )
         elif input_mode == 2:
             print(sentences[num_of_questions_asked])
+            num_of_questions_asked += 1
+        elif input_mode == 3:
+            print(SentenceGenerator.generate_sentence(
+                CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]))
             num_of_questions_asked += 1
         else:
             break
