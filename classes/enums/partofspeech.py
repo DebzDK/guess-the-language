@@ -71,7 +71,9 @@ class PartOfSpeech(Enum):
         """
         if ((self is PartOfSpeech.VERB and self in sentence_structure) or
                 (self is PartOfSpeech.ADVERB and
-                    preceeding_part_of_speech is PartOfSpeech.ADJECTIVE)):
+                    preceeding_part_of_speech is PartOfSpeech.ADJECTIVE) or
+                (self is PartOfSpeech.ADJECTIVE and
+                    preceeding_part_of_speech is PartOfSpeech.ADVERB)):
             return False
         return True
 
