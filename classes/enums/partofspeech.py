@@ -165,8 +165,7 @@ class PartOfSpeech(Enum):
             the current part of speech can follow it.
         """
         if part_of_speech is PartOfSpeech.ADJECTIVE:
-            if self not in (
-                    PartOfSpeech.NOUN, PartOfSpeech.PREPOSITION):
+            if self is not PartOfSpeech.NOUN:
                 return False
         else:
             return False
