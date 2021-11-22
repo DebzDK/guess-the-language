@@ -28,6 +28,26 @@ class SentenceGenerator():
     """
 
     @classmethod
+    def generate_sentence(cls, character_limit: int) -> Sentence:
+        """Generates a sentence that follows a basic structure and adheres to a
+        character limit.
+
+        Returns
+        -------
+        Sentence
+            A basic sentence.
+        """
+        sentence_structure = cls._get_sentence_structure()
+        words = []
+        for count, part_of_speech in enumerate(sentence_structure):
+            word = cls._select_word_for_part_of_speech(
+                    part_of_speech, character_limit)
+            if count == 0:
+                word = word.lower().capitalize()
+            words.append(Word(word, part_of_speech))
+        return Sentence(words, Language.ENGLISH)
+
+    @classmethod
     def _get_sentence_structure(cls) -> List[PartOfSpeech]:
         """Returns a random but valid order of parts of speech.
 
