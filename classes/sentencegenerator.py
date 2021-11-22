@@ -67,9 +67,9 @@ class SentenceGenerator():
         temp_list_of_choices = list_of_choices.copy()
 
         while not found_predicate:
-            preceeding_part_of_speech = sentence_structure[-1]
+            preceding_part_of_speech = sentence_structure[-1]
 
-            if preceeding_part_of_speech is PartOfSpeech.CONJUNCTION:
+            if preceding_part_of_speech is PartOfSpeech.CONJUNCTION:
                 next_part = cls._get_random_article()
             else:
                 try:
@@ -77,9 +77,9 @@ class SentenceGenerator():
                 except IndexError:
                     break
 
-            if next_part.can_follow(preceeding_part_of_speech):
+            if next_part.can_follow(preceding_part_of_speech):
                 if next_part.can_work_in_structure(
-                        sentence_structure, preceeding_part_of_speech):
+                        sentence_structure, preceding_part_of_speech):
 
                     sentence_structure.append(next_part)
                     temp_list_of_choices = list_of_choices.copy()
