@@ -9,7 +9,7 @@ class PartOfSpeech(Enum):
 
     Methods
     -------
-    can_follow() -> bool:
+    can_follow(part_of_speech: str) -> bool:
         Returns True if one part of speech can follow another, otherwise False.
     """
     DEFINITE_ARTICLE = "definite_article"
@@ -26,19 +26,19 @@ class PartOfSpeech(Enum):
     CONJUNCTION = "conjunction"
     PREPOSITION = "preposition"
 
-    def can_follow(self, part_of_speech) -> bool:
+    def can_follow(self, part_of_speech: str) -> bool:
         """Checks if one part of speech can follow another.
 
         Parameters
         ----------
         part_of_speech
-            The following part of speech to evaluate.
+            The preceeding part of speech to evaluate.
 
         Returns
         ----------
         bool
-            Returns True if the following part of speech can come after the
-            current, otherwise False.
+            Returns True if the current part of speech can follow the
+            preceeding part, otherwise False.
         """
         if (self._can_follow_article_or_noun(part_of_speech) or
                 self._can_follow_verb(part_of_speech) or
@@ -49,48 +49,47 @@ class PartOfSpeech(Enum):
         return False
 
     def _can_follow_article_or_noun(self, part_of_speech: str) -> bool:
-        """Checks if the current part of speech is an article or noun and the
-        one given as an argument can follow it.
+        """Checks if the preceeding part of speech is an article or noun and the
+        current one can follow it.
 
         Parameters
         ----------
         part_of_speech
-            The following part of speech to evaluate.
+            The preceeding part of speech to evaluate.
 
         Returns
         ----------
         bool
-            Returns True if the current part of speech is an article and the
-            one to follow is a part of speech that can come after it.
+            Returns True if the preceeding part of speech is an article or
+            amount and the current part of speech can follow it.
         """
-        if self.value in (
+        if part_of_speech in (
                 PartOfSpeech.DEFINITE_ARTICLE.value,
                 PartOfSpeech.INDEFINITE_ARTICLE.value,
                 PartOfSpeech.AMOUNT.value):
-            if part_of_speech not in (
-                    PartOfSpeech.NOUN.value, PartOfSpeech.ADJECTIVE.value):
+            if self.value not in (PartOfSpeech.NOUN, PartOfSpeech.ADJECTIVE):
                 return False
         else:
             return False
         return True
 
     def _can_follow_verb(self, part_of_speech: str) -> bool:
-        """Checks if the current part of speech is a verb and the one given as
-        an argument can follow it.
+        """Checks if the preceeding part of speech is a verb and the current
+        part of speech can follow it.
 
         Parameters
         ----------
         part_of_speech
-            The following part of speech to evaluate.
+            The preceeding part of speech to evaluate.
 
         Returns
         ----------
         bool
-            Returns True if the current part of speech is a verb and the
-            one to follow is a part of speech that can come after it.
+            Returns True if the preceeding part of speech is a verb and the
+            current part of speech can follow it.
         """
-        if self.value == PartOfSpeech.VERB.value:
-            if part_of_speech not in (
+        if part_of_speech == PartOfSpeech.VERB.value:
+            if self.value not in (
                     PartOfSpeech.DEFINITE_ARTICLE.value,
                     PartOfSpeech.ADVERB.value,
                     PartOfSpeech.NOUN.value,
@@ -102,45 +101,46 @@ class PartOfSpeech(Enum):
 
     def _can_follow_personal_pronoun_or_noun(
             self, part_of_speech: str) -> bool:
-        """Checks if the current argument is a personal pronoun or a noun and
-        the one given as an argument can follow it.
+        """Checks if the preceeding part of speech is a personal pronoun or
+        a noun and the current part of speech can follow it.
 
         Parameters
         ----------
         part_of_speech
-            The following part of speech to evaluate.
+            The preceeding part of speech to evaluate.
 
         Returns
         ----------
         bool
-            Returns True if the current part of speech is a personal pronoun or
-            a noun and the one to follow isn't a verb.
+            Returns True if the preceeding part of speech is a personal pronoun
+            or a noun and the current part of speech that
+            isn't a verb.
         """
-        if self.value in (
+        if part_of_speech in (
                 PartOfSpeech.NOUN.value, PartOfSpeech.PERSONAL_PRONOUN.value):
-            if part_of_speech != PartOfSpeech.VERB.value:
+            if self.value != PartOfSpeech.VERB.value:
                 return False
         else:
             return False
         return True
 
     def _can_follow_adverb(self, part_of_speech: str) -> bool:
-        """Checks if the current argument is an adverb and the one given as an
-        argument can follow it.
+        """Checks if the preceeding part of speech is an adverb and the current
+        part of speech can follow it.
 
         Parameters
         ----------
         part_of_speech
-            The following part of speech to evaluate.
+            The preceeding part of speech to evaluate.
 
         Returns
         ----------
         bool
-            Returns True if the current part of speech is an adverb and the one
-            to follow is a part of speech that can come after it.
+            Returns True if the preceeding part of speech is an adverb and the
+            current part of speech can follow it.
         """
-        if self.value == PartOfSpeech.ADVERB.value:
-            if part_of_speech not in (
+        if part_of_speech == PartOfSpeech.ADVERB.value:
+            if self.value not in (
                     PartOfSpeech.ADJECTIVE.value,
                     PartOfSpeech.CONJUNCTION.value):
                 return False
@@ -148,68 +148,68 @@ class PartOfSpeech(Enum):
             return False
         return True
 
-    def _can_follow_adjective(self, part_of_speech) -> bool:
-        """Checks if the current argument is an adjective and the one given as
-        an argument can follow it.
+    def _can_follow_adjective(self, part_of_speech: str) -> bool:
+        """Checks if the preceeding part of speech is an adjective and the current one
+        is a part of speech can follow it.
 
         Parameters
         ----------
         part_of_speech
-            The following part of speech to evaluate.
+            The preceeding part of speech to evaluate.
 
         Returns
         ----------
         bool
-            Returns True if the current part of speech is an adjective and the
-            one to follow is a part of speech that can come after it.
+            Returns True if the preceeding part of speech is an adjective and
+            the current part of speech can follow it.
         """
-        if self.value == PartOfSpeech.ADJECTIVE:
-            if part_of_speech not in (
+        if part_of_speech == PartOfSpeech.ADJECTIVE.value:
+            if self not in (
                     PartOfSpeech.NOUN.value, PartOfSpeech.PREPOSITION.value):
                 return False
         else:
             return False
         return True
 
-    def _can_follow_preposition(self, part_of_speech) -> bool:
-        """Checks if the current argument is a preposition and the one given as
-        an argument can follow it.
+    def _can_follow_preposition(self, part_of_speech: str) -> bool:
+        """Checks if the preceeding part of speech is a preposition and the current one
+        is a part of speech can follow it.
 
         Parameters
         ----------
         part_of_speech
-            The following part of speech to evaluate.
+            The preceeding part of speech to evaluate.
 
         Returns
         ----------
         bool
-            Returns True if the current part of speech is a preposition and the
-            one to follow is a part of speech that can come after it.
+            Returns True if the preceeding part of speech is a preposition and
+            the current part of speech can follow it.
         """
-        if self.value == PartOfSpeech.PREPOSITION.value:
-            if part_of_speech != PartOfSpeech.NOUN.value:
+        if part_of_speech == PartOfSpeech.PREPOSITION.value:
+            if self.value != PartOfSpeech.NOUN.value:
                 return False
         else:
             return False
         return True
 
-    def _can_follow_object_pronoun(self, part_of_speech) -> bool:
-        """Checks if the first argument is an object pronoun and the one given as
-        an argument can follow it.
+    def _can_follow_object_pronoun(self, part_of_speech: str) -> bool:
+        """Checks if the preceeding part of speech is an object pronoun and the
+        current part of speech can follow it.
 
         Parameters
         ----------
         part_of_speech
-            The following part of speech to evaluate.
+            The preceeding part of speech to evaluate.
 
         Returns
         ----------
         bool
-            Returns True if the current part of speech is an object pronoun and
-            the one to follow is a part of speech that can come after it.
+            Returns True if the preceeding part of speech is an object pronoun
+            and the current part of speech can come after it.
         """
-        if self is PartOfSpeech.OBJECT_PRONOUN.value:
-            if part_of_speech not in (
+        if part_of_speech == PartOfSpeech.OBJECT_PRONOUN.value:
+            if self.value not in (
                     PartOfSpeech.CONJUNCTION.value,
                     PartOfSpeech.PREPOSITION.value):
                 return False
