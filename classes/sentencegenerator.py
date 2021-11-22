@@ -1,4 +1,6 @@
 """Class for generating random sentences."""
+import random
+from classes.enums.partofspeech import PartOfSpeech
 
 
 class SentenceGenerator():
@@ -19,3 +21,17 @@ class SentenceGenerator():
     generate_sentence(character_limit: int) -> Sentence:
         Generates and returns a sentence.
     """
+
+    @staticmethod
+    def _get_random_article() -> PartOfSpeech:
+        """Gets a random article.
+
+        Returns
+        ----------
+        PartOfSpeech
+            Returns a definite or indefinite article.
+        """
+        return random.choice([
+            PartOfSpeech.DEFINITE_ARTICLE,
+            PartOfSpeech.INDEFINITE_ARTICLE
+        ])
