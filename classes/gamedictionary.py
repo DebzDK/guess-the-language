@@ -169,7 +169,7 @@ class GameDictionary():
                 "Wayne",
                 "William",
                 "Wilhemina",
-                "Xander"
+                "Xander",
                 "Xavier",
                 "Xena",
                 "Yolanda",
@@ -280,5 +280,4 @@ class GameDictionary():
         # parts of speech that have no specificity in their key
         key, specificity = criteria if len(criteria) == 2 else (
                 criteria[0], None)
-
         return (key + "s", specificity)
