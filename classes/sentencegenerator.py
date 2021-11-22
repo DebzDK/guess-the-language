@@ -1,6 +1,10 @@
 """Class for generating random sentences."""
 import random
 from typing import List
+from classes.sentence import Sentence
+from classes.word import Word
+from classes.gamedictionary import GameDictionary
+from classes.enums.language import Language
 from classes.enums.partofspeech import PartOfSpeech
 
 
@@ -45,6 +49,36 @@ class SentenceGenerator():
             structure.append(next_part)
 
         return structure
+
+    @staticmethod
+    def _has_subject(structure: List[PartOfSpeech]) -> bool:
+        """Checks whether or not a given structure has enough parts to comprise
+        the subject of a sentence.
+
+        Determines if a structure starts with a subject, specifically:
+            - noun phrase
+                article (+ adjective) + noun
+
+        Parameters
+        ----------
+        structure
+            A list of the parts of speech structuring a sentence.
+
+        Returns
+        ----------
+        bool
+            Returns True if structure has enough parts of speech to make the
+            subject of a sentence.
+        """
+        if len(structure) > 1:
+            if structure[0] in (
+                    PartOfSpeech.DEFINITE_ARTICLE,
+                    PartOfSpeech.INDEFINITE_ARTICLE):
+                following_part = structure[1]
+
+                if following_part is PartOfSpeech.NOUN:
+                    return True
+        return False
 
     @staticmethod
     def _get_random_article() -> PartOfSpeech:
