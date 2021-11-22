@@ -118,7 +118,7 @@ class GameDictionary():
                 "man",
                 "woman",
                 "father",
-                "step-father"
+                "step-father",
                 "dad",
                 "step-dad",
                 "mother",
