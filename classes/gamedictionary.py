@@ -1,6 +1,6 @@
 """Class for word lookup based on parts of speech."""
 import random
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from classes.enums.partofspeech import PartOfSpeech
 
 
@@ -16,8 +16,9 @@ class GameDictionary():
     Methods
     -------
     search_for_word_by_type(
-            part_of_speech: PartOfSpeech) -> str
-        Finds and returns a word that meets the given criteria.
+            part_of_speech: PartOfSpeech) -> Tuple[str, str]
+        Finds and returns a word that meets the given criteria with its part of
+        speech type/specificity.
     """
 
     WORDS: Dict[str, Dict[str, List[str]]] = {
@@ -275,7 +276,8 @@ class GameDictionary():
     }
 
     @classmethod
-    def search_for_word_by_type(cls, part_of_speech: PartOfSpeech) -> str:
+    def search_for_word_by_type(
+            cls, part_of_speech: PartOfSpeech) -> Tuple[str, str]:
         """Finds a random word in the WORDS dict that falls under a given part
         of speech.
 
@@ -297,7 +299,7 @@ class GameDictionary():
             specificity = random.choice(list(potential_words_by_spec.keys()))
 
         random_word = random.choice(potential_words_by_spec.get(specificity))
-        return random_word
+        return (random_word, specificity)
 
     @staticmethod
     def _get_search_criteria(part_of_speech: PartOfSpeech) -> tuple:
