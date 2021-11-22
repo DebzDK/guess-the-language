@@ -1,5 +1,6 @@
 """Enum type to represent a part of speech."""
 from enum import Enum
+from typing import List
 
 
 class PartOfSpeech(Enum):
@@ -11,6 +12,10 @@ class PartOfSpeech(Enum):
     -------
     can_follow(part_of_speech: PartOfSpeech) -> bool:
         Returns True if one part of speech can follow another, otherwise False.
+    can_work_in_structure(sentence_structure: List[PartOfSpeech],
+            preceeding_part_of_speech: PartOfSpeech) -> bool:
+        Returns True if a part of speech makes sense in a given sentence
+        structure and the preceeding part of speech.
     """
     DEFINITE_ARTICLE = "definite_article"
     INDEFINITE_ARTICLE = "indefinite_article"
@@ -47,6 +52,28 @@ class PartOfSpeech(Enum):
                 self._can_follow_adjective(part_of_speech)):
             return True
         return False
+
+    def can_work_in_structure(
+            self, sentence_structure: List["PartOfSpeech"],
+            preceeding_part_of_speech: "PartOfSpeech") -> bool:
+        """Checks if one part of speech can follow another.
+
+        Parameters
+        ----------
+        part_of_speech
+            The preceeding part of speech to evaluate.
+
+        Returns
+        ----------
+        bool
+            Returns True if the current part of speech can follow the
+            preceeding part, otherwise False.
+        """
+        if ((self is PartOfSpeech.VERB and self in sentence_structure) or
+                (self is PartOfSpeech.ADVERB and
+                    preceeding_part_of_speech is PartOfSpeech.ADJECTIVE)):
+            return False
+        return True
 
     def _can_follow_article_or_noun(
             self, part_of_speech: "PartOfSpeech") -> bool:
