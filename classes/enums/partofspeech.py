@@ -22,7 +22,7 @@ class PartOfSpeech(Enum):
     PERSONAL_PRONOUN = "personal_pronoun"
     POSSESSIVE_PRONOUN = "possessive_pronoun"
     OBJECT_PRONOUN = "object_pronoun"
-    REFLEXIVE_PRONOUN = "reflexive)pronoun"
+    REFLEXIVE_PRONOUN = "reflexive_pronoun"
     ADJECTIVE = "adjective"
     NOUN = "noun"
     AMOUNT = "amount"
