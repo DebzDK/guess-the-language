@@ -27,6 +27,53 @@ class SentenceGenerator():
         Generates and returns a sentence.
     """
 
+    @classmethod
+    def _get_sentence_structure(cls) -> List[PartOfSpeech]:
+        """Returns a random but valid order of parts of speech.
+
+        Uses the random module to choose parts of speech, ensuring
+        that the chosen part of speech can follow the previous.
+
+        Returns
+        ----------
+        List[PartOfSpeech]
+            A list of PartOfSpeech enums with a valid sentence order.
+        """
+        sentence_structure = cls._get_subject()
+        found_predicate = False
+        start_of_predicate_index = len(sentence_structure)
+
+        list_of_choices = list(PartOfSpeech)
+        temp_list_of_choices = list_of_choices.copy()
+
+        while not found_predicate:
+            preceeding_part_of_speech = sentence_structure[-1]
+
+            if preceeding_part_of_speech is PartOfSpeech.CONJUNCTION:
+                next_part = cls._get_random_article()
+            else:
+                try:
+                    next_part = random.choice(temp_list_of_choices)
+                except IndexError:
+                    break
+
+            if next_part.can_follow(preceeding_part_of_speech):
+                if next_part.can_work_in_structure(
+                        sentence_structure, preceeding_part_of_speech):
+
+                    sentence_structure.append(next_part)
+                    temp_list_of_choices = list_of_choices.copy()
+
+                    if not found_predicate:
+                        found_predicate = cls._has_predicate(
+                                sentence_structure, start_of_predicate_index)
+                else:
+                    temp_list_of_choices.remove(next_part)
+                    list_of_choices.remove(next_part)
+            else:
+                temp_list_of_choices.remove(next_part)
+        return sentence_structure
+
     @staticmethod
     def _select_word_for_part_of_speech(
             part_of_speech: PartOfSpeech, char_limit: int) -> Word:
@@ -111,6 +158,44 @@ class SentenceGenerator():
                 following_part = structure[1]
 
                 if following_part is PartOfSpeech.NOUN:
+                    return True
+        return False
+
+    @classmethod
+    def _has_predicate(
+            cls, structure: List[PartOfSpeech], predicate_index: int) -> bool:
+        """Checks whether or not a given structure has enough parts to comprise
+        the predicate of a sentence.
+
+        Determines if a structure ends with a predicate, specifically:
+            - verb + (noun phrase or or noun or adverb)
+
+        Parameters
+        ----------
+        structure
+            A list of the parts of speech structuring a sentence.
+        predicate_index
+            The index of the part of speech that marks the start of the
+            predicate in the list.
+
+        Returns
+        ----------
+        bool
+            Returns True if structure has enough parts of speech to make a
+            sentence.
+        """
+        if predicate_index > -1 and len(structure) > predicate_index + 1:
+            start_of_predicate = structure[predicate_index]
+
+            if start_of_predicate is PartOfSpeech.VERB:
+                following_part = structure[predicate_index + 1]
+                if ((following_part in (
+                    PartOfSpeech.DEFINITE_ARTICLE,
+                    PartOfSpeech.INDEFINITE_ARTICLE) and
+                    cls._has_subject(structure[1:])) or
+                        following_part in (
+                            PartOfSpeech.OBJECT_PRONOUN, PartOfSpeech.NOUN,
+                            PartOfSpeech.ADVERB)):
                     return True
         return False
 
