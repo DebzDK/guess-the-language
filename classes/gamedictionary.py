@@ -1,6 +1,7 @@
 """Class for word lookup based on parts of speech."""
 import random
 from typing import Dict, List, Tuple
+from num2words import num2words
 from classes.enums.partofspeech import PartOfSpeech
 
 
@@ -292,13 +293,27 @@ class GameDictionary():
             A word that matches the given criteria.
         """
         key, specificity = cls._get_search_criteria(part_of_speech)
+        random_word = None
 
-        potential_words_by_spec = cls.WORDS.get(key)
+        if part_of_speech == PartOfSpeech.ADVERB:
+            potential_adjectives = cls.WORDS["adjectives"].get("compliment")
+            adjective = random.choice(potential_adjectives)
+            while not random_word:
+                random_word = cls._get_adjective_in_adverb_form(adjective)
+        elif part_of_speech == PartOfSpeech.AMOUNT:
+            number = random.randint(0, 100)
+            random_word = cls._get_word_for_number(number)
+        else:
+            potential_words_by_spec = cls.WORDS.get(key)
 
-        if specificity is None:
-            specificity = random.choice(list(potential_words_by_spec.keys()))
+            if specificity is None:
+                specificity = random.choice(
+                    list(potential_words_by_spec.keys())
+                )
 
-        random_word = random.choice(potential_words_by_spec.get(specificity))
+            random_word = random.choice(
+                potential_words_by_spec.get(specificity)
+            )
         return (random_word, specificity)
 
     @staticmethod
@@ -329,3 +344,37 @@ class GameDictionary():
         key, specificity = criteria if len(criteria) == 2 else (
                 criteria[0], None)
         return (key + "s", specificity)
+
+    @staticmethod
+    def _get_adjective_in_adverb_form(adjective: str) -> str:
+        """Converts a given adjective to an adverb and returns it.
+
+        Returns
+        -------
+        str
+            The adverb.
+        """
+        adverb = ""
+        last_letter = adjective[-1]
+        letter_before_last = adjective[-2]
+
+        if letter_before_last != "l" and last_letter in ("edlsg"):
+            adverb = adjective + "ly"
+        elif last_letter == "y":
+            adverb = adjective[0:-2] + "ily"
+        elif last_letter == "c":
+            adverb = adjective + "ally"
+
+        return adverb
+
+    @staticmethod
+    def _get_word_for_number(number: int) -> str:
+        """Gets the number in its word form.
+
+        Returns
+        -------
+        str
+            The number as a word.
+        """
+        # Use library to convert number to word equivalent
+        return num2words(number, lang="en")
