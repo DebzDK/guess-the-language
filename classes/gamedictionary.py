@@ -247,7 +247,7 @@ class GameDictionary():
 
         potential_words_by_spec = cls.WORDS.get(key)
 
-        if not specificity:
+        if specificity is None:
             specificity = random.choice(list(potential_words_by_spec.keys()))
 
         random_word = random.choice(potential_words_by_spec.get(specificity))
