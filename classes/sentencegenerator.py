@@ -1,5 +1,6 @@
 """Class for generating random sentences."""
 import random
+from typing import List
 from classes.enums.partofspeech import PartOfSpeech
 
 
@@ -21,6 +22,29 @@ class SentenceGenerator():
     generate_sentence(character_limit: int) -> Sentence:
         Generates and returns a sentence.
     """
+
+    @classmethod
+    def _get_subject(cls) -> List[PartOfSpeech]:
+        """Gets a subject structure for a sentence.
+
+        Following the format:
+            definitve article (+ adjective) + noun
+
+        Returns
+        ----------
+        List[PartOfSpeech]
+            Returns a list of parts of speech that can make up the subject of a
+            sentence.
+        """
+        structure = [cls._get_random_article()]
+        next_part = random.choice([PartOfSpeech.ADJECTIVE, PartOfSpeech.NOUN])
+        if next_part is PartOfSpeech.ADJECTIVE:
+            structure.append(next_part)
+            structure.append(PartOfSpeech.NOUN)
+        else:
+            structure.append(next_part)
+
+        return structure
 
     @staticmethod
     def _get_random_article() -> PartOfSpeech:
