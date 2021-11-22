@@ -27,6 +27,40 @@ class SentenceGenerator():
         Generates and returns a sentence.
     """
 
+    @staticmethod
+    def _select_word_for_part_of_speech(
+            part_of_speech: PartOfSpeech, char_limit: int) -> Word:
+        """Selects a word for a given part of speech.
+
+        Selects a word for a given part of speech at random until one is found
+        that falls within a sentence's character limit for the current game's
+        difficulty level.
+
+        Parameters
+        ----------
+        part_of_speech
+            The part of speech to find a word for.
+        char_limit
+            The character limit for the sentence.
+
+        Returns
+        ----------
+        Word
+            A Word object if one is found that meets the criteria, otherwise
+            None.
+        """
+        has_found_word = False
+        found_word = ""
+
+        while not has_found_word:
+            found_word = GameDictionary.search_for_word_by_type(
+                part_of_speech)
+
+            if char_limit - len(found_word) >= 0:
+                has_found_word = True
+
+        return found_word
+
     @classmethod
     def _get_subject(cls) -> List[PartOfSpeech]:
         """Gets a subject structure for a sentence.
@@ -57,7 +91,7 @@ class SentenceGenerator():
 
         Determines if a structure starts with a subject, specifically:
             - noun phrase
-                article (+ adjective) + noun
+                definitve article (+ adjective) + noun
 
         Parameters
         ----------
@@ -67,8 +101,8 @@ class SentenceGenerator():
         Returns
         ----------
         bool
-            Returns True if structure has enough parts of speech to make the
-            subject of a sentence.
+            Returns True if structure has enough parts of speech to make a
+            sentence.
         """
         if len(structure) > 1:
             if structure[0] in (
