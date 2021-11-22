@@ -16,7 +16,7 @@ class GameDictionary():
     Methods
     -------
     search_for_word_by_type(
-            part_of_speech: PartOfSpeech, specificity: str) -> str
+            part_of_speech: PartOfSpeech) -> str
         Finds and returns a word that meets the given criteria.
     """
 
