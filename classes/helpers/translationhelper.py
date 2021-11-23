@@ -42,7 +42,7 @@ class TranslationHelper():
                 split_date = today.strftime("%Y %m").split()
                 limit_refresh_date = date(
                     int(split_date[0]), int(split_date[1]) + 1, 16)
-                return (f"LIMIT REACHED ({code}) - The monthly quota has been"
+                return (f"LIMIT REACHED ({code}) - The monthly quota has been "
                         "reached.\nIt will reset on "
                         f"{limit_refresh_date.strftime('%B %d, %Y')}.")
             return detailed_error
