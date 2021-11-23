@@ -16,15 +16,16 @@ class TranslationHelper():
 
     Methods
     -------
-    translate_sentence(text: str) -> str:
+    translate_sentence(text: str) -> Translation:
         Translates sentence into another language.
     """
 
     @staticmethod
-    def translate_sentence(text: str):
+    def translate_sentence(text: str) -> Translation:
         """Make request for translation and returns response."""
 
-        def create_translation_error(error: _T, target_language: Language):
+        def create_translation_error(
+                error: _T, target_language: Language) -> Translation:
             """Returns error wrapped as in a Translation object."""
             return Translation((
                         "\nUh oh... We encountered the following issue:\n"
