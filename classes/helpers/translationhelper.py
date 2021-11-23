@@ -40,7 +40,8 @@ class TranslationHelper():
             if code == 456:
                 today = date.today()
                 split_date = today.strftime("%Y %m").split()
-                limit_refresh_date = date(int(today[0]), int(today[1]) + 1, 16)
+                limit_refresh_date = date(
+                    int(split_date[0]), int(split_date[1]) + 1, 16)
                 return (f"LIMIT REACHED ({code}) - The monthly quota has been"
                         "reached.\nIt will reset on "
                         f"{limit_refresh_date.strftime('%B %d, %Y')}.")
