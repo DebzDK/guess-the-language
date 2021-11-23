@@ -24,14 +24,22 @@ Further information can be found in the project's README file.
 ----------------------------------------------------------------------
 """
 import re
-from typing import Any, Callable, List
+from typing import Any, Callable, List, Union
+from dotenv import load_dotenv
 from inputmode import InputMode
 from difficulty import Difficulty
 from classes.sentencegenerator import SentenceGenerator
+from classes.helpers.translationhelper import TranslationHelper
 
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
 CHAR_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
 QUIT_COMMANDS = ["q", "quit"]
+UNICODES = {
+    "green": "\u001b[32;1m",
+    "red": "\u001b[31;1m",
+    "underline": "\u001b\033[4m",
+    "reset": "\u001b[37;0m"
+}
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -177,28 +185,63 @@ def await_input(prompt: str, process: Callable[[str], Any] = None,
             break
 
 
+def get_processed_user_input(
+        prompt: str, process: Callable[[str], Any] = None) -> Union[str, None]:
+    """Prompt user for input, process input if required and return the input.
+
+    Continuously waits for user input and executes functions based on input
+    as required until it can be returned.
+
+    Parameters
+    ----------
+    prompt
+        The text to display to the user to indicate the desired type of input.
+    process
+        The function to call process user input.
+
+    Returns
+    -------
+        Union[str, None]
+            A string value if user input passes processing, otherwise None if
+            the input loop should be exited and return nothing.
+    """
+    while True:
+        user_input = input(prompt)
+        if process is not None:
+            end_loop = process(user_input)
+            if end_loop:
+                return user_input
+        else:
+            return None
+
+
 def run_game():
     """Run the game loop."""
     global input_mode
     num_of_questions_asked = 0
     num_of_correct_answers = 0
     character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+    sentences_from_file = None
+    sentence_to_translate = None
 
     if input_mode == 2:
         print((
             "\nSince you've chosen to play with file input,"
             " please make sure that each sentence in your file"
             " is on a new line.\n"))
-        sentences = read_from_file()
+        sentences_from_file = read_from_file()
 
     while (not is_game_over(num_of_questions_asked) and
             ((input_mode != 2) or
                 (input_mode == 2 and
-                    num_of_questions_asked < len(sentences)))):
-        print(f'\nQuestion {num_of_questions_asked + 1}\n')
+                    num_of_questions_asked < len(sentences_from_file)))):
+        print(
+            f"\n{UNICODES['underline']}"
+            f"Question {num_of_questions_asked + 1}{UNICODES['reset']}\n"
+        )
 
         if input_mode == 1:
-            await_input(
+            sentence_to_translate = get_processed_user_input(
                 (
                     "Enter a sentence"
                     f" (no longer than {character_limit} characters"
@@ -207,21 +250,58 @@ def run_game():
                 is_viable_for_translation
             )
         elif input_mode == 2:
-            print(sentences[num_of_questions_asked])
-            num_of_questions_asked += 1
+            sentence_to_translate = sentences_from_file[num_of_questions_asked]
         elif input_mode == 3:
-            print(SentenceGenerator.generate_sentence(
-                CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]))
-            num_of_questions_asked += 1
+            sentence_to_translate = SentenceGenerator.generate_sentence(
+                CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level])
+
+        if input_mode != 1:
+            print(sentence_to_translate)
+
+        translation = TranslationHelper.translate_sentence(
+                sentence_to_translate)
+
+        if "Error: " in translation.text:
+            print(f"{translation}\n")
+            print("You will now be returned to the main menu...")
+            print(
+                "If it's a connection or HTTP issue, please try again."
+                "\nOtherwise, please contact the developer to report a "
+                "potential bug.\n"
+            )
+            return
+
+        num_of_questions_asked += 1
+        answer = translation.lang
+
+        print(f"\nTranslation: {translation}\n")
+        guess = get_processed_user_input(
+            "What language is this?\n", is_valid_answer)
+        lower_case_guess = guess.lower()
+
+        if lower_case_guess == answer.name.lower():
+            result_indicator = UNICODES['green']
+            num_of_correct_answers += 1
         else:
-            break
+            result_indicator = UNICODES['red']
+
+        print(
+            f"\nYou guessed{result_indicator} {guess}"
+            f"{UNICODES['reset']} and the answer is"
+            f"{UNICODES['green']} {translation.lang.get_user_friendly_name()}"
+            f" ({answer.value}){UNICODES['reset']}."
+        )
+
+    if num_of_correct_answers < (num_of_questions_asked / 2):
+        extra_text = "..\nBetter luck next time"
+    elif num_of_correct_answers == num_of_questions_asked:
+        extra_text = "\nPerfect score"
+    else:
+        extra_text = "\nWell done"
 
     print(
-        (
-            f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
-            " languages correctly..."
-            "\nBetter luck next time.\n"
-        )
+        f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
+        f" languages correctly.{extra_text}!\n"
     )
 
 
@@ -280,6 +360,22 @@ def is_viable_for_translation(user_input) -> bool:
     return True
 
 
+def is_valid_answer(user_input: str) -> bool:
+    """Check if user input is a valid answer.
+
+    Ensures that the user input isn't an empty string and that it's at
+    least 2 characters, in case the use has entered a code representing
+    a language.
+
+    Returns
+    ----------
+    bool
+        True if user input is not an empty string, otherwise False.
+    """
+    user_input = user_input.strip()
+    return user_input and len(user_input) > 1
+
+
 def is_game_over(question_count: int) -> bool:
     """Check if the game is over.
 
@@ -326,7 +422,8 @@ def is_quit_command(user_input) -> bool:
 
 
 def main():
-    """Run display and game functions."""
+    """Load environment variables and run display and game functions."""
+    load_dotenv()
     display_title()
     display_main_menu()
     await_input("Select menu option: ", process_main_menu_selection)
