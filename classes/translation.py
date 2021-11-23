@@ -1,4 +1,5 @@
 """Class used to represent a translation"""
+from classes.enums.language import Language
 
 
 class Translation():
@@ -10,11 +11,11 @@ class Translation():
     ----------
     _text : str
         The translation.
-    _lang : str
+    _lang : Language
         The language the translation is in.
     """
 
-    def __init__(self, text: str, lang: str):
+    def __init__(self, text: str, lang: Language):
         """Initialise the object with the passed parameters.
 
         Parameters

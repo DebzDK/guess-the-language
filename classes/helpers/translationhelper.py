@@ -24,7 +24,7 @@ class TranslationHelper():
     def translate_sentence(text: str):
         """Make request for translation and returns response."""
 
-        def create_translation_error(error: _T, target_language: str):
+        def create_translation_error(error: _T, target_language: Language):
             """Returns error wrapped as in a Translation object."""
             return Translation((
                         "\nUh oh... We encountered the following issue:\n"
@@ -33,11 +33,11 @@ class TranslationHelper():
 
         api_endpoint = "https://api-free.deepl.com/v2/translate"
         api_key = env.get("DEEPL_API_KEY", "NO_KEY_PROVIDED")
-        target_language = random.choice(list(Language)).value
+        target_language = random.choice(list(Language))
         params = {
             "auth_key": api_key,
             "text": text,
-            "target_language": target_language
+            "target_language": target_language.value
         }
 
         response = RequestService.make_get_request(api_endpoint, params)
