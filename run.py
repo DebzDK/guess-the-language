@@ -33,6 +33,12 @@ from classes.helpers.translationhelper import TranslationHelper
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
 CHAR_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
 QUIT_COMMANDS = ["q", "quit"]
+UNICODES = {
+    "green": "\u001b[32;1m",
+    "red": "\u001b[31;1m",
+    "underline": "\u001b\033[4m",
+    "reset": "\u001b[37;0m"
+}
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -228,7 +234,10 @@ def run_game():
             ((input_mode != 2) or
                 (input_mode == 2 and
                     num_of_questions_asked < len(sentences_from_file)))):
-        print(f"Question {num_of_questions_asked + 1}\n")
+        print(
+            f"\n{UNICODES['underline']}"
+            f"Question {num_of_questions_asked + 1}{UNICODES['reset']}\n"
+        )
 
         if input_mode == 1:
             sentence_to_translate = get_processed_user_input(
@@ -270,13 +279,16 @@ def run_game():
         lower_case_guess = guess.lower()
 
         if lower_case_guess == answer.name.lower():
+            result_indicator = UNICODES['green']
             num_of_correct_answers += 1
+        else:
+            result_indicator = UNICODES['red']
 
         print(
-            f"\nYou guessed {guess}"
-            f" and the answer is"
-            f" {translation.lang.get_user_friendly_name()}"
-            f" ({answer.value})."
+            f"\nYou guessed{result_indicator} {guess}"
+            f"{UNICODES['reset']} and the answer is"
+            f"{UNICODES['green']} {translation.lang.get_user_friendly_name()}"
+            f" ({answer.value}){UNICODES['reset']}."
         )
 
     if num_of_correct_answers < (num_of_questions_asked / 2):
