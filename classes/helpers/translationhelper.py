@@ -33,7 +33,7 @@ class TranslationHelper():
                         target_language)
 
         api_endpoint = "https://api-free.deepl.com/v2/translate"
-        api_key = env.get("DEEPL_API_KEY", "NO_KEY_PROVIDED")
+        api_key = env.get("DEEPL_API_KEY", "NO_API_KEY_PROVIDED")
         language_choices = list(Language)
         language_choices.remove(Language.ENGLISH)
         target_language = random.choice(language_choices)
@@ -52,6 +52,8 @@ class TranslationHelper():
         except KeyError:
             return create_translation_error(result["message"], target_language)
         except json.decoder.JSONDecodeError as json_error:
+            if api_key == "NO_API_KEY_PROVIDED":
+                return create_translation_error(api_key, target_language)
             return create_translation_error(json_error, target_language)
         except requests.RequestException as request_error:
             return create_translation_error(request_error, target_language)
