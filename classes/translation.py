@@ -35,3 +35,15 @@ class Translation():
         """Modify object string representation"""
         return (f"<Translation text: {self._text}"
                 f"lang: {self._lang}>")
+
+    # Use of decorator to access _text
+    @property
+    def text(self):
+        """Getter method for text property"""
+        return self._text
+
+    # Use of decorator to access _lang
+    @property
+    def lang(self):
+        """Getter method for lang property"""
+        return self._lang
