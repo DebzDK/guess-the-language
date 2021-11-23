@@ -25,6 +25,7 @@ Further information can be found in the project's README file.
 """
 import re
 from typing import Any, Callable, List, Union
+from dotenv import load_dotenv
 from inputmode import InputMode
 from difficulty import Difficulty
 from classes.sentencegenerator import SentenceGenerator
@@ -421,7 +422,8 @@ def is_quit_command(user_input) -> bool:
 
 
 def main():
-    """Run display and game functions."""
+    """Load environment variables and run display and game functions."""
+    load_dotenv()
     display_title()
     display_main_menu()
     await_input("Select menu option: ", process_main_menu_selection)
