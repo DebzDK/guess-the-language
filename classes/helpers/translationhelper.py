@@ -46,7 +46,8 @@ class TranslationHelper():
 
         try:
             result = response.json()
-            return Translation(result["text"], target_language)
+            translation = result["translations"]
+            return Translation(translation[0]["text"], target_language)
         except KeyError:
             return create_translation_error(result["message"], target_language)
         except json.decoder.JSONDecodeError as json_error:
