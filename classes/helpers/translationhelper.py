@@ -46,8 +46,7 @@ class TranslationHelper():
 
         try:
             result = response.json()
-            translation_json = json.loads(result)
-            return Translation(translation_json["text"], target_language)
+            return Translation(result["text"], target_language)
         except json.decoder.JSONDecodeError as json_error:
             return create_translation_error(json_error, target_language)
         except requests.RequestException as request_error:
