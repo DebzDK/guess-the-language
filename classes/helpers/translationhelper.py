@@ -43,14 +43,12 @@ class TranslationHelper():
         }
 
         response = RequestService.make_get_request(api_endpoint, params)
-        has_response = False
 
-        while not has_response:
-            try:
-                result = response.json()
-                translation_json = json.loads(result)
-                return Translation(translation_json["text"], target_language)
-            except json.decoder.JSONDecodeError as json_error:
-                return create_translation_error(json_error, target_language)
-            except requests.RequestException as request_error:
-                return create_translation_error(request_error, target_language)
+        try:
+            result = response.json()
+            translation_json = json.loads(result)
+            return Translation(translation_json["text"], target_language)
+        except json.decoder.JSONDecodeError as json_error:
+            return create_translation_error(json_error, target_language)
+        except requests.RequestException as request_error:
+            return create_translation_error(request_error, target_language)
