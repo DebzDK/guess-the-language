@@ -33,7 +33,9 @@ class TranslationHelper():
 
         api_endpoint = "https://api-free.deepl.com/v2/translate"
         api_key = env.get("DEEPL_API_KEY", "NO_KEY_PROVIDED")
-        target_language = random.choice(list(Language))
+        language_choices = list(Language)
+        language_choices.remove(Language.ENGLISH)
+        target_language = random.choice(language_choices)
         params = {
             "auth_key": api_key,
             "text": text,
