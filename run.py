@@ -289,7 +289,7 @@ def run_game():
             f"\nYou guessed{result_indicator} {guess}"
             f"{UNICODES['reset']} and the answer is"
             f"{UNICODES['green']} {translation.lang.get_user_friendly_name()}"
-            f" ({answer.value}){UNICODES['reset']}."
+            f" ({answer.get_language_abbreviation()}){UNICODES['reset']}."
         )
 
     if num_of_correct_answers < (num_of_questions_asked / 2):
