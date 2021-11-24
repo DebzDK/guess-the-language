@@ -63,7 +63,8 @@ class TranslationHelper():
         params = {
             "auth_key": api_key,
             "text": text,
-            "target_lang": target_language.value
+            "target_lang": target_language.value,
+            "split_sentences": "0"
         }
 
         response = RequestService.make_get_request(api_endpoint, params)
