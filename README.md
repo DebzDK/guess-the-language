@@ -2,13 +2,13 @@
 
 'Guess The Language' is a language-guessing game that takes sentences from a .txt file, user input, or auto-generated data and translates them into another language. Its quiz-like fashion aims to introduce people to the beauty of language in a fun way and show how the differences between languages can range from tiny to quite big. The site will be targeted toward people who have an interest in or are curious about languages. This site will also be useful for people who want to see the capability of a translation tool other than Google Translate.
 
-TODO: Add game terminal screenshot
+![Screenshot of 'Guess The Language'](documentation/screenshots/evidence/title.png)
 
 ## Requirements
 
 Before jumping into the design process, requirements needed to be specified in order to know exactly what the game should do to meet the assessment criteria. Unlike the previous portfolio projects, the visual output is simply textual and therefore functionality and flow of events is even more so crucial.
 
-![Screenshot of requirements](documentation/screenshots/evidence/requirements.png).
+![Screenshot of requirements](documentation/screenshots/evidence/requirements.png)
 
 ## Design
 
@@ -59,18 +59,18 @@ Each feature listed below was chosen to provide users with a clear, logical path
 * Main menu
     * Allows users to see a main menu before starting the game
 
-        TODO: Add GIF once built
+        ![Screenshot of main menu](documentation/screenshots/evidence/main-menu.png)
 
         From here, a user can start the game and view/set game options.
 
 * Game options menu
     * Allows users to set options that effect gameplay
 
-        TODO: Add GIF once built
+        ![Game options menu GIF](documentation/screenshots/evidence/game-options.gif)
 
-        Option 1 - 'Input mode' - controls what mode of input users will use to input sentences into the game.
-        Option 2 - 'Enable hints' - controls where or not users what to receive hints while trying to guess a language.
-        Option 3 - 'Difficulty' - controls the amount of languages (and therefore questions) user will encounter per game.
+        * Option 1 - 'Input mode' - controls what mode of input users will use to input sentences into the game.
+        * Option 2 - 'Difficulty' - controls the amount of languages (and therefore questions) user will encounter per game.
+        * Option 3 - 'Enable hints' - controls where or not users what to receive hints while trying to guess a language.
 
         The free version of the [DeepL Translator](https://www.deepl.com/en/translator) used in the application has a limit of 500,000 characters per month.
         To account for this in the game and allow a reasonable number of games to be played, the following restrictions for sentence character length and the total number of questions per game mode were calculated as follows:
