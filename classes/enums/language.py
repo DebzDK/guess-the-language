@@ -1,4 +1,5 @@
 """Enum to represent languages and their codes"""
+import re
 from enum import Enum
 
 
@@ -11,7 +12,7 @@ class Language(Enum):
 
     Methods
     -------
-    get_user_friendly_name(mode):
+    get_user_friendly_name(mode) -> str:
         Gets a user-friendly version of the language text
     """
     BULGARIAN = "BG"
@@ -48,4 +49,8 @@ class Language(Enum):
         str
             The name of the language.
         """
-        return self.name.lower().capitalize()
+        names = self.name.split("_")
+        name = names[0].capitalize()
+        for i in range(1, len(names)):
+            name += f" {names[i].capitalize()}"
+        return name
