@@ -6,9 +6,18 @@
 
 ## Requirements
 
-Before jumping into the design process, requirements needed to be specified in order to know exactly what the game should do to meet the assessment criteria. Unlike the previous portfolio projects, the visual output is simply textual and therefore functionality and flow of events is even more so crucial.
+Before jumping into the design process, requirements needed to be specified in order to know exactly what the game should do to meet the assessment criteria.
 
-![Screenshot of requirements](documentation/screenshots/evidence/requirements.png)
+Unlike the previous portfolio projects, the visual output is simply textual and therefore functionality and flow of events is even more so crucial.
+
+The following functional requirements were decided on:
+1. The game must present the user with a logo and/or welcome message.
+2. The game must display a navigable main menu.
+3. The game must allow a user to choose how they want to play.
+4. The game must allow a user to quit the game at any time before the end of the game.
+5. The game must display the user's score in the form of: `You guessed {correct_answers}/{total_num_of_questions} correctly!`.
+6. The game must display the correct answer after every wrong answer.
+7. The game must allow a user to have a total of 3 hints if enabled.
 
 ## Design
 
@@ -69,7 +78,7 @@ All other user stories follow the same kind of format except for where the user 
 
 ## Features
 
-Each feature listed below was chosen to provide users with a clear, logical path through the application content in order for this project to achieve its goal.
+Each feature listed below was chosen to provide users with a clear, logical path through the application content in order for this project to achieve its goal and its functional requirements.
 
 ### Existing features
 
