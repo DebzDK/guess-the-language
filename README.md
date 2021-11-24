@@ -197,24 +197,7 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
 ## Testing
 
-### Validator testing
-
-* PEP8 online
-    * TODO: Add test results once tested
-
-* Accessibility
-    * Manual foreground and background colour testing
-        * General text
-            Contrast Ratio: <b>[21:1](https://webaim.org/resources/contrastchecker/?fcolor=FFFFFF&bcolor=000000)</b>
-
-        * Correct answers
-            Contrast Ratio: <b>[15.3:1](https://webaim.org/resources/contrastchecker/?fcolor=00FF00&bcolor=000000)</b>
-
-        * Incorrect answers
-            Contrast Ratio: <b>[7.8:1](https://webaim.org/resources/contrastchecker/?fcolor=#FF7070&bcolor=000000)</b>
-
-        * Highlighted menu option text
-            Contrast Ratio: <b>[21:1](https://webaim.org/resources/contrastchecker/?fcolor=000000&bcolor=FFFFFF)</b>
+Evidence for this section has been placed in its own .md file which can be found [here](https://github.com/DebzDK/guess-the-language/blob/main/TESTING.md).
         
 ## Deployment
 
