@@ -26,12 +26,12 @@ class TranslationHelper():
     @staticmethod
     def translate_sentence(
             text: str, use_all_languages: bool = False) -> Translation:
-        """Make request for translation and returns response."""
+        """Make request for translation and return response."""
         global _language_choices
 
         def create_translation_error(
                 error: _T, target_language: Language) -> Translation:
-            """Returns error wrapped as in a Translation object."""
+            """Return error wrapped in a Translation object."""
             return Translation((
                         "\nUh oh... We encountered the following issue:\n"
                         f"Error: {error}"),
