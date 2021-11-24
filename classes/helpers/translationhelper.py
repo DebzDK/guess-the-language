@@ -17,13 +17,17 @@ class TranslationHelper():
 
     Methods
     -------
-    translate_sentence(text: str) -> Translation:
+    translate_sentence(
+            text: str, use_all_languages: bool = False) -> Translation:
         Translates sentence into another language.
     """
+    _language_choices = None
 
     @staticmethod
-    def translate_sentence(text: str) -> Translation:
+    def translate_sentence(
+            text: str, use_all_languages: bool = False) -> Translation:
         """Make request for translation and returns response."""
+        global _language_choices
 
         def create_translation_error(
                 error: _T, target_language: Language) -> Translation:
@@ -49,9 +53,13 @@ class TranslationHelper():
 
         api_endpoint = "https://api-free.deepl.com/v2/translate"
         api_key = env.get("DEEPL_API_KEY", "NO_API_KEY_PROVIDED")
-        language_choices = list(Language)
-        language_choices.remove(Language.ENGLISH)
-        target_language = random.choice(language_choices)
+
+        if use_all_languages:
+            _language_choices = list(Language)
+            _language_choices.remove(Language.ENGLISH)
+
+        target_language = random.choice(_language_choices)
+        _language_choices.remove(target_language)
         params = {
             "auth_key": api_key,
             "text": text,

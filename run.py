@@ -259,7 +259,7 @@ def run_game():
             print(sentence_to_translate)
 
         translation = TranslationHelper.translate_sentence(
-                sentence_to_translate)
+                sentence_to_translate, num_of_questions_asked == 0)
 
         if "Error: " in translation.text:
             print(f"{translation}\n")
