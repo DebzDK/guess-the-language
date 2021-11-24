@@ -1,6 +1,8 @@
 """Enum to represent languages and their codes"""
 import re
+import random
 from enum import Enum
+from typing import List
 
 
 class Language(Enum):
@@ -16,6 +18,9 @@ class Language(Enum):
         Gets a user-friendly version of the language text
     get_language_abbreviation() -> str:
         Gets a lanugage's abbreviation.
+    get_choices_for_difficulty_level(difficulty_level) -> List["Language"]:
+        Gets a list of all possible languages to translate sentences into for
+        the current game's difficulty level.
     """
     BULGARIAN = "BG"
     CZECH = "CS"
@@ -67,3 +72,60 @@ class Language(Enum):
         """
         abbreviated_lang_form = re.sub("[-_]", " ", self.value).split()
         return abbreviated_lang_form[-1]
+
+    @staticmethod
+    def get_choices_for_difficulty_level(difficulty_level) -> List["Language"]:
+        """Get list of possible language choices for a given difficulty level.
+
+        Returns a list of all the possible languages that sentences can be
+        translated into depending on the current games difficulty level.
+
+        Returns
+        ----------
+        List[Language]
+            A list of possible language choices for a given difficulty level.
+        """
+        # NORMAL
+        if difficulty_level == 1:
+            return [
+                Language.CHINESE,
+                Language.RUSSIAN,
+                Language.BRAZILIAN_PORTUGUESE,
+                Language.DUTCH,
+                Language.SWEDISH
+            ]
+        # HARD
+        if difficulty_level == 2:
+            lesser_known_languages = [
+                Language.GREEK,
+                Language.POLISH,
+                Language.DANISH,
+                Language.FINNISH,
+                Language.ROMANIAN,
+                Language.CZECH,
+                Language.HUNGARIAN
+            ]
+            languages_to_complete_set = random.sample(
+                [
+                    Language.LITHUANIAN,
+                    Language.BULGARIAN,
+                    Language.PORTUGUESE,
+                    Language.ESTONIAN,
+                    Language.LATVIAN,
+                    Language.SLOVAK,
+                    Language.SLOVENIAN
+                ], k=3)
+
+            lesser_known_languages.extend(languages_to_complete_set)
+            return lesser_known_languages
+        # BEAST
+        if difficulty_level == 3:
+            return list(Language)
+        # EASY (default)
+        return [
+            Language.FRENCH,
+            Language.SPANISH,
+            Language.ITALIAN,
+            Language.GERMAN,
+            Language.JAPANESE
+        ]

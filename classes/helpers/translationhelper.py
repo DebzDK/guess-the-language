@@ -25,7 +25,8 @@ class TranslationHelper():
 
     @staticmethod
     def translate_sentence(
-            text: str, use_all_languages: bool = False) -> Translation:
+            text: str, difficulty_level: int,
+            use_all_languages: bool = False) -> Translation:
         """Make request for translation and return response."""
         global _language_choices
 
@@ -55,8 +56,10 @@ class TranslationHelper():
         api_key = env.get("DEEPL_API_KEY", "NO_API_KEY_PROVIDED")
 
         if use_all_languages:
-            _language_choices = list(Language)
-            _language_choices.remove(Language.ENGLISH)
+            _language_choices = Language.get_choices_for_difficulty_level(
+                difficulty_level)
+            if difficulty_level == 3:
+                _language_choices.remove(Language.ENGLISH)
 
         target_language = random.choice(_language_choices)
         _language_choices.remove(target_language)
