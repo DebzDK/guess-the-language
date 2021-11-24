@@ -148,14 +148,19 @@ Each feature listed below was chosen to provide users with a clear, logical path
     * [Python](https://en.wikipedia.org/wiki/Python_(programming_language)) - used to create the command line application
 
 * Technologies
-    * [DeepL Translator](https://www.deepl.com/en/translator) - used free verison of their API to translate sentences in game
+    * [EZGIF](https://ezgif.com/) - used to create the GIFs used in this README
     * [Lucidchart](https://www.lucidchart.com/) - used to create a flow chart of the game's processes
+    * [DeepL Translator](https://www.deepl.com/en/translator) - used to translate sentences in game
+    * [Regex101](https://regex101.com/) - used to create and test the regular expressions used in game for validation
+    * [num2words](https://github.com/savoirfairelinux/num2words#readme) - used library to convert numbers to their word equivalent
+    * [Requests](https://docs.python-requests.org/en/latest/) - used library to make HTTP requests to DeepL Translator API
+    * [StackOverflow](https://stackoverflow.com/) - used to find answers to coding issues, specifically [how to get coloured text](https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal), [understand the python equivalent of getters and setters](https://stackoverflow.com/questions/2627002/whats-the-pythonic-way-to-use-getters-and-setters), and [the purpose of \__init__\.py](https://stackoverflow.com/questions/448271/what-is-init-py-for)
+    * [w3schools](https://www.w3schools.com/) - used to find Python functions to complete tasks
     * [Trello](https://trello.com/) - used to document planning/design and development project progress and steps
     * [Git](https://git-scm.com/) - used for version control
     * [GitHub](https://github.com/) - used for internet hosting and version control through use of Git
     * [Gitpod](https://gitpod.io/) - used as online IDE for software development
         * The terminal was used to create branchs to work on before merging into the main branch. These branches have been preserved for the sake of the assessment, otherwise they would have been deleted after use.
-        *Note: initial merges were missing the '--no-ff' flag so commit history was lost*
 
         TODO: Add screenshot of all GitHub branches for project
 
