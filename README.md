@@ -20,7 +20,9 @@ While implementing the basic functions of the game, it was necessary to start th
 
 After this brainwave, a structural UML diagram, a.k.a [a class diagram](https://en.wikipedia.org/wiki/Class_diagram#General_relationship), was created as shown below.
 
-!['Guess The Language' class diagram](documentation/screenshots/evidence/class-diagram.png)
+![Initial class diagram for 'Guess The Language'](documentation/screenshots/evidence/original-class-diagram.png)
+
+TODO: Add screenshot of implemented classes
 
 ### Planning and execution
 
