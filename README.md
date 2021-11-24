@@ -116,40 +116,58 @@ Each feature listed below was chosen to provide users with a clear, logical path
             Total number of characters per month: 10 * 40 * 10 * daysInMonth = 120k - 124k
 
         * BEAST - questions in all available languages in the translation API + 5 seconds to answer question
-            Number of questions: 26
+            Number of questions: 25
             Max number of characters per sentence: 20
             Total number of games per day: 10
 
-            Total number of characters per month: 26 * 20 * 10 * daysInMonth = 156k - 161.2k
+            Total number of characters per month: 25 * 20 * 10 * daysInMonth = 144k - 148.8k
 
-        These calculations give approx. 471.2k (+ 6 easy games = 498.2k) characters to use over the span of the month which is equal to 1.8k - 1.86k (or 1.98k) playthroughs following the given amount of each game mode.
+        These calculations give max approx. 458.8k (+ 9 easy games = 499.3k) characters to use over the span of the month which is equal to 1.8k - 1.86k (or 1.98k) playthroughs following the given amount of each game mode.
         This is what will be followed when testing the application while in development so that the limit isn't prematurely exceeded.
 
         Once the maximum number of requests has been reached, the API will return that information in the form of an error message that will then be displayed to users before the game is exited (if playing) or started (if trying to play).
 
-        *Note: 'popular' languages refers to other European languages that are typically offered as second language options in school and in language learning apps.*
+        *Please note: 'popular' languages refers to other European languages that are typically offered as second language options in school and in language learning apps, such as Duolingo.*
 
 * Game
     * Where the magic happens
-        
-        Once a user starts a game, based on the chosen difficulty level and corresponding character limit (as outlined above), they are either prompted for direct input, file input, or presented with auto-generated sentences as input.
-        
-        After the appropriate input step is taken, the game proceeds to translating the sentence, presenting it to a user in another language, and prompting the user to take a guess. This repeats until the total number of questions for a game has been reached.
+        * Mechanics
 
-        Finally, a tally of the total number of correct guesses are displayed and the game ends.
-        
-        The cases are as follows:
-        * *User input* - the input is validated per question to ensure it meets the set criteria for translation.
-
-            ![GIF of user-input game mode](documentation/screenshots/evidence/user-input.gif)
-
-        * *File input* - the same is true here but with the extra step of using auto-generated values in addition to those extracted from the file if there aren't enough viable sentences for translation. If there are more lines of text than required in the file, the rest are ignored.
+            Once a user starts a game, based on the chosen difficulty level and corresponding character limit (as outlined above), they are either prompted for direct input, file input, or presented with auto-generated sentences as input.
             
-            ![GIF of user-input game mode](documentation/screenshots/evidence/file-input.gif)
+            After the appropriate input step is taken, the game proceeds to translating the sentence, presenting it to a user in another language, and prompting the user to take a guess. This repeats until the total number of questions for a game has been reached.
 
-        * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
-        
-            TODO: Add GIF once auto-generation is fully working
+            Finally, a tally of the total number of correct guesses are displayed and the game ends.
+            
+            The cases are as follows:
+            * *User input* - the input is validated per question to ensure it meets the set criteria for translation.
+
+                ![GIF of user-input game mode](documentation/screenshots/evidence/user-input.gif)
+
+            * *File input* - the same is true here but with the extra step of using auto-generated values in addition to those extracted from the file if there aren't enough viable sentences for translation. If there are more lines of text than required in the file, the rest are ignored.
+                
+                ![GIF of user-input game mode](documentation/screenshots/evidence/file-input.gif)
+
+            * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
+            
+                TODO: Add GIF once auto-generation is fully working
+
+        * Available translation languages
+
+            As mentioned before, Duolingo was referred to in regards to what could be used to classify 'popular' languages and ultimately was used as a guideline to categorise what languages should play for which difficulty levels:
+                ![Screenshot of Duolingo with annotations](documentation/screenshots/evidence/duolingo-languages.png)
+
+            *Note: Duolingo offers more languages than this. The ones that aren't used in the game have been removed from this image.*
+                
+            * Easy - Spanish, French, Japanese, German & Italian (5)
+
+            * Normal - Chinese, Russian, Brazilian Portuguese, Dutch & Swedish (5)
+
+            * Hard - Greek, Polish, Danish, Finnish, Romanian, Czech, Hungarian + 3 more languages from the DeepL Translator API (10)
+
+            * Beast - All of the above + the remaining languages from the API (Total = 24)
+
+            *The other languages offered by the API are Latvian, Lithuanian, Portuguese (Portugal), Slovenian, Slovak and English but English has been excluded since that is the language we assume to be translating from.*
 
 ### Future features
 
