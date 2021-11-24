@@ -8,7 +8,8 @@ class RequestService():
 
     Methods
     -------
-    make_get_request(method: str, endpoint: str, params: Dict[str, str] = None) -> str:
+    make_get_request(
+        method: str, endpoint: str, params: Dict[str, str] = None) -> str:
         Makes HTTP request using the given parameters.
     """
 
