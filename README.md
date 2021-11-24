@@ -12,9 +12,13 @@ Before jumping into the design process, requirements needed to be specified in o
 
 ## Design
 
+### Logical flow
+
 [Lucidchart](https://www.lucidchart.com/) was used to illustrate the logical flow derived from the requirements in the form of the flowchart shown below.
 
 !['Guess The Language' flowchart](documentation/screenshots/evidence/flow-chart.png)
+
+### Encapsulation
 
 While implementing the basic functions of the game, it was necessary to start thinking about how to model the various components of the game in order to separate concerns. This was, initially, a difficult task until I remembered a tool that would help with breaking down the processes - a [Unified Modeling Language (UML)](https://en.wikipedia.org/wiki/Unified_Modeling_Language) diagram.
 
@@ -24,11 +28,22 @@ After this brainwave, a structural UML diagram, a.k.a [a class diagram](https://
 
 TODO: Add screenshot of implemented classes
 
+### Coding practices
+
+To ensure that the project code is up to standard, the following PEP rules were adhered to:
+
+* [PEP 8 -- Style Guide for Python Code](https://www.python.org/dev/peps/pep-0008/) - for best code style practices (i.e. layout, naming conventions, comments, etc.) and programming recommendations on function and variable annotations
+* [PEP 257 -- Docstring Conventions](https://www.python.org/dev/peps/pep-0257/) - for general rules on docstrings
+* [NumPy Style Guide](https://numpydoc.readthedocs.io/en/latest/format.html) - for a more detailed explanation of what goes where in docstrings, using [this](https://sphinxcontrib-napoleon.readthedocs.io/en/latest/example_numpy.html) specifically as an example to follow
+* [PEP 3107 -- Function Annotations](https://www.python.org/dev/peps/pep-3107/) - for a specific way to specify function information and avoid confusion
+* [PEP 484 -- Type Hints](https://www.python.org/dev/peps/pep-3107/) - also for purposes of clarity (although provisional)
+* [PEP 526 -- Syntax for Variable Annotations](https://www.python.org/dev/peps/pep-0526/) - also for purposes of clarity
+
 ### Planning and execution
 
 Agile practices were used to carry out this project and documented in Trello [planning/design board](https://trello.com/b/JGCCLlNB/project-planning-design) and [dev board](https://trello.com/b/TsXKTw7W/project-development) and [Github Projects](https://github.com/DebzDK/guess-the-language/projects/1).
 
-*Please note that more task details + resources are available in the Trello boards than in the Github Project page.*
+*Please note that more task details + resources are available in the Trello boards than in the Github Projects page.*
 
 Each board is divided into 3 swimlanes/columns:
 * 'To Do' - used to list tasks that are yet to be done
