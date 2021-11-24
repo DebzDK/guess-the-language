@@ -18,7 +18,7 @@ class Language(Enum):
         Gets a lanugage's abbreviation.
     """
     BULGARIAN = "BG"
-    CZECH = "CZ"
+    CZECH = "CS"
     DANISH = "DA"
     GERMAN = "DE"
     GREEK = "EL"
