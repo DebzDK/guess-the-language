@@ -14,6 +14,8 @@ class Language(Enum):
     -------
     get_user_friendly_name(mode) -> str:
         Gets a user-friendly version of the language text
+    get_language_abbreviation() -> str:
+        Gets a lanugage's abbreviation.
     """
     BULGARIAN = "BG"
     CZECH = "CZ"
@@ -54,3 +56,14 @@ class Language(Enum):
         for i in range(1, len(names)):
             name += f" {names[i].capitalize()}"
         return name
+
+    def get_language_abbreviation(self) -> str:
+        """Gets the abbreviation for language, e.g: PT-BR --> BR
+
+        Returns
+        ----------
+        str
+            The abbreviated form of a language's name.
+        """
+        abbreviated_lang_form = re.sub("[-_]", " ", self.value).split()
+        return abbreviated_lang_form[-1]
