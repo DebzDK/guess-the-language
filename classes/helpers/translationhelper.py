@@ -17,17 +17,22 @@ class TranslationHelper():
 
     Methods
     -------
-    translate_sentence(text: str) -> Translation:
+    translate_sentence(
+            text: str, use_all_languages: bool = False) -> Translation:
         Translates sentence into another language.
     """
+    _language_choices = None
 
     @staticmethod
-    def translate_sentence(text: str) -> Translation:
-        """Make request for translation and returns response."""
+    def translate_sentence(
+            text: str, difficulty_level: int,
+            use_all_languages: bool = False) -> Translation:
+        """Make request for translation and return response."""
+        global _language_choices
 
         def create_translation_error(
                 error: _T, target_language: Language) -> Translation:
-            """Returns error wrapped as in a Translation object."""
+            """Return error wrapped in a Translation object."""
             return Translation((
                         "\nUh oh... We encountered the following issue:\n"
                         f"Error: {error}"),
@@ -49,13 +54,20 @@ class TranslationHelper():
 
         api_endpoint = "https://api-free.deepl.com/v2/translate"
         api_key = env.get("DEEPL_API_KEY", "NO_API_KEY_PROVIDED")
-        language_choices = list(Language)
-        language_choices.remove(Language.ENGLISH)
-        target_language = random.choice(language_choices)
+
+        if use_all_languages:
+            _language_choices = Language.get_choices_for_difficulty_level(
+                difficulty_level)
+            if difficulty_level == 3:
+                _language_choices.remove(Language.ENGLISH)
+
+        target_language = random.choice(_language_choices)
+        _language_choices.remove(target_language)
         params = {
             "auth_key": api_key,
             "text": text,
-            "target_lang": target_language.value
+            "target_lang": target_language.value,
+            "split_sentences": "0"
         }
 
         response = RequestService.make_get_request(api_endpoint, params)
