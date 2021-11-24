@@ -219,6 +219,32 @@ Evidence for this section has been placed in its own .md file which can be found
         
 ## Deployment
 
+The application was deployed via [Heroku](https://www.heroku.com/) using the steps listed below:
+
+1. In Heroku, click 'New' then 'Create app'.
+
+    ![Screeshot of deployment step 1](documentation/screenshots/evidence/deployment-step-1.png)
+
+1. Name the app and select your closest region.
+
+    ![Screeshot of deployment step 2](documentation/screenshots/evidence/deployment-step-2.png)
+
+1. Connect to Github and find the guess-the-language project.
+
+    ![Screeshot of deployment step 3](documentation/screenshots/evidence/deployment-step-3.png)
+
+1. Set up configuration variables and build packages.
+
+    ![Screeshot of deployment step 4](documentation/screenshots/evidence/deployment-step-4.png)
+
+1. Choose either 'Enable Automatic Deployments' or 'Deploy' for manual deployments.
+
+    *Note: Automatic deployments were enabled for this project.*
+
+    ![Screeshot of deployment step 5](documentation/screenshots/evidence/deployment-step-5.png)
+
+The live link can be found here - https://guess-the-language.herokuapp.com/
+
 ### Local deployment
 
 Since my work is in a publicly-accesible repository, it can be copied in 3 different ways:
