@@ -53,17 +53,3 @@
             ![Screenshot of partofspeech.py class test](documentation/screenshots/evidence/partofspeech-class-test.png)
         * classes/helpers/translationhelper.py - __TranslationHelper()__
             ![Screenshot of translationhelper.py class test](documentation/screenshots/evidence/translationhelper-class-test.png)
-
-* Accessibility
-    * Manual foreground and background colour testing
-        * General text
-            Contrast Ratio: <b>[21:1](https://webaim.org/resources/contrastchecker/?fcolor=FFFFFF&bcolor=000000)</b>
-
-        * Correct answers
-            Contrast Ratio: <b>[15.3:1](https://webaim.org/resources/contrastchecker/?fcolor=00FF00&bcolor=000000)</b>
-
-        * Incorrect answers
-            Contrast Ratio: <b>[7.8:1](https://webaim.org/resources/contrastchecker/?fcolor=#FF7070&bcolor=000000)</b>
-
-        * Highlighted menu option text
-            Contrast Ratio: <b>[21:1](https://webaim.org/resources/contrastchecker/?fcolor=000000&bcolor=FFFFFF)</b>
