@@ -27,8 +27,11 @@ import re
 from typing import Any, Callable, List, Union
 import flag
 from dotenv import load_dotenv
-from classes.enums.inputmode import InputMode
+from prompt_toolkit import prompt as autocomplete_prompt
+from prompt_toolkit.completion import WordCompleter
 from classes.enums.difficulty import Difficulty
+from classes.enums.inputmode import InputMode
+from classes.enums.language import Language
 from classes.sentencegenerator import SentenceGenerator
 from classes.helpers.translationhelper import TranslationHelper
 
@@ -187,7 +190,8 @@ def await_input(prompt: str, process: Callable[[str], Any] = None,
 
 
 def get_processed_user_input(
-        prompt: str, process: Callable[[str], Any] = None) -> Union[str, None]:
+        prompt: str, process: Callable[[str], Any],
+        completer: WordCompleter = None) -> Union[str, None]:
     """Prompt user for input, process input if required and return the input.
 
     Continuously waits for user input and executes functions based on input
@@ -199,6 +203,9 @@ def get_processed_user_input(
         The text to display to the user to indicate the desired type of input.
     process
         The function to call process user input.
+    completer
+        The class holding the list of all values to use as autocomplete
+        suggestions for the user.
 
     Returns
     -------
@@ -207,7 +214,7 @@ def get_processed_user_input(
             the input loop should be exited and return nothing.
     """
     while True:
-        user_input = input(prompt)
+        user_input = autocomplete_prompt(prompt, completer=completer)
         if process is not None:
             end_loop = process(user_input)
             if end_loop:
@@ -222,6 +229,8 @@ def run_game():
     num_of_questions_asked = 0
     num_of_correct_answers = 0
     character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+    all_languages = [lang.get_user_friendly_name() for lang in Language]
+    language_completer = WordCompleter(all_languages, ignore_case=True)
     sentences_from_file = None
     sentence_to_translate = None
 
@@ -278,7 +287,7 @@ def run_game():
 
         print(f"\nTranslation: {translation}\n")
         guess = get_processed_user_input(
-            "What language is this?\n", is_valid_answer)
+            "What language is this?\n", is_valid_answer, language_completer)
         lower_case_guess = guess.lower()
 
         if lower_case_guess == answer.name.lower():
