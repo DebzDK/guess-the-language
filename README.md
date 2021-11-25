@@ -2,7 +2,7 @@
 
 'Guess The Language' is a language-guessing game that takes sentences from a .txt file, user input, or auto-generated data and translates them into another language. Its quiz-like fashion aims to introduce people to the beauty of language in a fun way and show how the differences between languages can range from tiny to quite big. The site will be targeted toward people who have an interest in or are curious about languages. This site will also be useful for people who want to see the capability of a translation tool other than Google Translate.
 
-![Screenshot of 'Guess The Language'](documentation/screenshots/evidence/title.png)
+![Screenshot of 'Guess The Language'](documentation/screenshots/evidence/design/title.png)
 
 ## Requirements
 
@@ -25,7 +25,7 @@ The following functional requirements were decided on:
 
 [Lucidchart](https://www.lucidchart.com/) was used to illustrate the logical flow derived from the requirements in the form of the flowchart shown below.
 
-!['Guess The Language' flowchart](documentation/screenshots/evidence/flow-chart.png)
+!['Guess The Language' flowchart](documentation/screenshots/evidence/design/flow-chart.png)
 
 ### Encapsulation
 
@@ -33,7 +33,7 @@ While implementing the basic functions of the game, it was necessary to start th
 
 After this brainwave, a structural UML diagram, a.k.a [a class diagram](https://en.wikipedia.org/wiki/Class_diagram#General_relationship), was created as shown below.
 
-![Initial class diagram for 'Guess The Language'](documentation/screenshots/evidence/original-class-diagram.png)
+![Initial class diagram for 'Guess The Language'](documentation/screenshots/evidence/design/original-class-diagram.png)
 
 TODO: Add screenshot of implemented classes
 
@@ -61,7 +61,7 @@ Each board is divided into 3 swimlanes/columns:
 
 After defining the status divisions for a task, the indicators for time constraints were defined using 't-shirt sizes'.
 
-![Card labels screenshot from Trello](documentation/screenshots/evidence/task-sizes-and-areas.png)
+![Card labels screenshot from Trello](documentation/screenshots/evidence/design/task-sizes-and-areas.png)
 
 ‘T-shirt sizes’ were defined to provide an estimate for the perceived difficulty of a task and extra labels to further separate tasks by what part of the process they’re related to, i.e. Requirements, Design, Development, and Testing.
 The project area labels have been defined as follows:
@@ -72,7 +72,7 @@ The project area labels have been defined as follows:
 
 At this point, user stories were created in order to produce tasks while thinking from a user's perspective.
 
-![Screenshot of first user story made in Trello](documentation/screenshots/evidence/first-user-story.png)
+![Screenshot of first user story made in Trello](documentation/screenshots/evidence/design/first-user-story.png)
 
 All other user stories follow the same kind of format except for where the user story is self-explanatory of the task.
 
@@ -85,14 +85,14 @@ Each feature listed below was chosen to provide users with a clear, logical path
 * Main menu
     * Allows users to see a main menu before starting the game
 
-        ![Screenshot of main menu](documentation/screenshots/evidence/main-menu.png)
+        ![Screenshot of main menu](documentation/screenshots/evidence/design/main-menu.png)
 
         From here, a user can start the game and view/set game options.
 
 * Game options menu
     * Allows users to set options that effect gameplay
 
-        ![Game options menu GIF](documentation/screenshots/evidence/game-options.gif)
+        ![Game options menu GIF](documentation/screenshots/evidence/design/game-options.gif)
 
         * Option 1 - 'Input mode' - controls what mode of input users will use to input sentences into the game.
         * Option 2 - 'Difficulty' - controls the amount of languages (and therefore questions) user will encounter per game.
@@ -142,11 +142,11 @@ Each feature listed below was chosen to provide users with a clear, logical path
             The cases are as follows:
             * *User input* - the input is validated per question to ensure it meets the set criteria for translation.
 
-                ![GIF of user-input game mode](documentation/screenshots/evidence/user-input.gif)
+                ![GIF of user-input game mode](documentation/screenshots/evidence/design/user-input.gif)
 
             * *File input* - the same is true here but with the extra step of using auto-generated values in addition to those extracted from the file if there aren't enough viable sentences for translation. If there are more lines of text than required in the file, the rest are ignored.
                 
-                ![GIF of user-input game mode](documentation/screenshots/evidence/file-input.gif)
+                ![GIF of user-input game mode](documentation/screenshots/evidence/design/file-input.gif)
 
             * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
             
@@ -155,7 +155,7 @@ Each feature listed below was chosen to provide users with a clear, logical path
         * Available translation languages
 
             As mentioned before, Duolingo was referred to in regards to what could be used to classify 'popular' languages and ultimately was used as a guideline to categorise what languages should play for which difficulty levels:
-                ![Screenshot of Duolingo with annotations](documentation/screenshots/evidence/duolingo-languages.png)
+                ![Screenshot of Duolingo with annotations](documentation/screenshots/evidence/design/duolingo-languages.png)
 
             *Note: Duolingo offers more languages than this. The ones that aren't used in the game have been removed from this image.*
                 
@@ -212,7 +212,7 @@ Each feature listed below was chosen to provide users with a clear, logical path
     * [Gitpod](https://gitpod.io/) - used as online IDE for software development
         * The terminal was used to create branchs to work on before merging into the main branch. These branches have been preserved for the sake of the assessment, otherwise they would have been deleted after use.
 
-        ![Screenshot of GitHub branches](documentation/screenshots/evidence/branches.png)
+        ![Screenshot of GitHub branches](documentation/screenshots/evidence/other/branches.png)
 
 ## Testing
 
@@ -224,25 +224,25 @@ The application was deployed via [Heroku](https://www.heroku.com/) using the ste
 
 1. In Heroku, click 'New' then 'Create app'.
 
-    ![Screeshot of deployment step 1](documentation/screenshots/evidence/deployment-step-1.png)
+    ![Screeshot of deployment step 1](documentation/screenshots/evidence/other/deployment-step-1.png)
 
 1. Name the app and select your closest region.
 
-    ![Screeshot of deployment step 2](documentation/screenshots/evidence/deployment-step-2.png)
+    ![Screeshot of deployment step 2](documentation/screenshots/evidence/other/deployment-step-2.png)
 
 1. Connect to Github and find the guess-the-language project.
 
-    ![Screeshot of deployment step 3](documentation/screenshots/evidence/deployment-step-3.png)
+    ![Screeshot of deployment step 3](documentation/screenshots/evidence/other/deployment-step-3.png)
 
 1. Set up configuration variables and build packages.
 
-    ![Screeshot of deployment step 4](documentation/screenshots/evidence/deployment-step-4.png)
+    ![Screeshot of deployment step 4](documentation/screenshots/evidence/other/deployment-step-4.png)
 
 1. Choose either 'Enable Automatic Deployments' or 'Deploy' for manual deployments.
 
     *Note: Automatic deployments were enabled for this project.*
 
-    ![Screeshot of deployment step 5](documentation/screenshots/evidence/deployment-step-5.png)
+    ![Screeshot of deployment step 5](documentation/screenshots/evidence/other/deployment-step-5.png)
 
 The live link can be found here - https://guess-the-language.herokuapp.com/
 
@@ -256,7 +256,7 @@ Since my work is in a publicly-accesible repository, it can be copied in 3 diffe
 
 1. Forking the repository
 
-    ![Fork repo image](documentation/screenshots/evidence/fork-it.png)
+    ![Fork repo image](documentation/screenshots/evidence/other/fork-it.png)
 
 1. Using Gitpod to create a new workspace for the repository with this button: [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/DebzDK/guess-the-language)
 
