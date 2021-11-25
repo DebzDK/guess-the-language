@@ -25,6 +25,7 @@ Further information can be found in the project's README file.
 """
 import re
 from typing import Any, Callable, List, Union
+import flag
 from dotenv import load_dotenv
 from classes.enums.inputmode import InputMode
 from classes.enums.difficulty import Difficulty
@@ -290,7 +291,8 @@ def run_game():
             f"\nYou guessed{result_indicator} {guess}"
             f"{UNICODES['reset']} and the answer is"
             f"{UNICODES['green']} {translation.lang.get_user_friendly_name()}"
-            f" ({answer.get_language_abbreviation()}){UNICODES['reset']}."
+            f" ({flag.flag(answer.get_language_abbreviation())})"
+            f"{UNICODES['reset']}."
         )
 
     if num_of_correct_answers < (num_of_questions_asked / 2):
