@@ -26,8 +26,8 @@ Further information can be found in the project's README file.
 import re
 from typing import Any, Callable, List, Union
 from dotenv import load_dotenv
-from inputmode import InputMode
-from difficulty import Difficulty
+from classes.enums.inputmode import InputMode
+from classes.enums.difficulty import Difficulty
 from classes.sentencegenerator import SentenceGenerator
 from classes.helpers.translationhelper import TranslationHelper
 
