@@ -23,6 +23,7 @@ Further information can be found in the project's README file.
 
 ----------------------------------------------------------------------
 """
+import os
 import re
 from typing import Any, Callable, List, Union
 import flag
@@ -86,6 +87,13 @@ def display_main_menu():
     print("-- QUIT [Q]")
 
 
+# Code from StackOverflow - https://stackoverflow.com/a/684344
+def clear_terminal():
+    """Clear the terminal."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+    display_title()
+
+
 def process_main_menu_selection(user_input: str):
     """Display game menu options according to user input.
 
@@ -103,8 +111,10 @@ def process_main_menu_selection(user_input: str):
         If the user has entered a command to quit the game
     """
     if user_input == "1":
+        clear_terminal()
         run_game()
     elif user_input == "2":
+        clear_terminal()
         display_game_options_menu()
         await_input("Select game option: ",
                     process_game_option,
@@ -153,6 +163,7 @@ def process_game_option(user_input: str):
     elif user_input == "3":
         enable_hints = not enable_hints
     elif user_input == "4":
+        clear_terminal()
         display_main_menu()
         return True
     return False
@@ -182,6 +193,7 @@ def await_input(prompt: str, process: Callable[[str], Any] = None,
             end_loop = process(user_input)
             if (end_loop is not True and
                     update_terminal is not None):
+                clear_terminal()
                 update_terminal()
             elif end_loop:
                 break
