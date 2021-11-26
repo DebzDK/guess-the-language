@@ -28,7 +28,10 @@ import re
 from typing import Any, Callable, List, Union
 import flag
 from dotenv import load_dotenv
-from prompt_toolkit import prompt as autocomplete_prompt
+from prompt_toolkit import prompt as toolkit_prompt
+from prompt_toolkit.application import run_in_terminal
+from prompt_toolkit.keys import Keys
+from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
 from prompt_toolkit.completion import WordCompleter
 from classes.enums.difficulty import Difficulty
 from classes.enums.inputmode import InputMode
@@ -45,6 +48,7 @@ UNICODES = {
     "underline": "\u001b\033[4m",
     "reset": "\u001b[37;0m"
 }
+KEY_BINDINGS = KeyBindings()
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -188,7 +192,7 @@ def await_input(prompt: str, process: Callable[[str], Any] = None,
         to the terminal.
     """
     while True:
-        user_input = input(prompt)
+        user_input = toolkit_prompt(prompt)
         if process is not None:
             end_loop = process(user_input)
             if (end_loop is not True and
@@ -226,7 +230,7 @@ def get_processed_user_input(
             the input loop should be exited and return nothing.
     """
     while True:
-        user_input = autocomplete_prompt(prompt, completer=completer)
+        user_input = toolkit_prompt(prompt, completer=completer)
         if process is not None:
             end_loop = process(user_input)
             if end_loop:
@@ -328,6 +332,20 @@ def run_game():
         f" languages correctly.{extra_text}!\n"
     )
 
+    toolkit_prompt(
+        "Press any key to return to the main menu",
+        key_bindings=KEY_BINDINGS
+    )
+
+
+@KEY_BINDINGS.add(Keys.Any)  # Key press listener (except 'Enter')
+@KEY_BINDINGS.add("enter")   # 'Enter' key press listener
+def _(event: KeyPressEvent):
+    """Clear terminal on any key press and display main menu."""
+    event.app.exit()
+    run_in_terminal(clear_terminal)
+    run_in_terminal(display_main_menu)
+
 
 def read_from_file() -> List[str]:
     """Read lines from a file.
@@ -343,7 +361,7 @@ def read_from_file() -> List[str]:
     """
     sentences = []
     while len(sentences) == 0:
-        path_or_filename = input(
+        path_or_filename = toolkit_prompt(
             "\nEnter the name or path of the file you wish to read from: ")
         try:
             with open(path_or_filename, encoding="utf-8") as file:
