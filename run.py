@@ -23,12 +23,19 @@ Further information can be found in the project's README file.
 
 ----------------------------------------------------------------------
 """
+import os
 import re
 from typing import Any, Callable, List, Union
 import flag
 from dotenv import load_dotenv
-from classes.enums.inputmode import InputMode
+from prompt_toolkit import prompt as toolkit_prompt
+from prompt_toolkit.application import run_in_terminal
+from prompt_toolkit.keys import Keys
+from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
+from prompt_toolkit.completion import WordCompleter
 from classes.enums.difficulty import Difficulty
+from classes.enums.inputmode import InputMode
+from classes.enums.language import Language
 from classes.sentencegenerator import SentenceGenerator
 from classes.helpers.translationhelper import TranslationHelper
 
@@ -38,9 +45,12 @@ QUIT_COMMANDS = ["q", "quit"]
 UNICODES = {
     "green": "\u001b[32;1m",
     "red": "\u001b[31;1m",
-    "underline": "\u001b\033[4m",
+    "white-bg": "\u001b[30;47m",
+    "underline": "\u001b\33[4m",
     "reset": "\u001b[37;0m"
 }
+GAMEPLAY_BINDINGS = KeyBindings()
+MENU_NAVIGATION_BINDINGS = KeyBindings()
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -70,6 +80,19 @@ input_mode = InputMode.USER.value
 difficulty_level = Difficulty.EASY.value
 enable_hints = True
 
+viewing_main_menu = True
+viewing_game_options_menu = False
+selected_main_menu_option_index = 0
+main_menu_options = ["PLAY", "GAME OPTIONS", "QUIT"]
+selected_game_option_index = 0
+game_options = [
+    "Input mode",
+    "Difficulty",
+    "Enable hints",
+    "Return to main menu"
+]
+start_game = False
+
 
 def display_title():
     """Prints title to terminal."""
@@ -78,81 +101,182 @@ def display_title():
 
 def display_main_menu():
     """Print main manu options to terminal."""
-    print("-- PLAY [1]")
-    print("-- GAME OPTIONS [2]")
-    print("-- QUIT [Q]")
+    global viewing_main_menu, viewing_game_options_menu
+
+    viewing_main_menu = True
+    viewing_game_options_menu = False
+    text = ""
+    for i, option in enumerate(main_menu_options):
+        if i == selected_main_menu_option_index:
+            text += f"{UNICODES['white-bg']}> {option} <{UNICODES['reset']}"
+        else:
+            text += f"> {option}"
+        text += "\n"
+    print(text)
 
 
-def process_main_menu_selection(user_input: str):
-    """Display game menu options according to user input.
+# Code from StackOverflow - https://stackoverflow.com/a/684344
+def clear_terminal():
+    """Clear the terminal."""
+    os.system('cls' if os.name == 'nt' else 'clear')
+    display_title()
 
-    Checks if user input corresponds to a main menu option and processes
+
+def select_next_main_menu_option():
+    """Select next main menu option.
+
+    Updates the terminal to show the next menu option as the one
+    that's selected.
+    """
+    global selected_main_menu_option_index
+
+    if selected_main_menu_option_index == len(main_menu_options) - 1:
+        return
+
+    selected_main_menu_option_index += 1
+    clear_terminal()
+    display_main_menu()
+
+
+def select_previous_main_menu_option():
+    """Select previous main menu option.
+
+    Updates the terminal to show the previous menu option as the one
+    that's selected.
+    """
+    global selected_main_menu_option_index
+
+    if selected_main_menu_option_index == 0:
+        return
+
+    selected_main_menu_option_index -= 1
+    clear_terminal()
+    display_main_menu()
+
+
+def process_main_menu_selection():
+    """Process main menu selection from user input.
+
+    Checks if the key pressed corresponds to a main menu option and processes
     accordingly.
-
-    Parameters
-    ----------
-    user_input
-        The value typed by the user.
 
     Raises
     -------
     SystemExit
         If the user has entered a command to quit the game
     """
-    if user_input == "1":
-        run_game()
-    elif user_input == "2":
+    global viewing_main_menu, viewing_game_options_menu, start_game
+
+    if selected_main_menu_option_index == 0:
+        clear_terminal()
+        viewing_main_menu = False
+        start_game = True
+    elif selected_main_menu_option_index == 1:
+        clear_terminal()
+        viewing_main_menu = False
         display_game_options_menu()
-        await_input("Select game option: ",
-                    process_game_option,
-                    display_game_options_menu)
-    elif is_quit_command(user_input):
+    elif selected_main_menu_option_index == 2:
         raise SystemExit()
 
 
 def display_game_options_menu():
     """Print game menu options to console."""
-    game_options_str = (
-        "---- Input mode [1]: {}\n"
-        "---- Difficulty [2]: {}\n"
-        "---- Enable hints [3]: {}\n"
-        "-- Return to main menu [4]"
-    )
-    print(game_options_str.format(
-                            InputMode.get_description(input_mode),
-                            Difficulty.get_description(difficulty_level),
-                            enable_hints))
+    global viewing_game_options_menu
+    viewing_game_options_menu = True
+
+    text = ""
+    for i, option in enumerate(game_options):
+        if i == selected_game_option_index:
+            text += f"{UNICODES['white-bg']}> {option}"
+            text += ": " if i != len(game_options) - 1 else ""
+            text += f"{get_game_option_description(i)} <{UNICODES['reset']}"
+        else:
+            text += f"> {option}"
+            text += ": " if i != len(game_options) - 1 else ""
+            text += get_game_option_description(i)
+        text += "\n"
+    print(text)
 
 
-def process_game_option(user_input: str):
+def get_game_option_description(index: int) -> str:
+    """Get the description for the currently selected game option.
+
+    Parameters
+    ----------
+    index
+        The index of the game option.
+
+    Returns
+    -------
+    str
+        The game options's description.
+    """
+    if index == 0:
+        return InputMode.get_description(input_mode)
+
+    if index == 1:
+        return (
+            Difficulty.get_description(difficulty_level) +
+            " (" + Difficulty(difficulty_level).name + ")")
+
+    if index == 2:
+        return str(enable_hints)
+    return ""
+
+
+def select_next_game_option():
+    """Select next game menu option.
+
+    Updates the terminal to show the next menu option as the one
+    that's selected.
+    """
+    global selected_game_option_index
+
+    if selected_game_option_index == len(game_options) - 1:
+        return
+
+    selected_game_option_index += 1
+    clear_terminal()
+    display_game_options_menu()
+
+
+def select_previous_game_option():
+    """Select previous game option.
+
+    Updates the terminal to show the previous game option as the one
+    that's selected.
+    """
+    global selected_game_option_index
+
+    if selected_game_option_index == 0:
+        return
+
+    selected_game_option_index -= 1
+    clear_terminal()
+    display_game_options_menu()
+
+
+def process_game_option_selection():
     """Toggle game option based on user input and current settings.
 
     Checks if user input corresponds to a game option and processes
     accordingly.
-
-    Parameters
-    ----------
-    user_input
-        The value typed by the user.
-
-    Returns
-    -------
-    bool
-        True if the user has chosen to return to the main menu, otherwise
-        False.
     """
     global input_mode, difficulty_level, enable_hints
 
-    if user_input == "1":
+    if selected_game_option_index == 0:
         input_mode = input_mode + 1 if input_mode < 3 else 1
-    elif user_input == "2":
-        difficulty_level = difficulty_level + 1 if difficulty_level < 3 else 1
-    elif user_input == "3":
+    elif selected_game_option_index == 1:
+        difficulty_level = difficulty_level + 1 if difficulty_level < 3 else 0
+    elif selected_game_option_index == 2:
         enable_hints = not enable_hints
-    elif user_input == "4":
+
+    clear_terminal()
+
+    if selected_game_option_index == 3:
         display_main_menu()
-        return True
-    return False
+    else:
+        display_game_options_menu()
 
 
 def await_input(prompt: str, process: Callable[[str], Any] = None,
@@ -174,11 +298,12 @@ def await_input(prompt: str, process: Callable[[str], Any] = None,
         to the terminal.
     """
     while True:
-        user_input = input(prompt)
+        user_input = toolkit_prompt(prompt)
         if process is not None:
             end_loop = process(user_input)
             if (end_loop is not True and
                     update_terminal is not None):
+                clear_terminal()
                 update_terminal()
             elif end_loop:
                 break
@@ -187,7 +312,8 @@ def await_input(prompt: str, process: Callable[[str], Any] = None,
 
 
 def get_processed_user_input(
-        prompt: str, process: Callable[[str], Any] = None) -> Union[str, None]:
+        prompt: str, process: Callable[[str], Any],
+        completer: WordCompleter = None) -> Union[str, None]:
     """Prompt user for input, process input if required and return the input.
 
     Continuously waits for user input and executes functions based on input
@@ -199,6 +325,9 @@ def get_processed_user_input(
         The text to display to the user to indicate the desired type of input.
     process
         The function to call process user input.
+    completer
+        The class holding the list of all values to use as autocomplete
+        suggestions for the user.
 
     Returns
     -------
@@ -207,7 +336,7 @@ def get_processed_user_input(
             the input loop should be exited and return nothing.
     """
     while True:
-        user_input = input(prompt)
+        user_input = toolkit_prompt(prompt, completer=completer)
         if process is not None:
             end_loop = process(user_input)
             if end_loop:
@@ -218,10 +347,12 @@ def get_processed_user_input(
 
 def run_game():
     """Run the game loop."""
-    global input_mode
+    global input_mode, start_game
     num_of_questions_asked = 0
     num_of_correct_answers = 0
     character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+    all_languages = [lang.get_user_friendly_name() for lang in Language]
+    language_completer = WordCompleter(all_languages, ignore_case=True)
     sentences_from_file = None
     sentence_to_translate = None
 
@@ -278,7 +409,7 @@ def run_game():
 
         print(f"\nTranslation: {translation}\n")
         guess = get_processed_user_input(
-            "What language is this?\n", is_valid_answer)
+            "What language is this?\n", is_valid_answer, language_completer)
         lower_case_guess = guess.lower()
 
         if lower_case_guess == answer.name.lower():
@@ -307,6 +438,97 @@ def run_game():
         f" languages correctly.{extra_text}!\n"
     )
 
+    toolkit_prompt(
+        "Press any key to return to the main menu",
+        key_bindings=GAMEPLAY_BINDINGS
+    )
+
+    start_game = False
+
+
+@GAMEPLAY_BINDINGS.add(Keys.Any)  # Key press listener (minus 'Enter' & arrows)
+@MENU_NAVIGATION_BINDINGS.add(Keys.Any)
+@GAMEPLAY_BINDINGS.add("enter")   # 'Enter' key press listener
+def _(event: KeyPressEvent):
+    """Clear terminal on any key press and display main menu.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    event.app.exit()
+    run_in_terminal(clear_terminal)
+    run_in_terminal(display_main_menu)
+
+
+@MENU_NAVIGATION_BINDINGS.add("up")  # Up arrow key press listener
+def _(event: KeyPressEvent):
+    """Cycle up through menu options.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    global viewing_main_menu, viewing_game_options_menu
+
+    event.app.exit()
+    if viewing_main_menu:
+        run_in_terminal(select_previous_main_menu_option)
+    elif viewing_game_options_menu:
+        run_in_terminal(select_previous_game_option)
+
+
+@MENU_NAVIGATION_BINDINGS.add("down")  # Down arrow key press listener
+def _(event: KeyPressEvent):
+    """Cycle down through menu options.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    global viewing_main_menu, viewing_game_options_menu
+
+    event.app.exit()
+    if viewing_main_menu:
+        run_in_terminal(select_next_main_menu_option)
+    elif viewing_game_options_menu:
+        run_in_terminal(select_next_game_option)
+
+
+@MENU_NAVIGATION_BINDINGS.add("enter")   # 'Enter' key press listener
+def _(event: KeyPressEvent):
+    """Process selected menu option.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    global viewing_main_menu, viewing_game_options_menu
+
+    event.app.exit()
+
+    if viewing_main_menu:
+        process_main_menu_selection()
+    elif viewing_game_options_menu:
+        process_game_option_selection()
+
+
+@MENU_NAVIGATION_BINDINGS.add("c-c")   # 'Control-C' key press listener
+def _(event: KeyPressEvent):
+    """Exit the game.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    event.app.exit()
+    raise SystemExit()
+
 
 def read_from_file() -> List[str]:
     """Read lines from a file.
@@ -322,7 +544,7 @@ def read_from_file() -> List[str]:
     """
     sentences = []
     while len(sentences) == 0:
-        path_or_filename = input(
+        path_or_filename = toolkit_prompt(
             "\nEnter the name or path of the file you wish to read from: ")
         try:
             with open(path_or_filename, encoding="utf-8") as file:
@@ -405,31 +627,17 @@ def is_game_over(question_count: int) -> bool:
     return question_count == NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
 
 
-def is_quit_command(user_input) -> bool:
-    """Check if user has given a quit command.
-
-    Determines whether or not the given input is one of the pre-set
-    quit commands.
-
-    Parameters
-    ----------
-    question_count
-        The number of questions that have been asked so far in the game
-
-    Returns
-    ----------
-    bool
-        True if all questions have been asked
-    """
-    return user_input.lower() in QUIT_COMMANDS
-
-
 def main():
     """Load environment variables and run display and game functions."""
     load_dotenv()
     display_title()
     display_main_menu()
-    await_input("Select menu option: ", process_main_menu_selection)
+
+    while True:
+        while not start_game:
+            toolkit_prompt("", key_bindings=MENU_NAVIGATION_BINDINGS)
+
+        run_game()
 
 
 main()
