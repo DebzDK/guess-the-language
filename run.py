@@ -45,10 +45,12 @@ QUIT_COMMANDS = ["q", "quit"]
 UNICODES = {
     "green": "\u001b[32;1m",
     "red": "\u001b[31;1m",
-    "underline": "\u001b\033[4m",
+    "white-bg": "\u001b[30;47m",
+    "underline": "\u001b\33[4m",
     "reset": "\u001b[37;0m"
 }
-KEY_BINDINGS = KeyBindings()
+GAMEPLAY_BINDINGS = KeyBindings()
+MENU_NAVIGATION_BINDINGS = KeyBindings()
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
@@ -78,6 +80,19 @@ input_mode = InputMode.USER.value
 difficulty_level = Difficulty.EASY.value
 enable_hints = True
 
+viewing_main_menu = True
+viewing_game_options_menu = False
+selected_main_menu_option_index = 0
+main_menu_options = ["PLAY", "GAME OPTIONS", "QUIT"]
+selected_game_option_index = 0
+game_options = [
+    "Input mode",
+    "Difficulty",
+    "Enable hints",
+    "Return to main menu"
+]
+start_game = False
+
 
 def display_title():
     """Prints title to terminal."""
@@ -86,9 +101,18 @@ def display_title():
 
 def display_main_menu():
     """Print main manu options to terminal."""
-    print("-- PLAY [1]")
-    print("-- GAME OPTIONS [2]")
-    print("-- QUIT [Q]")
+    global viewing_main_menu, viewing_game_options_menu
+
+    viewing_main_menu = True
+    viewing_game_options_menu = False
+    text = ""
+    for i, option in enumerate(main_menu_options):
+        if i == selected_main_menu_option_index:
+            text += f"{UNICODES['white-bg']}> {option} <{UNICODES['reset']}"
+        else:
+            text += f"> {option}"
+        text += "\n"
+    print(text)
 
 
 # Code from StackOverflow - https://stackoverflow.com/a/684344
@@ -98,79 +122,161 @@ def clear_terminal():
     display_title()
 
 
-def process_main_menu_selection(user_input: str):
-    """Display game menu options according to user input.
+def select_next_main_menu_option():
+    """Select next main menu option.
 
-    Checks if user input corresponds to a main menu option and processes
+    Updates the terminal to show the next menu option as the one
+    that's selected.
+    """
+    global selected_main_menu_option_index
+
+    if selected_main_menu_option_index == len(main_menu_options) - 1:
+        return
+
+    selected_main_menu_option_index += 1
+    clear_terminal()
+    display_main_menu()
+
+
+def select_previous_main_menu_option():
+    """Select previous main menu option.
+
+    Updates the terminal to show the previous menu option as the one
+    that's selected.
+    """
+    global selected_main_menu_option_index
+
+    if selected_main_menu_option_index == 0:
+        return
+
+    selected_main_menu_option_index -= 1
+    clear_terminal()
+    display_main_menu()
+
+
+def process_main_menu_selection():
+    """Process main menu selection from user input.
+
+    Checks if the key pressed corresponds to a main menu option and processes
     accordingly.
-
-    Parameters
-    ----------
-    user_input
-        The value typed by the user.
 
     Raises
     -------
     SystemExit
         If the user has entered a command to quit the game
     """
-    if user_input == "1":
+    global viewing_main_menu, viewing_game_options_menu, start_game
+
+    if selected_main_menu_option_index == 0:
         clear_terminal()
-        run_game()
-    elif user_input == "2":
+        viewing_main_menu = False
+        start_game = True
+    elif selected_main_menu_option_index == 1:
         clear_terminal()
+        viewing_main_menu = False
         display_game_options_menu()
-        await_input("Select game option: ",
-                    process_game_option,
-                    display_game_options_menu)
-    elif is_quit_command(user_input):
+    elif selected_main_menu_option_index == 2:
         raise SystemExit()
 
 
 def display_game_options_menu():
     """Print game menu options to console."""
-    game_options_str = (
-        "---- Input mode [1]: {}\n"
-        "---- Difficulty [2]: {}\n"
-        "---- Enable hints [3]: {}\n"
-        "-- Return to main menu [4]"
-    )
-    print(game_options_str.format(
-                            InputMode.get_description(input_mode),
-                            Difficulty.get_description(difficulty_level),
-                            enable_hints))
+    global viewing_game_options_menu
+    viewing_game_options_menu = True
+
+    text = ""
+    for i, option in enumerate(game_options):
+        if i == selected_game_option_index:
+            text += f"{UNICODES['white-bg']}> {option}"
+            text += ": " if i != len(game_options) - 1 else ""
+            text += f"{get_game_option_description(i)} <{UNICODES['reset']}"
+        else:
+            text += f"> {option}"
+            text += ": " if i != len(game_options) - 1 else ""
+            text += get_game_option_description(i)
+        text += "\n"
+    print(text)
 
 
-def process_game_option(user_input: str):
+def get_game_option_description(index: int) -> str:
+    """Get the description for the currently selected game option.
+
+    Parameters
+    ----------
+    index
+        The index of the game option.
+
+    Returns
+    -------
+    str
+        The game options's description.
+    """
+    if index == 0:
+        return InputMode.get_description(input_mode)
+
+    if index == 1:
+        return (
+            Difficulty.get_description(difficulty_level) +
+            " (" + Difficulty(difficulty_level).name + ")")
+
+    if index == 2:
+        return str(enable_hints)
+    return ""
+
+
+def select_next_game_option():
+    """Select next game menu option.
+
+    Updates the terminal to show the next menu option as the one
+    that's selected.
+    """
+    global selected_game_option_index
+
+    if selected_game_option_index == len(game_options) - 1:
+        return
+
+    selected_game_option_index += 1
+    clear_terminal()
+    display_game_options_menu()
+
+
+def select_previous_game_option():
+    """Select previous game option.
+
+    Updates the terminal to show the previous game option as the one
+    that's selected.
+    """
+    global selected_game_option_index
+
+    if selected_game_option_index == 0:
+        return
+
+    selected_game_option_index -= 1
+    clear_terminal()
+    display_game_options_menu()
+
+
+def process_game_option_selection():
     """Toggle game option based on user input and current settings.
 
     Checks if user input corresponds to a game option and processes
     accordingly.
-
-    Parameters
-    ----------
-    user_input
-        The value typed by the user.
-
-    Returns
-    -------
-    bool
-        True if the user has chosen to return to the main menu, otherwise
-        False.
     """
     global input_mode, difficulty_level, enable_hints
 
-    if user_input == "1":
+    if selected_game_option_index == 0:
         input_mode = input_mode + 1 if input_mode < 3 else 1
-    elif user_input == "2":
-        difficulty_level = difficulty_level + 1 if difficulty_level < 3 else 1
-    elif user_input == "3":
+    elif selected_game_option_index == 1:
+        difficulty_level = difficulty_level + 1 if difficulty_level < 3 else 0
+    elif selected_game_option_index == 2:
         enable_hints = not enable_hints
-    elif user_input == "4":
-        clear_terminal()
+
+    clear_terminal()
+
+    if selected_game_option_index == 3:
         display_main_menu()
-        return True
-    return False
+    else:
+        display_game_options_menu()
 
 
 def await_input(prompt: str, process: Callable[[str], Any] = None,
@@ -241,7 +347,7 @@ def get_processed_user_input(
 
 def run_game():
     """Run the game loop."""
-    global input_mode
+    global input_mode, start_game
     num_of_questions_asked = 0
     num_of_correct_answers = 0
     character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
@@ -334,17 +440,94 @@ def run_game():
 
     toolkit_prompt(
         "Press any key to return to the main menu",
-        key_bindings=KEY_BINDINGS
+        key_bindings=GAMEPLAY_BINDINGS
     )
 
+    start_game = False
 
-@KEY_BINDINGS.add(Keys.Any)  # Key press listener (except 'Enter')
-@KEY_BINDINGS.add("enter")   # 'Enter' key press listener
+
+@GAMEPLAY_BINDINGS.add(Keys.Any)  # Key press listener (minus 'Enter' & arrows)
+@MENU_NAVIGATION_BINDINGS.add(Keys.Any)
+@GAMEPLAY_BINDINGS.add("enter")   # 'Enter' key press listener
 def _(event: KeyPressEvent):
-    """Clear terminal on any key press and display main menu."""
+    """Clear terminal on any key press and display main menu.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
     event.app.exit()
     run_in_terminal(clear_terminal)
     run_in_terminal(display_main_menu)
+
+
+@MENU_NAVIGATION_BINDINGS.add("up")  # Up arrow key press listener
+def _(event: KeyPressEvent):
+    """Cycle up through menu options.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    global viewing_main_menu, viewing_game_options_menu
+
+    event.app.exit()
+    if viewing_main_menu:
+        run_in_terminal(select_previous_main_menu_option)
+    elif viewing_game_options_menu:
+        run_in_terminal(select_previous_game_option)
+
+
+@MENU_NAVIGATION_BINDINGS.add("down")  # Down arrow key press listener
+def _(event: KeyPressEvent):
+    """Cycle down through menu options.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    global viewing_main_menu, viewing_game_options_menu
+
+    event.app.exit()
+    if viewing_main_menu:
+        run_in_terminal(select_next_main_menu_option)
+    elif viewing_game_options_menu:
+        run_in_terminal(select_next_game_option)
+
+
+@MENU_NAVIGATION_BINDINGS.add("enter")   # 'Enter' key press listener
+def _(event: KeyPressEvent):
+    """Process selected menu option.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    global viewing_main_menu, viewing_game_options_menu
+
+    event.app.exit()
+
+    if viewing_main_menu:
+        process_main_menu_selection()
+    elif viewing_game_options_menu:
+        process_game_option_selection()
+
+
+@MENU_NAVIGATION_BINDINGS.add("c-c")   # 'Control-C' key press listener
+def _(event: KeyPressEvent):
+    """Exit the game.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    event.app.exit()
+    raise SystemExit()
 
 
 def read_from_file() -> List[str]:
@@ -444,31 +627,17 @@ def is_game_over(question_count: int) -> bool:
     return question_count == NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
 
 
-def is_quit_command(user_input) -> bool:
-    """Check if user has given a quit command.
-
-    Determines whether or not the given input is one of the pre-set
-    quit commands.
-
-    Parameters
-    ----------
-    question_count
-        The number of questions that have been asked so far in the game
-
-    Returns
-    ----------
-    bool
-        True if all questions have been asked
-    """
-    return user_input.lower() in QUIT_COMMANDS
-
-
 def main():
     """Load environment variables and run display and game functions."""
     load_dotenv()
     display_title()
     display_main_menu()
-    await_input("Select menu option: ", process_main_menu_selection)
+
+    while True:
+        while not start_game:
+            toolkit_prompt("", key_bindings=MENU_NAVIGATION_BINDINGS)
+
+        run_game()
 
 
 main()
