@@ -13,9 +13,10 @@
         Running the contents of [this](https://github.com/DebzDK/guess-the-language/blob/a5062a6b2b17af2659383b60a67ffa681555073a/run.py) file in the PEP8 online tool will produce the above results.
 
     * Potential non-error errors
-        1. The following errors occur in [run.py](https://github.com/DebzDK/guess-the-language/blob/main/run.py#L157) and [requestservice.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/services/requestservice.py#L17):
+        1. The following errors occured in run.py, [requestservice.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/services/requestservice.py#L20), and [sentencegenerator.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/sentencegenerator.py#L178):
             ![Screenshot of run.py errors](documentation/screenshots/evidence/testing/run-test.png)
             ![Screenshot of requestservice.py error](documentation/screenshots/evidence/testing/requestservice-class-test.png)
+            ![Screenshot of sentencegenerator.py error](documentation/screenshots/evidence/testing/sentencegenerator-class-test.png)
 
             However, in [PEP 3107](https://legacy.python.org/dev/peps/pep-3107/#syntax), it explains that this is the expected format for funciton annotations that specify a default value and the pystylecode (formerly pep8) tool in Gitpod shows no error on these lines.
             
@@ -24,6 +25,10 @@
             This [answer](https://stackoverflow.com/a/38727786) in StackOverflow also supports this.
 
             For this reason, these errors outlined by the [PEP8 online tool](http://pep8online.com/) can be ignored.
+
+            The code causing this error in run.py has now been removed because it is no longer needed. Here is the updated test result as of 16/12/21:
+
+            ![Screenshot of run.py test](documentation/screenshots/evidence/testing/run-test-updated.png)
 
         2. This error occurred in [gamedictionary.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/gamedictionary.py#L25):
             ![Screenshot of gamedictionary.py error](documentation/screenshots/evidence/testing/gamedictionary-class-test.png)
@@ -37,8 +42,6 @@
     * All other classes
         * classes/sentence.py - __Sentence()__
             ![Screenshot of translationhelper.py class test](documentation/screenshots/evidence/testing/sentence-class-test.png)
-        * classes/sentencegenerator.py - __SentenceGenerator()__
-            ![Screenshot of sentencegenerator.py class test](documentation/screenshots/evidence/testing/sentencegenerator-class-test.png)
         * classes/translation.py - __Translation()__
             ![Screenshot of translation.py class test](documentation/screenshots/evidence/testing/translation-class-test.png)
         * classes/word.py - __Word()__
