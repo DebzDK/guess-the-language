@@ -148,6 +148,8 @@ Each feature listed below was chosen to provide users with a clear, logical path
                 
                 ![GIF of user-input game mode](documentation/screenshots/evidence/design/file-input.gif)
 
+                Once this type of game is complete the user will be informed that the translations are being written to their file. This was initially supposed to be a future feature but has been implemented as of 16/12/21 for the sake of ensuring that LO7 of the pass criteria has been well met. LO7 of the pass criteria states 'Write code that queries and manipulates data to meet the identified vital project needs'.
+
             * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
             
                 TODO: Add GIF once auto-generation is fully working
@@ -187,9 +189,13 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
     Wikipedia has an unofficial public API called ['MediaWiki'](https://www.mediawiki.org/wiki/API:Main_page) and a [wiki](https://en.wikipedia.org/wiki/List_of_languages_by_the_number_of_countries_in_which_they_are_recognized_as_an_official_language) containing this information. The two together, plus some algorithm to extract the desired data for a given language, could've provided this information but it isn't verified and appears to be outdated. I couldn't find another source so I chose not to implement this feature.
 
-* Writing sentences and their translations to a new text file or the existing text file (if one is provided)
+* Ability to read out translated sentences
 
-    This would allow for some level of persistence for a user who is genuinely interested in languages to keep a log of their translations.
+    It would have been pretty fun for the game to also read out the translated sentence as a kind of audio hint for a user while playing the game. This could have been implemented using the [gTTs Python library](https://github.com/pndurette/gTTS) which caters for most of the languages the DeepL Translator API supports.
+
+* ~~Writing sentences and their translations to a new text file or the existing text file (if one is provided)~~
+
+    ~~This would allow for some level of persistence for a user who is genuinely interested in languages to keep a log of their translations.~~
 
 ## Languages and technologies used
 
