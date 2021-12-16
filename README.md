@@ -88,6 +88,7 @@ Each feature listed below was chosen to provide users with a clear, logical path
         ![Screenshot of main menu](documentation/screenshots/evidence/design/main-menu.png)
 
         From here, a user can start the game and view/set game options.
+        *Please note: For some reason, the bottom bar does not display in the terminal of the deployed Heroku site. Even after adjusting the terminal dimenstions via the views/index.html file in the project, it can't be viewed. Will display when forked and run in Gitpod.*
 
 * Game options menu
     * Allows users to set options that effect gameplay
