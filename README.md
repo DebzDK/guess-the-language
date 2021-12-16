@@ -155,7 +155,7 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
             * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
             
-                TODO: Add GIF once auto-generation is fully working
+                TODO: Add GIF once last bug is fixed
 
         * Available translation languages
 
