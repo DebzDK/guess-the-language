@@ -82,8 +82,6 @@ class TranslationHelper():
         if use_all_languages:
             _language_choices = Language.get_choices_for_difficulty_level(
                 difficulty_level)
-            if difficulty_level == 3:
-                _language_choices.remove(Language.ENGLISH)
 
         target_language = random.choice(_language_choices)
         _language_choices.remove(target_language)

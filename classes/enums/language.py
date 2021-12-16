@@ -122,7 +122,9 @@ class Language(Enum):
             return lesser_known_languages
         # BEAST
         if difficulty_level == 3:
-            return list(Language)
+            languages = list(Language)
+            languages.remove(Language.ENGLISH)
+            return languages
         # EASY (default)
         return [
             Language.FRENCH,
