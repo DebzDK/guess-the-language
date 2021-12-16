@@ -11,25 +11,29 @@ class InputMode(Enum):
     Members
     ----------
     USER : int
-        integer representation of user input mode
+        The integer representation of the user input mode.
     FILE : int
-        integer representation of file input mode
+        The integer representation of the file input mode.
     AUTO : int
-        integer representation of auto input mode
+        The integer representation of the auto-generated input mode.
 
     Methods
     -------
-    get_description(cls, mode):
-        Gets a description for a given input mode
+    get_description(cls, mode: int) -> str:
+        Returns a description for a given input mode.
     """
     USER = 1
     FILE = 2
     AUTO = 3
 
     @classmethod
-    def get_description(cls, mode):
-        """
-        Returns the description for a given input mode
+    def get_description(cls, mode: int) -> str:
+        """Returns the description for a given input mode.
+
+        Returns
+        -------
+        str
+            The description of the given input mode.
         """
         if mode == 2:
             return 'Load sentences from text file'

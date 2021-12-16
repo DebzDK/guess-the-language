@@ -14,11 +14,12 @@ class Language(Enum):
 
     Methods
     -------
-    get_user_friendly_name(mode) -> str:
+    get_user_friendly_name() -> str:
         Gets a user-friendly version of the language text
     get_language_abbreviation() -> str:
         Gets a lanugage's abbreviation.
-    get_choices_for_difficulty_level(difficulty_level) -> List["Language"]:
+    get_choices_for_difficulty_level(
+            difficulty_level: int) -> List["Language"]:
         Gets a list of all possible languages to translate sentences into for
         the current game's difficulty level.
     """
@@ -74,8 +75,9 @@ class Language(Enum):
         return abbreviated_lang_form[-1]
 
     @staticmethod
-    def get_choices_for_difficulty_level(difficulty_level) -> List["Language"]:
-        """Get list of possible language choices for a given difficulty level.
+    def get_choices_for_difficulty_level(
+            difficulty_level: int) -> List["Language"]:
+        """Gets list of possible language choices for a given difficulty level.
 
         Returns a list of all the possible languages that sentences can be
         translated into depending on the current games difficulty level.
@@ -120,7 +122,9 @@ class Language(Enum):
             return lesser_known_languages
         # BEAST
         if difficulty_level == 3:
-            return list(Language)
+            languages = list(Language)
+            languages.remove(Language.ENGLISH)
+            return languages
         # EASY (default)
         return [
             Language.FRENCH,

@@ -11,18 +11,18 @@ class Difficulty(Enum):
     Members
     ----------
     EASY : int
-        integer representation of easy difficulty level
+        The integer representation of the easy difficulty level.
     NORMAL : int
-        integer representation of normal difficulty level
+        The integer representation of the normal difficulty level.
     HARD : int
-        integer representation of hard difficulty level
+        The integer representation of the hard difficulty level.
     BEAST : int
-        integer representation of beast difficulty level
+        The integer representation of the beast difficulty level.
 
     Methods
     -------
-    get_description(cls, mode):
-        Gets a description for a given difficulty level
+    get_description(cls, difficulty: int) -> str:
+        Gets a description for a given difficulty level.
     """
     EASY = 0
     NORMAL = 1
@@ -30,9 +30,13 @@ class Difficulty(Enum):
     BEAST = 3
 
     @classmethod
-    def get_description(cls, difficulty):
-        """
-        Returns the description for a given input mode
+    def get_description(cls, difficulty: int) -> str:
+        """Returns the description for a given input mode.
+
+        Returns
+        -------
+        str
+            The description for the given difficulty level.
         """
         if difficulty == 1:
             return "5 questions in less 'popular' languages"
@@ -40,7 +44,7 @@ class Difficulty(Enum):
             return "10 questions in lesser known languages"
         if difficulty == 3:
             return (
-                "26 questions in all available languages"
+                "24 questions in all available languages"
                 " + 5 seconds to answer"
             )
         return "5 questions in 'popular' languages"

@@ -201,7 +201,7 @@ class PartOfSpeech(Enum):
             The preceding part of speech to evaluate.
 
         Returns
-        ----------
+        -------
         bool
             Returns True if the preceding part of speech is an article or
             amount and the current part of speech can follow it.
@@ -223,7 +223,7 @@ class PartOfSpeech(Enum):
             The preceding part of speech to evaluate.
 
         Returns
-        ----------
+        -------
         bool
             Returns True if the preceding part of speech is a verb and the
             current part of speech can follow it.
@@ -250,7 +250,7 @@ class PartOfSpeech(Enum):
             The preceding part of speech to evaluate.
 
         Returns
-        ----------
+        -------
         bool
             Returns True if the preceding part of speech is a personal pronoun
             or a noun and the current part of speech that
@@ -274,7 +274,7 @@ class PartOfSpeech(Enum):
             The preceding part of speech to evaluate.
 
         Returns
-        ----------
+        -------
         bool
             Returns True if the preceding part of speech is an adverb and the
             current part of speech can follow it.
@@ -299,7 +299,7 @@ class PartOfSpeech(Enum):
             The preceding part of speech to evaluate.
 
         Returns
-        ----------
+        -------
         bool
             Returns True if the preceding part of speech is an adjective and
             the current part of speech can follow it.
@@ -321,7 +321,7 @@ class PartOfSpeech(Enum):
             The preceding part of speech to evaluate.
 
         Returns
-        ----------
+        -------
         bool
             Returns True if the preceding part of speech is a preposition and
             the current part of speech can follow it.
@@ -344,7 +344,7 @@ class PartOfSpeech(Enum):
             The preceding part of speech to evaluate.
 
         Returns
-        ----------
+        -------
         bool
             Returns True if the preceding part of speech is an object pronoun
             and the current part of speech can come after it.
