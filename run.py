@@ -25,7 +25,7 @@ Further information can be found in the project's README file.
 """
 import os
 import re
-from typing import Any, Callable, List, Union
+from typing import Any, Callable, Dict, Tuple, Union
 import flag
 from dotenv import load_dotenv
 from prompt_toolkit import prompt as toolkit_prompt
@@ -353,15 +353,17 @@ def run_game():
     character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
     all_languages = [lang.get_user_friendly_name() for lang in Language]
     language_completer = WordCompleter(all_languages, ignore_case=True)
+    file_name = ""
     sentences_from_file = None
     sentence_to_translate = None
+    translations = {}
 
     if input_mode == 2:
         print((
             "\nSince you've chosen to play with file input,"
             " please make sure that each sentence in your file"
             " is on a new line.\n"))
-        sentences_from_file = read_from_file()
+        file_name, sentences_from_file = read_from_file()
 
     while (not is_game_over(num_of_questions_asked) and
             ((input_mode != 2) or
@@ -382,7 +384,12 @@ def run_game():
                 is_viable_for_translation
             )
         elif input_mode == 2:
-            sentence_to_translate = sentences_from_file[num_of_questions_asked]
+            sentence_to_translate, is_viable = (
+                sentences_from_file[num_of_questions_asked]
+            )
+            if not is_viable:
+                sentence_to_translate = SentenceGenerator.generate_sentence(
+                    CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level])
         elif input_mode == 3:
             sentence_to_translate = SentenceGenerator.generate_sentence(
                 CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level])
@@ -393,6 +400,9 @@ def run_game():
         translation = TranslationHelper.translate_sentence(
                 sentence_to_translate, difficulty_level,
                 num_of_questions_asked == 0)
+
+        if input_mode == 2:
+            translations[sentence_to_translate] = translation
 
         if "Error: " in translation.text:
             print(f"{translation}\n")
@@ -437,6 +447,9 @@ def run_game():
         f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
         f" languages correctly.{extra_text}!\n"
     )
+
+    if input_mode == 2:
+        write_to_file(file_name, sentences_from_file, translations)
 
     toolkit_prompt(
         "Press any key to return to the main menu",
@@ -530,7 +543,7 @@ def _(event: KeyPressEvent):
     raise SystemExit()
 
 
-def read_from_file() -> List[str]:
+def read_from_file() -> Tuple[str, Tuple[str, bool]]:
     """Read lines from a file.
 
     Reads from file, line by line, and adds each line to sentences list
@@ -538,11 +551,15 @@ def read_from_file() -> List[str]:
 
     Returns
     ----------
-    List[str]
-        A populated list of strings if there are viable lines of text in a
-        given file, otherwise an empty one.
+    Tuple[str, Tuple[str, bool]]
+        A tuple containing the file_name and a populated tuple of strings
+        paired with whether or not there are viable for translation, otherwise
+        an empty one.
     """
-    sentences = []
+    sentences = ()
+    question_limit = NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
+    char_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+
     while len(sentences) == 0:
         path_or_filename = toolkit_prompt(
             "\nEnter the name or path of the file you wish to read from: ")
@@ -551,18 +568,69 @@ def read_from_file() -> List[str]:
                 for line in file:
                     stripped_line = line.strip()
                     if (stripped_line and
-                            is_viable_for_translation(stripped_line)):
-                        sentences.append(stripped_line)
+                            not is_inserted_file_sentence(stripped_line)):
+                        sentences += (
+                            (
+                                stripped_line,
+                                is_viable_for_translation(stripped_line)
+                            ),
+                        )
 
-                    if (len(sentences) ==
-                            NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]):
+                    if len(sentences) == question_limit:
                         break
+
+                while len(sentences) < question_limit:
+                    sentences += (
+                        (
+                            SentenceGenerator.generate_sentence(char_limit),
+                            is_viable_for_translation(stripped_line)
+                        ),
+                    )
         except FileNotFoundError:
             print("\nUh oh... Looks like that file doesn't exist.")
-    return sentences
+    return (path_or_filename, sentences)
 
 
-def is_viable_for_translation(user_input) -> bool:
+def write_to_file(
+        path_or_filename: str, original_values: Tuple[str, bool],
+        content: Dict[str, str]):
+    """Writes translations to a file.
+
+    Overwrites file with original sentences and their translations.
+
+    Parameters
+    ----------
+    file_name
+        The path to or name of the file to write to.
+    original_values
+        The original file sentences paired with whether or not they were
+        viable for translation.
+    content
+        The content to be written to the file.
+    """
+    char_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+    print("\nWriting translations to file...")
+    with open(path_or_filename, mode="w", encoding="utf-8") as file:
+        index = 0
+        for sentence, translation in content.items():
+            file.write(f"{sentence}\n")
+            file.write(f"Translation: {translation}\n")
+            file.write(f"""Language: {
+                translation.lang.get_user_friendly_name()}""")
+            original_sentence, was_viable = original_values[index]
+            if not was_viable:
+                file.write(f"\nOriginal sentence: {original_sentence}")
+                file.write("\nNote: Exceeded character limit for")
+                file.write(f" {Difficulty(difficulty_level).name} level")
+                file.write(f" ({char_limit} chars)")
+                file.write(" so was replaced with an auto-generated sentence.")
+            file.write("\n\n")
+            index += 1
+
+    print("All done!\n")
+
+
+def is_viable_for_translation(user_input: str) -> bool:
     """Check if user input are viable for translation.
 
     Ensures that input adheres to the character limit for the current
@@ -570,6 +638,11 @@ def is_viable_for_translation(user_input) -> bool:
     exceeded.
     .. A detailed explanation can be found in the project's README:
         https://github.com/DebzDK/guess-the-language#features
+
+    Parameters
+    ----------
+    user_input
+        The input given by a user.
 
     Returns
     ----------
@@ -583,6 +656,28 @@ def is_viable_for_translation(user_input) -> bool:
             str_len > CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]):
         return False
     return True
+
+
+def is_inserted_file_sentence(sentence) -> bool:
+    """Checks if a given sentence starts with a preset value.
+
+    Parameters
+    ----------
+    sentence
+        The sentence to check.
+
+    Returns
+    ----------
+    bool
+        True if the sentence starts with a preset marker for file additions
+        that are not part of the original file content, i.e. the sentence to
+        translate.
+    """
+    if (sentence.startswith("Translation:") or
+            sentence.startswith("Language:") or
+            sentence.startswith("Note:")):
+        return True
+    return False
 
 
 def is_valid_answer(user_input: str) -> bool:
