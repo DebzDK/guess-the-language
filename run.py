@@ -393,14 +393,30 @@ def get_user_answer() -> str:
     return guess
 
 
-def end_question(
-        guess: str, answer: Language, num_of_correct_answers: int):
+def is_guess_correct(guess: str, answer: Language) -> bool:
+    """Checks if the guess is correct.
+
+    Returns
+    -------
+    bool
+        Returns True if the guess matches the answer, otherwise False.
+    """
+    return guess.lower() == answer.name.lower()
+
+
+def end_question(guess: str, answer: Language):
     """Ends question by printing a statemtn to inform the user as to whether
     they were right or not.
+
+    Parameters
+    ----------
+    guess
+        The value the user provided as input.
+    answer
+        The correct answer.
     """
-    if guess.lower() == answer.name.lower():
+    if is_guess_correct(guess, answer):
         result_indicator = UNICODES['green']
-        num_of_correct_answers += 1
     else:
         result_indicator = UNICODES['red']
 
@@ -493,7 +509,11 @@ def run_game():
         print(f"\nTranslation: {translation}\n")
         ask_question()
         guess = get_user_answer()
-        end_question(guess, translation.lang, num_of_correct_answers)
+
+        if is_guess_correct(guess, translation.lang):
+            num_of_correct_answers += 1
+
+        end_question(guess, translation.lang)
 
     if num_of_correct_answers < (num_of_questions_asked / 2):
         extra_text = "..\nBetter luck next time"
