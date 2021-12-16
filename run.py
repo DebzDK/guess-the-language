@@ -417,7 +417,7 @@ def get_user_answer() -> str:
     """
     guess = get_processed_user_input(
         "", is_valid_answer, LANGUAGE_COMPLETER, difficulty_level == 3)
-    return guess.lower()
+    return guess
 
 
 def end_question(
@@ -425,7 +425,7 @@ def end_question(
     """Ends question by printing a statemtn to inform the user as to whether
     they were right or not.
     """
-    if guess == answer.name.lower():
+    if guess.lower() == answer.name.lower():
         result_indicator = UNICODES['green']
         num_of_correct_answers += 1
     else:
