@@ -89,6 +89,18 @@ class Word():
         """Getter method for value property"""
         return self._value
 
+    # Use of decorator to access _part_of_speech
+    @property
+    def part_of_speech(self):
+        """Getter method for part_of_speech property"""
+        return self._part_of_speech
+
+    # Use of decorator to access _specificity
+    @property
+    def specificity(self):
+        """Getter method for specificity property"""
+        return self._specificity
+
     def is_an_adjective(self) -> bool:
         """Checks if the given word is an adjective.
 
