@@ -382,8 +382,8 @@ def get_processed_user_input(
     while True:
         if set_timer:
             print("You have 5 seconds to answer: ")
-            # Learned how to achieve similar effect as JavaScript's timeout function
-            # thanks to StackOverflow.
+            # Learned how to achieve similar effect as JavaScript's timeout
+            # function thanks to StackOverflow.
             # Link is in README due to length of link:
             #   https://github.com/DebzDK/guess-the-language#languages-and-technologies-used
             timer = Timer(5.0, end_prompt)
