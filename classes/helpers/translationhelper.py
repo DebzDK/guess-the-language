@@ -9,6 +9,8 @@ from classes.translation import Translation
 from classes.enums.language import Language
 from classes.services.requestservice import RequestService
 
+# Learned how to create generic types, like in Java,
+# from https://docs.python.org/3/library/typing.html#generics
 _T = TypeVar("T")
 
 
