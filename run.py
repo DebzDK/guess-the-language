@@ -25,7 +25,7 @@ Further information can be found in the project's README file.
 """
 import os
 import re
-from typing import Any, Callable, List, Union
+from typing import Any, Callable, Dict, List, Tuple, Union
 import flag
 from dotenv import load_dotenv
 from prompt_toolkit import prompt as toolkit_prompt
@@ -353,15 +353,17 @@ def run_game():
     character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
     all_languages = [lang.get_user_friendly_name() for lang in Language]
     language_completer = WordCompleter(all_languages, ignore_case=True)
+    file_name = ""
     sentences_from_file = None
     sentence_to_translate = None
+    translations = {}
 
     if input_mode == 2:
         print((
             "\nSince you've chosen to play with file input,"
             " please make sure that each sentence in your file"
             " is on a new line.\n"))
-        sentences_from_file = read_from_file()
+        file_name, sentences_from_file = read_from_file()
 
     while (not is_game_over(num_of_questions_asked) and
             ((input_mode != 2) or
@@ -393,6 +395,9 @@ def run_game():
         translation = TranslationHelper.translate_sentence(
                 sentence_to_translate, difficulty_level,
                 num_of_questions_asked == 0)
+
+        if input_mode == 2:
+            translations[sentence_to_translate] = translation
 
         if "Error: " in translation.text:
             print(f"{translation}\n")
@@ -437,6 +442,9 @@ def run_game():
         f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
         f" languages correctly.{extra_text}!\n"
     )
+
+    if input_mode == 2:
+        write_to_file(file_name, translations)
 
     toolkit_prompt(
         "Press any key to return to the main menu",
@@ -530,7 +538,7 @@ def _(event: KeyPressEvent):
     raise SystemExit()
 
 
-def read_from_file() -> List[str]:
+def read_from_file() -> Tuple[str, List[str]]:
     """Read lines from a file.
 
     Reads from file, line by line, and adds each line to sentences list
@@ -559,7 +567,29 @@ def read_from_file() -> List[str]:
                         break
         except FileNotFoundError:
             print("\nUh oh... Looks like that file doesn't exist.")
-    return sentences
+    return (path_or_filename, sentences)
+
+
+def write_to_file(path_or_filename: str, content: Dict[str, str]):
+    """Writes translations to a file.
+
+    Overwrites file with original sentences and their translations.
+
+    Parameters
+    ----------
+    file_name
+        The path to or name of the file to write to.
+    content
+        The content to be written to the file.
+    """
+    print("\nWriting translations to file...")
+    with open(path_or_filename, mode="w", encoding="utf-8") as file:
+        for sentence, translation in content.items():
+            file.write(f"{sentence}\n")
+            file.write(f"Translation: {translation}\n")
+            file.write(f"""Language: {
+                translation.lang.get_user_friendly_name()}\n\n""")
+    print("All done!\n")
 
 
 def is_viable_for_translation(user_input) -> bool:
