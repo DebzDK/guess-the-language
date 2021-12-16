@@ -1,6 +1,6 @@
 """Class for generating random sentences."""
 import random
-from typing import List
+from typing import List, Tuple
 from classes.sentence import Sentence
 from classes.word import Word
 from classes.gamedictionary import GameDictionary
@@ -232,3 +232,64 @@ class SentenceGenerator():
             PartOfSpeech.DEFINITE_ARTICLE,
             PartOfSpeech.INDEFINITE_ARTICLE
         ])
+
+    @staticmethod
+    def _is_word_suitable_for_sentence(
+            word_to_add: Word, sentence: List[Word]) -> Tuple[bool, List[str]]:
+        """Checks if a word is suitable for a given sentence.
+
+        Attempts to determine if a word fits into a sentence given preceding
+        words in the sentence.
+
+        Parameters
+        ----------
+        word_to_add
+            The word being evaluated.
+        sentence
+            The sentence the word is being added to.
+
+        Returns
+        ----------
+        Tuple[bool, List[str]]
+            Returns a tuple with value True and an empty list if the word is
+            detemined to be 'suitable' for the sentence, otherwise a tuple
+            with value False and a list of types to not include when
+            searching for the next suitable word.
+        """
+        blacklist = {}
+
+        reversed_sentence = sentence.copy()
+        reversed_sentence.reverse()
+
+        if len(sentence) > 0:
+            for preceding_word in reversed_sentence:
+                add_to_blacklist = False
+                if preceding_word.is_an_article_or_amount():
+                    if (word_to_add.is_possessive()
+                            or word_to_add.is_a_place()
+                            or word_to_add.is_a_name()):
+                        add_to_blacklist = True
+
+                if (preceding_word.is_an_irregular_verb()
+                        and word_to_add.is_an_adverb()):
+                    add_to_blacklist = True
+
+                if ((preceding_word.is_an_adjective()
+                        or preceding_word.is_a_noun())
+                        and word_to_add.is_a_noun()
+                        and preceding_word.specificity !=
+                        word_to_add.specificity):
+                    add_to_blacklist = True
+
+                if (word_to_add.is_a_verb() and preceding_word.is_a_noun()
+                        and preceding_word.specificity == "food"
+                        and not word_to_add.is_a_being_verb()):
+                    add_to_blacklist = True
+
+                if add_to_blacklist:
+                    if word_to_add.part_of_speech not in blacklist:
+                        blacklist[word_to_add.part_of_speech] = set()
+                    blacklist[word_to_add.part_of_speech].add(
+                        word_to_add.specificity)
+
+        return (len(blacklist) == 0, blacklist)
