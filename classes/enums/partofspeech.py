@@ -50,7 +50,7 @@ class PartOfSpeech(Enum):
     PREPOSITION = "preposition"
 
     def is_a_noun(self) -> bool:
-        """Determines if the part of speech represents a noun.
+        """Checks if the part of speech represents a noun.
 
         Returns
         -------
@@ -60,7 +60,7 @@ class PartOfSpeech(Enum):
         return self is PartOfSpeech.NOUN
 
     def is_a_personal_pronoun(self) -> bool:
-        """Determines if the part of speech represents a personal pronoun.
+        """Checks if the part of speech represents a personal pronoun.
 
         Returns
         -------
@@ -70,7 +70,7 @@ class PartOfSpeech(Enum):
         return self is PartOfSpeech.PERSONAL_PRONOUN
 
     def is_a_verb(self) -> bool:
-        """Determines if the part of speech word is a verb.
+        """Checks if the part of speech word is a verb.
 
         Returns
         -------
@@ -80,7 +80,7 @@ class PartOfSpeech(Enum):
         return self is PartOfSpeech.VERB
 
     def is_an_adjective(self) -> bool:
-        """Determines if the part of speech word is an adjective.
+        """Checks if the part of speech word is an adjective.
 
         Returns
         -------
@@ -90,7 +90,7 @@ class PartOfSpeech(Enum):
         return self is PartOfSpeech.ADJECTIVE
 
     def is_an_adverb(self) -> bool:
-        """Determines if the part of speech represents an adverb.
+        """Checks if the part of speech represents an adverb.
 
         Returns
         -------
@@ -100,7 +100,7 @@ class PartOfSpeech(Enum):
         return self is PartOfSpeech.ADVERB
 
     def is_an_amount(self) -> bool:
-        """Determines if the part of speech represents an amount.
+        """Checks if the part of speech represents an amount.
 
         Returns
         -------
@@ -110,7 +110,7 @@ class PartOfSpeech(Enum):
         return self is PartOfSpeech.AMOUNT
 
     def is_an_article_or_amount(self) -> bool:
-        """Determines if the part of speech represents an article or amount.
+        """Checks if the part of speech represents an article or amount.
 
         Returns
         -------
@@ -124,7 +124,7 @@ class PartOfSpeech(Enum):
         )
 
     def is_an_indefinte_article(self) -> bool:
-        """Determines if the part of speech represents an indefinite article.
+        """Checks if the part of speech represents an indefinite article.
 
         Returns
         -------
@@ -135,7 +135,7 @@ class PartOfSpeech(Enum):
         return self is PartOfSpeech.INDEFINITE_ARTICLE
 
     def is_a_conjunction(self) -> bool:
-        """Determines if the part of speech represents a conjunction.
+        """Checks if the part of speech represents a conjunction.
 
         Returns
         -------
