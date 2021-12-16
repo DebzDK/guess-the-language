@@ -56,7 +56,7 @@ class Word():
     def __init__(
             self, value: str, part_of_speech: PartOfSpeech,
             specificity: str = ""):
-        """Initialise the object with the passed parameters.
+        """Initialises the object with the passed parameters.
 
         Parameters
         ----------
@@ -68,17 +68,17 @@ class Word():
             The type of part of speech that the word falls under.
         """
         # A single word cannot have spaces
-        # so we strip them to be on the safeside
+        # so we strip them to be on the safe side
         self._value = value.replace(" ", "")
         self._part_of_speech = part_of_speech
         self._specificity = specificity
 
     def __str__(self):
-        """Modify object string representation using when printing."""
+        """Modifies object string representation using when printing."""
         return self._value
 
     def __repr__(self):
-        """Modify object string representation."""
+        """Modifies object string representation."""
         return (f"<Word value: {self._value} "
                 f"part_of_speech: {self._part_of_speech.name} "
                 f"specificity: {self._specificity}")

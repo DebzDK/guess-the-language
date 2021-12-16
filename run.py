@@ -1,11 +1,11 @@
 """'Guess The Language' - A language-guessing game program
 
 Author
-----------
+------
 Deborah Dike
 
 Usage
-----------
+-----
 To run the code, use:
     python3 run.py
 
@@ -16,7 +16,7 @@ The program can also be run by opening it in a version of Python
 IDLE and pressing F5.
 
 Note
-----------
+----
 Further information can be found in the project's README file.
 .. 'Guess The Language' project README:
     https://github.com/DebzDK/guess-the-language#guess-the-language
@@ -104,7 +104,7 @@ def display_title():
 
 
 def display_main_menu():
-    """Print main manu options to terminal."""
+    """Prints main manu options to terminal."""
     global viewing_main_menu, viewing_game_options_menu
 
     viewing_main_menu = True
@@ -120,7 +120,7 @@ def display_main_menu():
 
 
 def get_toolbar_text() -> str:
-    """Get toolbar text.
+    """Gets toolbar text.
 
     Displays the appropriate text depending on what the user is currently
     viewing, i.e. the main menu, the game options menu, or the game.
@@ -143,13 +143,13 @@ def get_toolbar_text() -> str:
 
 # Code from StackOverflow - https://stackoverflow.com/a/684344
 def clear_terminal():
-    """Clear the terminal."""
+    """Clears the terminal."""
     os.system('cls' if os.name == 'nt' else 'clear')
     display_title()
 
 
 def select_next_main_menu_option():
-    """Select next main menu option.
+    """Selects the next main menu option.
 
     Updates the terminal to show the next menu option as the one
     that's selected.
@@ -167,7 +167,7 @@ def select_next_main_menu_option():
 
 
 def select_previous_main_menu_option():
-    """Select previous main menu option.
+    """Selects the previous main menu option.
 
     Updates the terminal to show the previous menu option as the one
     that's selected.
@@ -185,7 +185,7 @@ def select_previous_main_menu_option():
 
 
 def process_main_menu_selection():
-    """Process main menu selection from user input.
+    """Processes the main menu option based on user selection.
 
     Checks if the key pressed corresponds to a main menu option and processes
     accordingly.
@@ -210,7 +210,7 @@ def process_main_menu_selection():
 
 
 def display_game_options_menu():
-    """Print game menu options to console."""
+    """Prints game menu options to console."""
     global viewing_game_options_menu
     viewing_game_options_menu = True
 
@@ -229,7 +229,7 @@ def display_game_options_menu():
 
 
 def get_game_option_description(index: int) -> str:
-    """Get the description for the currently selected game option.
+    """Gets the description for the currently selected game option.
 
     Parameters
     ----------
@@ -255,7 +255,7 @@ def get_game_option_description(index: int) -> str:
 
 
 def select_next_game_option():
-    """Select next game menu option.
+    """Selects the next game menu option.
 
     Updates the terminal to show the next menu option as the one
     that's selected.
@@ -271,7 +271,7 @@ def select_next_game_option():
 
 
 def select_previous_game_option():
-    """Select previous game option.
+    """Selects the previous game option.
 
     Updates the terminal to show the previous game option as the one
     that's selected.
@@ -287,7 +287,7 @@ def select_previous_game_option():
 
 
 def process_game_option_selection():
-    """Toggle game option based on user input and current settings.
+    """Toggles the game option based on user input and current settings.
 
     Checks if user input corresponds to a game option and processes
     accordingly.
@@ -309,40 +309,8 @@ def process_game_option_selection():
         display_game_options_menu()
 
 
-def await_input(prompt: str, process: Callable[[str], Any] = None,
-                update_terminal: Callable[[str], Any] = None):
-    """Prompt user for input, process input if required
-    and update the terminal or exit the loop as needed.
-
-    Continuously waits for user input and executes functions based on input
-    as required until the feedback loop is exited.
-
-    Parameters
-    ----------
-    prompt
-        The text to display to the user to indicate the desired type of input.
-    process
-        The function to call process user input.
-    update_terminal
-        The function to call to print changes made by calling process()
-        to the terminal.
-    """
-    while True:
-        user_input = toolkit_prompt(prompt)
-        if process is not None:
-            end_loop = process(user_input)
-            if (end_loop is not True and
-                    update_terminal is not None):
-                clear_terminal()
-                update_terminal()
-            elif end_loop:
-                break
-        else:
-            break
-
-
 def end_prompt():
-    """Ends prompt.
+    """Ends prompt for user input.
 
     Exits prompt after 5 seconds.
     """
@@ -355,7 +323,7 @@ def get_processed_user_input(
         prompt: str, process: Callable[[str], Any],
         completer: WordCompleter = None,
         set_timer: bool = False) -> str:
-    """Prompt user for input, process input if required and return the input.
+    """Prompts user for input, process input if required and return the input.
 
     Continuously waits for user input and executes functions based on input
     as required until it can be returned.
@@ -454,7 +422,7 @@ def end_question(
 
 
 def run_game():
-    """Run the game loop."""
+    """Runs the game loop."""
     global input_mode, is_playing_game
     num_of_questions_asked = 0
     num_of_correct_answers = 0
@@ -561,7 +529,7 @@ def quit_game():
 @GAMEPLAY_BINDINGS.add(Keys.Any)  # End game listener
 @GAMEPLAY_BINDINGS.add("enter")   # 'Enter' key press listener
 def _(event: KeyPressEvent):
-    """Clear terminal on any key press and display main menu.
+    """Clears terminal on any key press and display main menu.
 
     Parameters
     ----------
@@ -575,7 +543,7 @@ def _(event: KeyPressEvent):
 
 @MENU_NAVIGATION_BINDINGS.add("up")  # Up arrow key press listener
 def _(event: KeyPressEvent):
-    """Cycle up through menu options.
+    """Cycles up through menu options.
 
     Parameters
     ----------
@@ -593,7 +561,7 @@ def _(event: KeyPressEvent):
 
 @MENU_NAVIGATION_BINDINGS.add("down")  # Down arrow key press listener
 def _(event: KeyPressEvent):
-    """Cycle down through menu options.
+    """Cycles down through menu options.
 
     Parameters
     ----------
@@ -611,7 +579,7 @@ def _(event: KeyPressEvent):
 
 @MENU_NAVIGATION_BINDINGS.add("enter")   # 'Enter' key press listener
 def _(event: KeyPressEvent):
-    """Process selected menu option.
+    """Processes the selected menu option.
 
     Parameters
     ----------
@@ -630,7 +598,7 @@ def _(event: KeyPressEvent):
 
 @MENU_NAVIGATION_BINDINGS.add("c-c")   # 'CTRL+C' key press listener for menu
 def _(event: KeyPressEvent):
-    """Exit the game.
+    """Quits the game.
 
     Parameters
     ----------
@@ -642,7 +610,7 @@ def _(event: KeyPressEvent):
 
 
 def read_from_file() -> Tuple[str, Tuple[str, bool]]:
-    """Read lines from a file.
+    """Reads lines from a file.
 
     Reads from file, line by line, and adds each line to sentences list
     if the line passes validation.
@@ -694,7 +662,9 @@ def write_to_file(
         content: Dict[str, str]):
     """Writes translations to a file.
 
-    Overwrites file with original sentences and their translations.
+    Overwrites file with original sentences and their translations,
+    adding an appropriate note if a sentence had to be replaced with an
+    auto-generated one.
 
     Parameters
     ----------
@@ -729,7 +699,7 @@ def write_to_file(
 
 
 def is_viable_for_translation(user_input: str) -> bool:
-    """Check if user input are viable for translation.
+    """Checks if user input are viable for translation.
 
     Ensures that input adheres to the character limit for the current
     difficulty level in order for the chosen API's character limit to not be
@@ -779,14 +749,14 @@ def is_inserted_file_sentence(sentence) -> bool:
 
 
 def is_valid_answer(user_input: str) -> bool:
-    """Check if user input is a valid answer.
+    """Checks if user input is a valid answer.
 
     Ensures that the user input isn't an empty string and that it's at
     least 2 characters, in case the use has entered a code representing
     a language.
 
     Returns
-    ----------
+    -------
     bool
         True if user input is not an empty string, otherwise False.
     """
@@ -795,7 +765,7 @@ def is_valid_answer(user_input: str) -> bool:
 
 
 def is_game_over(question_count: int) -> bool:
-    """Check if the game is over.
+    """Checks if the game is over.
 
     Determines whether or not the game is over based on the game's
     difficulty level (easy, normal, hard or beast):
@@ -821,7 +791,7 @@ def is_game_over(question_count: int) -> bool:
 
 
 def main():
-    """Load environment variables and run display and game functions."""
+    """Loads environment variables and run display and game functions."""
     load_dotenv()
     display_title()
     display_main_menu()

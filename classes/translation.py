@@ -16,24 +16,24 @@ class Translation():
     """
 
     def __init__(self, text: str, lang: Language):
-        """Initialise the object with the passed parameters.
+        """Initialises the object with the passed parameters.
 
         Parameters
         ----------
         text
-            The translation
+            The translation.
         lang
-            The language the translation is in
+            The language the translation is in.
         """
         self._text = text
         self._lang = lang
 
     def __str__(self):
-        """Modify object string representation using when printing"""
+        """Modifies object string representation using when printing"""
         return self._text
 
     def __repr__(self):
-        """Modify object string representation"""
+        """Modifies object string representation"""
         return (f"<Translation text: {self._text}"
                 f"lang: {self._lang}>")
 
