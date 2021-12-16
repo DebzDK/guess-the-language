@@ -293,3 +293,46 @@ class SentenceGenerator():
                         word_to_add.specificity)
 
         return (len(blacklist) == 0, blacklist)
+
+    @staticmethod
+    def _conjugate_verb_for_part_of_speech(
+            word: str, part_of_speech_for_word: PartOfSpeech,
+            preceding_word: Word) -> str:
+        """Returns a conjugated verb.
+
+        Based on basic English grammar rules, this method attempts to
+        correctly conjugate a given verb based on the part of speech that it
+        follows.
+
+        Parameters
+        ----------
+        word
+            The word to conjugate.
+        part_of_speech_for_word
+            The part of speech the given word falls under.
+        preceding_word
+            The word that comes before the word to conjugate.
+
+        Returns
+        -------
+        str
+            The conjugated verb.
+        """
+        if part_of_speech_for_word.is_a_verb():
+            if word in ("am", "have"):
+                if (preceding_word.is_in_the_third_person() or
+                        preceding_word.is_a_noun()):
+                    return "am" if word == "is" else "has"
+                if preceding_word.is_in_the_second_person():
+                    return "are" if word == "is" else "have"
+
+            if (not preceding_word.is_an_irregular_verb() and
+                    (preceding_word.is_a_name() or
+                        preceding_word.is_a_noun() or
+                        preceding_word.is_a_person_noun() or
+                        (
+                            preceding_word.is_a_personal_pronoun()
+                            and preceding_word.value in ("he", "she", "it")
+                        ))):
+                return f"{word}{'e' if word[-1] == 'o' else ''}s"
+        return word
