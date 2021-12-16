@@ -10,23 +10,23 @@ class PartOfSpeech(Enum):
 
     Methods
     -------
-    is_a_noun(self) -> bool:
+    is_a_noun() -> bool:
         Returns True if the part of speech represents a noun.
-    is_a_personal_pronoun(self) -> bool:
+    is_a_personal_pronoun() -> bool:
         Returns True if the part of speech represents a personal pronoun.
-    is_a_verb(self) -> bool:
+    is_a_verb() -> bool:
         Returns True if the part of speech represents a verb.
-    is_an_adjective(self) -> bool:
+    is_an_adjective() -> bool:
         Returns True if the part of speech represents an adjective.
-    is_an_adverb(self) -> bool:
+    is_an_adverb() -> bool:
         Returns True if the part of speech represents an adverb.
-    is_an_amount(self) -> bool:
+    is_an_amount() -> bool:
         Returns True if the part of speech is an amount.
-    is_an_article_or_amount(self) -> bool:
+    is_an_article_or_amount() -> bool:
         Returns True if the part of speech is an article or amount.
-    is_an_indefinite_article(self) -> bool:
+    is_an_indefinite_article() -> bool:
         Returns True if the part of speech is an indefinite article.
-    is_a_conjunction(self) -> bool:
+    is_a_conjunction() -> bool:
         Returns True if the part of speech represents a conjuction.
     can_follow(part_of_speech: PartOfSpeech) -> bool:
         Returns True if one part of speech can follow another, otherwise False.
