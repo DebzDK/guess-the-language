@@ -29,18 +29,40 @@ class TranslationHelper():
     def translate_sentence(
             text: str, difficulty_level: int,
             use_all_languages: bool = False) -> Translation:
-        """Make request for translation and return response."""
+        """Makes request for translation and return response.
+
+        Returns
+        -------
+        Translation
+            The translated sentence as a Translation object or an error
+            parsed into a Translation object for later processing to show
+            the user a useful message.
+        """
         global _language_choices
 
         def create_translation_error(
                 error: _T, target_language: Language) -> Translation:
-            """Return error wrapped in a Translation object."""
+            """Returns error wrapped in a Translation object.
+
+            Returns
+            -------
+            Translation
+                An error parsed into a Translation object for later processing
+                to show the user a useful message.
+            """
             return Translation((
                         "\nUh oh... We encountered the following issue:\n"
                         f"Error: {error}"),
                         target_language)
 
         def get_api_error_message(code: int, detailed_error: str) -> str:
+            """Gets a user-friendly error message for the API error.
+
+            Returns
+            -------
+            str
+                The user-friendly representation of an API error.
+            """
             if code == 403:
                 return (f"FORBIDDEN ({code}) - Please ensure the DeepL "
                         "API key has been provided.")
