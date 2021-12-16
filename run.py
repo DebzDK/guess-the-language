@@ -559,7 +559,7 @@ def read_from_file() -> Tuple[str, List[str]]:
                 for line in file:
                     stripped_line = line.strip()
                     if (stripped_line and
-                            is_viable_for_translation(stripped_line)):
+                            is_viable_for_translation(stripped_line, True)):
                         sentences.append(stripped_line)
 
                     if (len(sentences) ==
@@ -592,7 +592,8 @@ def write_to_file(path_or_filename: str, content: Dict[str, str]):
     print("All done!\n")
 
 
-def is_viable_for_translation(user_input) -> bool:
+def is_viable_for_translation(
+        user_input: str, from_file: bool = False) -> bool:
     """Check if user input are viable for translation.
 
     Ensures that input adheres to the character limit for the current
@@ -600,6 +601,14 @@ def is_viable_for_translation(user_input) -> bool:
     exceeded.
     .. A detailed explanation can be found in the project's README:
         https://github.com/DebzDK/guess-the-language#features
+
+    Parameters
+    ----------
+    user_input
+        The input given by a user.
+    from_file
+        Should be True if validating input from a text file, otherwise
+        False by default.
 
     Returns
     ----------
@@ -611,6 +620,10 @@ def is_viable_for_translation(user_input) -> bool:
     if (str_len == 0 or
             re.search("^[^A-Za-z0-9]+", user_input) or
             str_len > CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]):
+        return False
+    if (from_file and
+            (user_input.startswith("Translation:") or
+                user_input.startswith("Language:"))):
         return False
     return True
 
