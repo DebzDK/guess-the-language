@@ -1,5 +1,6 @@
 """Class for generating random sentences."""
 import random
+import re
 from typing import List, Tuple
 from classes.sentence import Sentence
 from classes.word import Word
@@ -335,4 +336,43 @@ class SentenceGenerator():
                             preceding_word.value in ("he", "she", "it")
                         ))):
                 return f"{word}{'e' if word[-1] == 'o' else ''}s"
+        return word
+
+    @staticmethod
+    def _pluralise_noun(
+            word: str, part_of_speech_for_word: PartOfSpeech,
+            specificity: str, preceding_word: Word) -> str:
+        """Returns the noun in plural form if needed.
+
+        Based on basic English grammar rules, this method attempts to
+        correctly pluralise a given word based on the part of speech that it
+        follows.
+
+        Parameters
+        ----------
+        word
+            The word to pluralise.
+        part_of_speech_for_word
+            The part of speech the given word falls under.
+        specificity
+            The type of the given part of speech.
+        preceding_word
+            The word that comes before the word to conjugate.
+
+        Returns
+        -------
+        str
+            The noun in its plural or original form.
+        """
+        if (part_of_speech_for_word.is_a_noun() and (
+                preceding_word.is_a_verb() or
+                (preceding_word.is_an_amount() and
+                    preceding_word.value != "one"))):
+            if word.endswith("n"):
+                word = re.sub("(a)n$", "en", word)
+            elif (not specificity == "people" and
+                    word.endswith("y")):
+                word = re.sub("y$", "ies", word)
+            else:
+                word += "s"
         return word
