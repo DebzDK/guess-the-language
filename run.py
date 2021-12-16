@@ -95,7 +95,7 @@ game_options = [
     "Enable hints",
     "Return to main menu"
 ]
-start_game = False
+is_playing_game = False
 
 
 def display_title():
@@ -130,12 +130,14 @@ def get_toolbar_text() -> str:
     str
         The string that will display in the bottom toolbar.
     """
-    global viewing_game_options_menu
+    global viewing_game_options_menu, is_playing_game
 
     menu_default_text = "Press the UP and DOWN arrow keys to navigate the menu"
 
     if viewing_game_options_menu:
         return f"{menu_default_text}\nPress ENTER to toggle a game option"
+    if is_playing_game:
+        return "Press CTRL+C at any time to quit the game"
     return menu_default_text
 
 
@@ -193,18 +195,18 @@ def process_main_menu_selection():
     SystemExit
         If the user has entered a command to quit the game
     """
-    global viewing_main_menu, viewing_game_options_menu, start_game
+    global viewing_main_menu, viewing_game_options_menu, is_playing_game
 
     if selected_main_menu_option_index == 0:
         clear_terminal()
         viewing_main_menu = False
-        start_game = True
+        is_playing_game = True
     elif selected_main_menu_option_index == 1:
         clear_terminal()
         viewing_main_menu = False
         display_game_options_menu()
     elif selected_main_menu_option_index == 2:
-        raise SystemExit()
+        quit_game()
 
 
 def display_game_options_menu():
@@ -389,7 +391,10 @@ def get_processed_user_input(
             timer = Timer(5.0, end_prompt)
             timer.start()
 
-        user_input = toolkit_prompt(prompt, completer=completer) or ""
+        user_input = toolkit_prompt(
+            prompt,
+            completer=completer,
+            bottom_toolbar=get_toolbar_text) or ""
 
         if timer:
             timer.cancel()
@@ -450,7 +455,7 @@ def end_question(
 
 def run_game():
     """Run the game loop."""
-    global input_mode, start_game
+    global input_mode, is_playing_game
     num_of_questions_asked = 0
     num_of_correct_answers = 0
     character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
@@ -542,11 +547,18 @@ def run_game():
         key_bindings=GAMEPLAY_BINDINGS
     )
 
-    start_game = False
+    is_playing_game = False
 
 
-@GAMEPLAY_BINDINGS.add(Keys.Any)  # Key press listener (minus 'Enter' & arrows)
-@MENU_NAVIGATION_BINDINGS.add(Keys.Any)
+def quit_game():
+    """Quits the game."""
+    print("Thank you for playing!\n")
+    raise SystemExit()
+
+
+# Key press listeners
+@MENU_NAVIGATION_BINDINGS.add(Keys.Any)  # All keys except enter and arrows
+@GAMEPLAY_BINDINGS.add(Keys.Any)  # End game listener
 @GAMEPLAY_BINDINGS.add("enter")   # 'Enter' key press listener
 def _(event: KeyPressEvent):
     """Clear terminal on any key press and display main menu.
@@ -616,7 +628,7 @@ def _(event: KeyPressEvent):
         process_game_option_selection()
 
 
-@MENU_NAVIGATION_BINDINGS.add("c-c")   # 'Control-C' key press listener
+@MENU_NAVIGATION_BINDINGS.add("c-c")   # 'CTRL+C' key press listener for menu
 def _(event: KeyPressEvent):
     """Exit the game.
 
@@ -626,7 +638,7 @@ def _(event: KeyPressEvent):
         The key press event.
     """
     event.app.exit()
-    raise SystemExit()
+    run_in_terminal(quit_game)
 
 
 def read_from_file() -> Tuple[str, Tuple[str, bool]]:
@@ -815,13 +827,16 @@ def main():
     display_main_menu()
 
     while True:
-        while not start_game:
+        while not is_playing_game:
             toolkit_prompt(
                 "", key_bindings=MENU_NAVIGATION_BINDINGS,
                 bottom_toolbar=get_toolbar_text
             )
 
-        run_game()
+        try:
+            run_game()
+        except KeyboardInterrupt:
+            quit_game()
 
 
 main()
