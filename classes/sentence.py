@@ -5,9 +5,9 @@ from classes.enums.language import Language
 
 
 class Sentence():
-    """Super class for types of text to inherit from.
+    """Class coupling required information about a sentence.
 
-    Creates a new Sentence object from the given string.
+    Creates a new Sentence object from the given list of Word objects.
 
     Attributes
     ----------
@@ -28,7 +28,7 @@ class Sentence():
     def __init__(
             self, parts: List[Word], lang=Language.ENGLISH,
             ending_punctuation="."):
-        """Initialise the object with the passed parameters.
+        """Initialises the object with the passed parameters.
 
         Parameters
         ----------
@@ -47,11 +47,11 @@ class Sentence():
         self._value = sentence
 
     def __str__(self) -> str:
-        """Modify object string representation using when printing."""
+        """Modifies object string representation using when printing."""
         return self._value
 
     def __repr__(self):
-        """Modify object string representation."""
+        """Modifies object string representation."""
         return ('<Sentence value: "%s" lang: %s>'
                 % (self._value, self.lang))
 
@@ -60,13 +60,3 @@ class Sentence():
     def lang(self):
         """Getter method for lang property"""
         return self._lang.get_user_friendly_name()
-
-    # TODO: Create TranslationHelper class and complete this function
-    def translate(self) -> str:
-        """Returns a translation."""
-        return self._value + " has been translated to: Bonjour!"
-
-    # TODO: If time allows, implement Text-to-speech functionality using
-    # gTTs (Google-Text-To-Speech) Python library
-    # def read_aloud(self):
-    #     """Plays audio equivalent of sentence"
