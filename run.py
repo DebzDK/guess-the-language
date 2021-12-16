@@ -115,6 +115,26 @@ def display_main_menu():
     print(text)
 
 
+def get_toolbar_text() -> str:
+    """Get toolbar text.
+
+    Displays the appropriate text depending on what the user is currently
+    viewing, i.e. the main menu, the game options menu, or the game.
+
+    Returns
+    -------
+    str
+        The string that will display in the bottom toolbar.
+    """
+    global viewing_game_options_menu
+
+    menu_default_text = "Press the UP and DOWN arrow keys to navigate the menu"
+
+    if viewing_game_options_menu:
+        return f"{menu_default_text}\nPress ENTER to toggle a game option"
+    return menu_default_text
+
+
 # Code from StackOverflow - https://stackoverflow.com/a/684344
 def clear_terminal():
     """Clear the terminal."""
@@ -131,6 +151,8 @@ def select_next_main_menu_option():
     global selected_main_menu_option_index
 
     if selected_main_menu_option_index == len(main_menu_options) - 1:
+        clear_terminal()
+        display_main_menu()
         return
 
     selected_main_menu_option_index += 1
@@ -147,6 +169,8 @@ def select_previous_main_menu_option():
     global selected_main_menu_option_index
 
     if selected_main_menu_option_index == 0:
+        clear_terminal()
+        display_main_menu()
         return
 
     selected_main_menu_option_index -= 1
@@ -730,7 +754,10 @@ def main():
 
     while True:
         while not start_game:
-            toolkit_prompt("", key_bindings=MENU_NAVIGATION_BINDINGS)
+            toolkit_prompt(
+                "", key_bindings=MENU_NAVIGATION_BINDINGS,
+                bottom_toolbar=get_toolbar_text
+            )
 
         run_game()
 
