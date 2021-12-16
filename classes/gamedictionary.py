@@ -17,7 +17,7 @@ class GameDictionary():
     Methods
     -------
     search_for_word_by_type(
-            part_of_speech: PartOfSpeech) -> Tuple[str, str]
+            part_of_speech: PartOfSpeech, specificity: str) -> Tuple[str, str]
         Finds and returns a word that meets the given criteria with its part of
         speech type/specificity.
     """
@@ -292,7 +292,9 @@ class GameDictionary():
 
     @classmethod
     def search_for_word_by_type(
-            cls, part_of_speech: PartOfSpeech) -> Tuple[str, str]:
+            cls, part_of_speech: PartOfSpeech,
+            desired_type: str,
+            excluded_types: Dict[PartOfSpeech, str]) -> Tuple[str, str]:
         """Finds a random word in the WORDS dict that falls under a given part
         of speech.
 
@@ -300,6 +302,10 @@ class GameDictionary():
         ----------
         part_of_speech
             The part of speech that the word falls under.
+        desired_type
+            The desired type of part of speech to look for, if provided.
+        excluded_types
+            The types of parts_of_speech to ignore, if provided.
 
         Returns
         ----------
@@ -319,11 +325,15 @@ class GameDictionary():
             random_word = cls._get_word_for_number(number)
         else:
             potential_words_by_spec = cls.WORDS.get(key)
+            potential_specs = []
 
-            if specificity is None:
-                specificity = random.choice(
-                    list(potential_words_by_spec.keys())
-                )
+            for spec in list(potential_words_by_spec.keys()):
+                if not (part_of_speech in excluded_types and
+                        specificity in excluded_types[part_of_speech]):
+                    potential_specs.append(spec)
+
+            while specificity is None or specificity == "":
+                specificity = desired_type or random.choice(potential_specs)
 
             random_word = random.choice(
                 potential_words_by_spec.get(specificity)
