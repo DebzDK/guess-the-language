@@ -265,25 +265,25 @@ class SentenceGenerator():
             for preceding_word in reversed_sentence:
                 add_to_blacklist = False
                 if preceding_word.is_an_article_or_amount():
-                    if (word_to_add.is_possessive()
-                            or word_to_add.is_a_place()
-                            or word_to_add.is_a_name()):
+                    if (word_to_add.is_possessive() or
+                            word_to_add.is_a_place() or
+                            word_to_add.is_a_name()):
                         add_to_blacklist = True
 
-                if (preceding_word.is_an_irregular_verb()
-                        and word_to_add.is_an_adverb()):
+                if (preceding_word.is_an_irregular_verb() and
+                        word_to_add.is_an_adverb()):
                     add_to_blacklist = True
 
-                if ((preceding_word.is_an_adjective()
-                        or preceding_word.is_a_noun())
-                        and word_to_add.is_a_noun()
-                        and preceding_word.specificity !=
+                if ((preceding_word.is_an_adjective() or
+                        preceding_word.is_a_noun()) and
+                        word_to_add.is_a_noun() and
+                        preceding_word.specificity !=
                         word_to_add.specificity):
                     add_to_blacklist = True
 
-                if (word_to_add.is_a_verb() and preceding_word.is_a_noun()
-                        and preceding_word.specificity == "food"
-                        and not word_to_add.is_a_being_verb()):
+                if (word_to_add.is_a_verb() and preceding_word.is_a_noun() and
+                        preceding_word.specificity == "food" and
+                        not word_to_add.is_a_being_verb()):
                     add_to_blacklist = True
 
                 if add_to_blacklist:
@@ -331,8 +331,8 @@ class SentenceGenerator():
                         preceding_word.is_a_noun() or
                         preceding_word.is_a_person_noun() or
                         (
-                            preceding_word.is_a_personal_pronoun()
-                            and preceding_word.value in ("he", "she", "it")
+                            preceding_word.is_a_personal_pronoun() and
+                            preceding_word.value in ("he", "she", "it")
                         ))):
                 return f"{word}{'e' if word[-1] == 'o' else ''}s"
         return word
