@@ -25,10 +25,12 @@ Further information can be found in the project's README file.
 """
 import os
 import re
-from typing import Any, Callable, Dict, Tuple, Union
+from threading import Timer
+from typing import Any, Callable, Dict, Tuple
 import flag
 from dotenv import load_dotenv
 from prompt_toolkit import prompt as toolkit_prompt
+from prompt_toolkit.application import get_app
 from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
@@ -39,8 +41,10 @@ from classes.enums.language import Language
 from classes.sentencegenerator import SentenceGenerator
 from classes.helpers.translationhelper import TranslationHelper
 
-NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 26]
+NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 24]
 CHAR_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
+ALL_LANGUAGES = [lang.get_user_friendly_name() for lang in Language]
+LANGUAGE_COMPLETER = WordCompleter(ALL_LANGUAGES, ignore_case=True)
 QUIT_COMMANDS = ["q", "quit"]
 UNICODES = {
     "green": "\u001b[32;1m",
@@ -335,9 +339,20 @@ def await_input(prompt: str, process: Callable[[str], Any] = None,
             break
 
 
+def end_prompt():
+    """Ends prompt.
+
+    Exits prompt after 5 seconds.
+    """
+    if difficulty_level == 3:
+        print("\nTime's up!")
+        get_app().exit()
+
+
 def get_processed_user_input(
         prompt: str, process: Callable[[str], Any],
-        completer: WordCompleter = None) -> Union[str, None]:
+        completer: WordCompleter = None,
+        set_timer: bool = False) -> str:
     """Prompt user for input, process input if required and return the input.
 
     Continuously waits for user input and executes functions based on input
@@ -352,21 +367,85 @@ def get_processed_user_input(
     completer
         The class holding the list of all values to use as autocomplete
         suggestions for the user.
+    set_timer
+        True if playing with BEAST level difficulty, otherwise
+        False by default.
 
     Returns
     -------
-        Union[str, None]
-            A string value if user input passes processing, otherwise None if
-            the input loop should be exited and return nothing.
+        str
+            A string value if user input passes processing, otherwise an empty
+            string if the input loop should be exited and return nothing.
     """
+    user_input = ""
+    timer = None
     while True:
-        user_input = toolkit_prompt(prompt, completer=completer)
+        if set_timer:
+            print("You have 5 seconds to answer: ")
+            # Learned how to achieve similar effect as JavaScript's timeout function
+            # thanks to StackOverflow.
+            # Link is in README due to length of link:
+            #   https://github.com/DebzDK/guess-the-language#languages-and-technologies-used
+            timer = Timer(5.0, end_prompt)
+            timer.start()
+
+        user_input = toolkit_prompt(prompt, completer=completer) or ""
+
+        if timer:
+            timer.cancel()
+
         if process is not None:
             end_loop = process(user_input)
-            if end_loop:
+            if end_loop or set_timer:
                 return user_input
         else:
-            return None
+            return user_input
+
+
+def ask_question():
+    """Prints the question."""
+    print("What language is this?")
+
+
+def get_user_answer() -> str:
+    """Gets the answer from the user.
+
+    Returns
+    -------
+    str
+        The value that the user has provided as the answer.
+    """
+    guess = get_processed_user_input(
+        "", is_valid_answer, LANGUAGE_COMPLETER, difficulty_level == 3)
+    return guess.lower()
+
+
+def end_question(
+        guess: str, answer: Language, num_of_correct_answers: int):
+    """Ends question by printing a statemtn to inform the user as to whether
+    they were right or not.
+    """
+    if guess == answer.name.lower():
+        result_indicator = UNICODES['green']
+        num_of_correct_answers += 1
+    else:
+        result_indicator = UNICODES['red']
+
+    guess_statement = ""
+    answer_statement = ""
+
+    if guess:
+        guess_statement = f"\nYou guessed{result_indicator} {guess}"
+        answer_statement = f"{UNICODES['reset']} and the answer is"
+    else:
+        answer_statement = "The answer is"
+
+    print(
+        f"{guess_statement}{answer_statement}"
+        f"{UNICODES['green']} {answer.get_user_friendly_name()}"
+        f" ({flag.flag(answer.get_language_abbreviation())})"
+        f"{UNICODES['reset']}."
+    )
 
 
 def run_game():
@@ -375,8 +454,6 @@ def run_game():
     num_of_questions_asked = 0
     num_of_correct_answers = 0
     character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
-    all_languages = [lang.get_user_friendly_name() for lang in Language]
-    language_completer = WordCompleter(all_languages, ignore_case=True)
     file_name = ""
     sentences_from_file = None
     sentence_to_translate = None
@@ -439,26 +516,11 @@ def run_game():
             return
 
         num_of_questions_asked += 1
-        answer = translation.lang
 
         print(f"\nTranslation: {translation}\n")
-        guess = get_processed_user_input(
-            "What language is this?\n", is_valid_answer, language_completer)
-        lower_case_guess = guess.lower()
-
-        if lower_case_guess == answer.name.lower():
-            result_indicator = UNICODES['green']
-            num_of_correct_answers += 1
-        else:
-            result_indicator = UNICODES['red']
-
-        print(
-            f"\nYou guessed{result_indicator} {guess}"
-            f"{UNICODES['reset']} and the answer is"
-            f"{UNICODES['green']} {translation.lang.get_user_friendly_name()}"
-            f" ({flag.flag(answer.get_language_abbreviation())})"
-            f"{UNICODES['reset']}."
-        )
+        ask_question()
+        guess = get_user_answer()
+        end_question(guess, translation.lang, num_of_correct_answers)
 
     if num_of_correct_answers < (num_of_questions_asked / 2):
         extra_text = "..\nBetter luck next time"
@@ -727,8 +789,8 @@ def is_game_over(question_count: int) -> bool:
     difficulty level (easy, normal, hard or beast):
         - Easy and normal difficulty level = 5 questions
         - Hard difficulty level = 10 questions
-        - BEAST difficulty level = 26 questions (all available languages in
-            chosen API)
+        - BEAST difficulty level = 24 questions (all available languages in
+            chosen API minus English)
 
     A detailed explanation can be found at:
         https://github.com/DebzDK/guess-the-language#features
