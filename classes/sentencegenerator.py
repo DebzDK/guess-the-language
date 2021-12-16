@@ -10,7 +10,7 @@ from classes.enums.partofspeech import PartOfSpeech
 
 
 class SentenceGenerator():
-    """A class used to represent a sentence generator.
+    """A class used to help with sentence generation.
 
     This class will create the most basic sentence using the format:
         - Subject + Predicate
