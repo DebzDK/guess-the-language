@@ -151,6 +151,8 @@ def select_next_main_menu_option():
     global selected_main_menu_option_index
 
     if selected_main_menu_option_index == len(main_menu_options) - 1:
+        clear_terminal()
+        display_main_menu()
         return
 
     selected_main_menu_option_index += 1
@@ -167,6 +169,8 @@ def select_previous_main_menu_option():
     global selected_main_menu_option_index
 
     if selected_main_menu_option_index == 0:
+        clear_terminal()
+        display_main_menu()
         return
 
     selected_main_menu_option_index -= 1
