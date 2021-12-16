@@ -25,7 +25,7 @@ class GameDictionary():
     WORDS: Dict[str, Dict[str, List[str]]] = {
         "articles": {
             "definite": ["the", "this", "that"],
-            "indefinite": ["a", "an"]
+            "indefinite": ["a"]
         },
         "pronouns": {
             "personal": ["I", "we", "you", "he", "she", "they", "it"],
@@ -43,7 +43,7 @@ class GameDictionary():
         },
         "adjectives": {
             "possessive": ["mine", "ours", "yours", "his", "hers", "theirs"],
-            "compliment": [
+            "people": [
                 "attentive",
                 "articulate",
                 "beautiful",
@@ -64,10 +64,20 @@ class GameDictionary():
                 "thoughtful",
                 "well-dressed",
                 "wonderful",
+            ],
+            "food": [
+                "delicious",
+                "disgusting",
+                "yummy",
+                "tasty",
+                "ok",
+                "bad",
+                "decent",
+                "appetising"
             ]
         },
         "nouns": {
-            "places": [
+            "place": [
                 "London",
                 "England",
                 "France",
@@ -139,7 +149,7 @@ class GameDictionary():
                 "boyfriend",
                 "girlfriend"
                 ],
-            "names": [
+            "name": [
                 "Alberto",
                 "Alex",
                 "Agatha",
@@ -229,9 +239,9 @@ class GameDictionary():
                 "Zeke",
                 "Zelda",
             ],
-            "fruits": [
+            "food": [
                 "apple",
-                "apricots",
+                "apricot",
                 "banana",
                 "blueberry",
                 "cherry",
@@ -256,23 +266,27 @@ class GameDictionary():
             ]
         },
         "prepositions": {
-            "comparitive": ["than"],
-            "place": ["at", "in", "on"],
-            "assosiative": ["with"],
+            "place": ["at", "in", "to"],
+            "associative": ["with", "to"],
         },
         "verbs": {
-            "action": [
+            "transitive": [
+                "eat",
+                "hold",
+                "play",
+                "like",
+                "see"
+            ],
+            "intransitive": [
                 "go",
                 "come",
-                "sit",
-                "stand",
-                "see",
-                "run"
             ],
-            "irregular": [
-                "is",
+            "being": [
+                "am"
+            ],
+            "possessive": [
                 "have"
-            ],
+            ]
         }
     }
 
@@ -296,7 +310,7 @@ class GameDictionary():
         random_word = None
 
         if part_of_speech == PartOfSpeech.ADVERB:
-            potential_adjectives = cls.WORDS["adjectives"].get("compliment")
+            potential_adjectives = cls.WORDS["adjectives"].get("people")
             adjective = random.choice(potential_adjectives)
             while not random_word:
                 random_word = cls._get_adjective_in_adverb_form(adjective)
