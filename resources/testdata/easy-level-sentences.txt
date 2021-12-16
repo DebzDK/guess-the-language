@@ -1,12 +1,20 @@
 Hello.
+Translation: Bonjour.
+Language: French
+
 How are you?
+Translation: Come stai?
+Language: Italian
+
 Thank you.
-Welcome!
+Translation: ありがとうございました。
+Language: Japanese
+
+Welcome
+Translation: Bienvenido
+Language: Spanish
+
 Happy Birthday!
-Merry Christmas!
-Yes, please.
-No.
-Help!
-One.
-Two.
-Three.
+Translation: Alles Gute zum Geburtstag!
+Language: German
+

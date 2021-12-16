@@ -150,6 +150,8 @@ Each feature listed below was chosen to provide users with a clear, logical path
                 ![GIF of user-input game mode](documentation/screenshots/evidence/design/file-input.gif)
 
                 Once this type of game is complete the user will be informed that the translations are being written to their file. This was initially supposed to be a future feature but has been implemented as of 16/12/21 for the sake of ensuring that LO7 of the pass criteria has been well met. LO7 of the pass criteria states 'Write code that queries and manipulates data to meet the identified vital project needs'.
+                
+                ![Screenshot of file after modification](documentation/screenshots/evidence/design/file-after-writing-translations.png)
 
             * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
             
