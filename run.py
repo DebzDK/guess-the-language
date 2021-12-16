@@ -546,9 +546,9 @@ def read_from_file() -> Tuple[str, List[str]]:
 
     Returns
     ----------
-    List[str]
-        A populated list of strings if there are viable lines of text in a
-        given file, otherwise an empty one.
+    Tuple[str, List[str]]
+        A tuple containing the file_name and a populated list of strings if
+        there are viable lines of text in a given file, otherwise an empty one.
     """
     sentences = []
     while len(sentences) == 0:
