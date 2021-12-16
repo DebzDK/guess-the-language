@@ -66,6 +66,7 @@ class TranslationHelper():
         params = {
             "auth_key": api_key,
             "text": text,
+            "source_lang": "EN",
             "target_lang": target_language.value,
             "split_sentences": "0"
         }
