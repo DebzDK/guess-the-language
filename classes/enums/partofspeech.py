@@ -10,6 +10,24 @@ class PartOfSpeech(Enum):
 
     Methods
     -------
+    is_a_noun() -> bool:
+        Returns True if the part of speech represents a noun.
+    is_a_personal_pronoun() -> bool:
+        Returns True if the part of speech represents a personal pronoun.
+    is_a_verb() -> bool:
+        Returns True if the part of speech represents a verb.
+    is_an_adjective() -> bool:
+        Returns True if the part of speech represents an adjective.
+    is_an_adverb() -> bool:
+        Returns True if the part of speech represents an adverb.
+    is_an_amount() -> bool:
+        Returns True if the part of speech is an amount.
+    is_an_article_or_amount() -> bool:
+        Returns True if the part of speech is an article or amount.
+    is_an_indefinite_article() -> bool:
+        Returns True if the part of speech is an indefinite article.
+    is_a_conjunction() -> bool:
+        Returns True if the part of speech represents a conjuction.
     can_follow(part_of_speech: PartOfSpeech) -> bool:
         Returns True if one part of speech can follow another, otherwise False.
     can_work_in_structure(sentence_structure: List[PartOfSpeech],
@@ -30,6 +48,101 @@ class PartOfSpeech(Enum):
     ADVERB = "adverb"
     CONJUNCTION = "conjunction"
     PREPOSITION = "preposition"
+
+    def is_a_noun(self) -> bool:
+        """Checks if the part of speech represents a noun.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents a noun.
+        """
+        return self is PartOfSpeech.NOUN
+
+    def is_a_personal_pronoun(self) -> bool:
+        """Checks if the part of speech represents a personal pronoun.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents a personal pronoun.
+        """
+        return self is PartOfSpeech.PERSONAL_PRONOUN
+
+    def is_a_verb(self) -> bool:
+        """Checks if the part of speech word is a verb.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents a verb.
+        """
+        return self is PartOfSpeech.VERB
+
+    def is_an_adjective(self) -> bool:
+        """Checks if the part of speech word is an adjective.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents an adjective.
+        """
+        return self is PartOfSpeech.ADJECTIVE
+
+    def is_an_adverb(self) -> bool:
+        """Checks if the part of speech represents an adverb.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents an adverb.
+        """
+        return self is PartOfSpeech.ADVERB
+
+    def is_an_amount(self) -> bool:
+        """Checks if the part of speech represents an amount.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents an amount.
+        """
+        return self is PartOfSpeech.AMOUNT
+
+    def is_an_article_or_amount(self) -> bool:
+        """Checks if the part of speech represents an article or amount.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents an article or amount.
+        """
+        return self in (
+            PartOfSpeech.DEFINITE_ARTICLE,
+            PartOfSpeech.INDEFINITE_ARTICLE,
+            PartOfSpeech.AMOUNT
+        )
+
+    def is_an_indefinte_article(self) -> bool:
+        """Checks if the part of speech represents an indefinite article.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents an indefinite
+            article.
+        """
+        return self is PartOfSpeech.INDEFINITE_ARTICLE
+
+    def is_a_conjunction(self) -> bool:
+        """Checks if the part of speech represents a conjunction.
+
+        Returns
+        -------
+        bool
+            Returns True if the part of speech represents a conjunction.
+        """
+        return self is PartOfSpeech.CONJUNCTION
 
     def can_follow(self, part_of_speech: "PartOfSpeech") -> bool:
         """Checks if one part of speech can follow another.
@@ -69,11 +182,11 @@ class PartOfSpeech(Enum):
             Returns True if the current part of speech can follow the
             preceding part, otherwise False.
         """
-        if ((self is PartOfSpeech.VERB and self in sentence_structure) or
-                (self is PartOfSpeech.ADVERB and
-                    preceding_part_of_speech is PartOfSpeech.ADJECTIVE) or
-                (self is PartOfSpeech.ADJECTIVE and
-                    preceding_part_of_speech is PartOfSpeech.ADVERB)):
+        if ((self.is_a_verb() and self in sentence_structure) or
+                (self.is_an_adverb() and
+                    preceding_part_of_speech.is_an_adjective()) or
+                (self.is_an_adjective() and
+                    preceding_part_of_speech.is_an_adverb())):
             return False
         return True
 
@@ -93,10 +206,7 @@ class PartOfSpeech(Enum):
             Returns True if the preceding part of speech is an article or
             amount and the current part of speech can follow it.
         """
-        if part_of_speech in (
-                PartOfSpeech.DEFINITE_ARTICLE,
-                PartOfSpeech.INDEFINITE_ARTICLE,
-                PartOfSpeech.AMOUNT):
+        if part_of_speech.is_an_article_or_amount():
             if self not in (PartOfSpeech.NOUN, PartOfSpeech.ADJECTIVE):
                 return False
         else:
@@ -148,7 +258,7 @@ class PartOfSpeech(Enum):
         """
         if part_of_speech in (
                 PartOfSpeech.NOUN, PartOfSpeech.PERSONAL_PRONOUN):
-            if self is not PartOfSpeech.VERB:
+            if not self.is_a_verb():
                 return False
         else:
             return False
@@ -169,10 +279,11 @@ class PartOfSpeech(Enum):
             Returns True if the preceding part of speech is an adverb and the
             current part of speech can follow it.
         """
-        if part_of_speech is PartOfSpeech.ADVERB:
+        if part_of_speech.is_an_adverb():
             if self not in (
                     PartOfSpeech.ADJECTIVE,
-                    PartOfSpeech.CONJUNCTION):
+                    PartOfSpeech.CONJUNCTION,
+                    PartOfSpeech.PREPOSITION):
                 return False
         else:
             return False
@@ -194,7 +305,7 @@ class PartOfSpeech(Enum):
             the current part of speech can follow it.
         """
         if part_of_speech is PartOfSpeech.ADJECTIVE:
-            if self is not PartOfSpeech.NOUN:
+            if not self.is_a_noun():
                 return False
         else:
             return False
@@ -216,7 +327,7 @@ class PartOfSpeech(Enum):
             the current part of speech can follow it.
         """
         if part_of_speech is PartOfSpeech.PREPOSITION:
-            if self is not PartOfSpeech.NOUN:
+            if not self.is_a_noun():
                 return False
         else:
             return False
