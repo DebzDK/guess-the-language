@@ -1,20 +1,6 @@
 Hello.
-Translation: Bonjour.
-Language: French
-
 How are you?
-Translation: Come stai?
-Language: Italian
-
 Thank you.
-Translation: ありがとうございました。
-Language: Japanese
-
 Welcome
-Translation: Bienvenido
-Language: Spanish
-
 Happy Birthday!
-Translation: Alles Gute zum Geburtstag!
-Language: German
 
