@@ -639,7 +639,7 @@ def get_sentence_for_translation(
             (
                 "Enter a sentence"
                 f" (no longer than {char_limit} characters"
-                " long):\n"
+                " long and has more than one word):\n"
             ),
             is_viable_for_translation
         )
@@ -931,6 +931,7 @@ def is_viable_for_translation(user_input: str) -> bool:
     user_input = user_input.strip()
     str_len = len(user_input)
     if (str_len == 0 or
+            len(user_input.split()) == 1 or
             re.search("^[^A-Za-z0-9]+", user_input) or
             str_len > CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]):
         return False
