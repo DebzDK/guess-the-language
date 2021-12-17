@@ -180,7 +180,7 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
     The default language to translate from is English because that is my first language and the language of the country where I reside. However, I also speak more-or-less fluent French and am learning Greek so it would be cool to use sentences in these languages in the game.
 
-    The chosen API to run translations does have an optional parameter that, when omitted, allows for language detection so it is possible but there is also the issue of special characters to consider.
+    The chosen API to run translations does have an optional parameter that, when omitted, allows for language detection so it is possible but won't be implemented to avoid more potential bugs to deal with.
 
 * Display of the number of countries in which the translation target language is spoken
 
@@ -211,6 +211,7 @@ Each feature listed below was chosen to provide users with a clear, logical path
     * [DeepL Translator](https://www.deepl.com/en/translator) - used to translate sentences in game
     * [Regex101](https://regex101.com/) - used to test the regular expressions used in game for validation
     * [num2words](https://github.com/savoirfairelinux/num2words#readme) - used library to convert numbers to their word equivalent
+    * [prompt-toolkit](https://python-prompt-toolkit.readthedocs.io/en/master/) - used library to make prompts for user input use auto-completion and handle arrow and CTRL keys
     * [Requests](https://docs.python-requests.org/en/latest/) - used library to make HTTP requests to DeepL Translator API
     * [StackOverflow](https://stackoverflow.com/) - used to find answers to coding issues, specifically [how to get coloured text](https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal), [understand the python equivalent of getters and setters](https://stackoverflow.com/questions/2627002/whats-the-pythonic-way-to-use-getters-and-setters), [the purpose of \__init__\.py](https://stackoverflow.com/questions/448271/what-is-init-py-for), [how to make an enum in Python](https://stackoverflow.com/a/1695250), and [what the Python equivalent of JavaScript's setTimeout() function is](https://stackoverflow.com/a/15456828)
     * [w3schools](https://www.w3schools.com/) - used to find Python functions to complete tasks, e.g. [learning how to make requests](https://www.w3schools.com/python/module_requests.asp) and [file handling](https://www.w3schools.com/python/python_file_handling.asp)
@@ -245,36 +246,51 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
     This is first thing that comes up when running a Google search for 'python requests'. It's also shown as the [go-to way to make HTTP requests in w3schools](https://www.w3schools.com/python/module_requests.asp) so this is what was used.
 
+1. [Python Prompt Toolkit](https://www.google.com/search?q=python+prompt+for+input+suggestion&rlz=1C1CHBF_enGB848GB848&oq=&sourceid=chrome&ie=UTF-8)
+
+    This library was found after running a [Google search for 'python prompt for input suggestion'](https://www.google.com/search?q=python+prompt+for+input+suggestion&rlz=1C1CHBF_enGB848GB848&oq=&sourceid=chrome&ie=UTF-8) (2nd result) and no further searching was required to be honest. It was perfect for my initial need of [adding auto-completion](https://python-prompt-toolkit.readthedocs.io/en/master/pages/asking_for_input.html#autocompletion) to the user input prompt.
+
+    Subsequently, after taking a deeper look at the documentation, other ways to improve the command line application were found and implemented:
+    * [Bottom toolbar](https://python-prompt-toolkit.readthedocs.io/en/master/pages/asking_for_input.html#adding-a-bottom-toolbar) - used to provide some guidance to players on how to navigate through the game menus
+    * [Custom key bindings](https://python-prompt-toolkit.readthedocs.io/en/master/pages/asking_for_input.html#adding-custom-key-bindings) - used to enable the use of arrow keys to navigate menus rather then using numbers and CTRL-C to quit the game/program at any point
+
 #### Shortcomings
-* Sadly, the [DeepL Translator API](https://www.deepl.com/en/translator) came with an unexpected, hard to predict bug.
-
-    This image shows an attempt to translate 'Hello, how are you?' from English to Japanese. (Email attachment: api-issue-1.png)
-    ![Screenshot of an example of DeepL Translator bug 1](documentation/screenshots/evidence/testing/api-issue-1.png)
-
-    This image shows an attempt to translate 'Hello.' from English too Italian. (Email attachment: api-issue-2.png)
-    ![Screenshot of an example of DeepL Translator bug 2](documentation/screenshots/evidence/testing/api-issue-2.png)
-
-* DeepL support was contacted as soon as the bug was discovered to find out if there was a potential workaround. They replied and suggested making use of the 'source_lang' parameter when making the request to ensure that the translator knows that it's translating from English.
-
-    Email to DeepL support:
-    ![Screenshot of email to DeepL support](documentation/screenshots/evidence/other/email-evidence-1.png)
-
-    Response from email support + attached image:
-    ![Screenshot of response from DeepL support](documentation/screenshots/evidence/other/email-evidence-2.png)
-    ![Screenshot of attachement in response from DeepL support](documentation/screenshots/evidence/other/email-evidence-3.png)
-
-* The code was updated to use the 'source_lang' parameter and no reoccurrences of the bug were spotted again... until the game attempted to translate 'Welcome!' into Japanese.
-
-    Recreation of bug using site's simulator:
-    ![Screenshot of presence of bug despite suggested fix](documentation/screenshots/evidence/other/evidence-of-bug-despite-param.png)
-
-    Which explains why the support response only contained Italian...
-    On the bright side, the issue only seems to occur with one word sentences due to lack of context as was stated by the DeepL support agent. This was verified with another quick test using their simulator, as show below:
+1. [DeepL Translator API](https://www.deepl.com/en/translator)
     
-    ![Screenshot of context making a difference](documentation/screenshots/evidence/other/evidence-of-context-making-a-difference.png)
+    * Sadly, the API came with an unexpected, hard to predict bug.
 
-    So to make this bug less likely to appear when playing the game, it is necessary to use more than one word when giving a sentence for translation via user or file input.
-    
+        This image shows an attempt to translate 'Hello, how are you?' from English to Japanese. (Email attachment: api-issue-1.png)
+        ![Screenshot of an example of DeepL Translator bug 1](documentation/screenshots/evidence/testing/api-issue-1.png)
+
+        This image shows an attempt to translate 'Hello.' from English too Italian. (Email attachment: api-issue-2.png)
+        ![Screenshot of an example of DeepL Translator bug 2](documentation/screenshots/evidence/testing/api-issue-2.png)
+
+    * DeepL support was contacted as soon as the bug was discovered to find out if there was a potential workaround. They replied and suggested making use of the 'source_lang' parameter when making the request to ensure that the translator knows that it's translating from English.
+
+        Email to DeepL support:
+        ![Screenshot of email to DeepL support](documentation/screenshots/evidence/other/email-evidence-1.png)
+
+        Response from email support + attached image:
+        ![Screenshot of response from DeepL support](documentation/screenshots/evidence/other/email-evidence-2.png)
+        ![Screenshot of attachement in response from DeepL support](documentation/screenshots/evidence/other/email-evidence-3.png)
+
+    * The code was updated to use the 'source_lang' parameter and no reoccurrences of the bug were spotted again... until the game attempted to translate 'Welcome!' into Japanese.
+
+        Recreation of bug using site's simulator:
+        ![Screenshot of presence of bug despite suggested fix](documentation/screenshots/evidence/other/evidence-of-bug-despite-param.png)
+
+        Which explains why the support response only contained Italian...
+        On the bright side, the issue only seems to occur with one word sentences due to lack of context as was stated by the DeepL support agent. This was verified with another quick test using their simulator, as show below:
+        
+        ![Screenshot of context making a difference](documentation/screenshots/evidence/other/evidence-of-context-making-a-difference.png)
+
+        So to make this bug less likely to appear when playing the game, it is necessary to use more than one word when giving a sentence for translation via user or file input.
+
+1. [Python Prompt Toolkit](https://www.google.com/search?q=python+prompt+for+input+suggestion&rlz=1C1CHBF_enGB848GB848&oq=&sourceid=chrome&ie=UTF-8)
+
+    The bottom toolbar re-renders when navigating through the game menus and progressing from one question to the next in the game, as can be seen in the GIFs in the 'Existing Features' section of this README. It's not great on the eyes but it's a small cost to pay in order to provide meaningful user messages to make the game easier to navigate and play.
+
+    It's [a known issue](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/547) and doesn't seem to be on schedule to be fixed any time soon.
 
 ## Testing
 
