@@ -58,6 +58,8 @@ GAME_OPTIONS = [
     "Enable hints",
     "Return to main menu"
 ]
+# ..Found thanks to StackOverflow:
+#   https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal
 UNICODES = {
     "green": "\u001b[32;1m",
     "red": "\u001b[31;1m",
@@ -733,6 +735,7 @@ def quit_game():
 
 
 # region Key press conditions
+# Decorator from prompt-toolkit library
 @Condition
 def can_get_hint() -> bool:
     """Checks if hints are enabled.
@@ -750,6 +753,8 @@ def can_get_hint() -> bool:
 
 
 # region Key press listeners
+# ..As described in prompt-toolkit documentation:
+#   https://python-prompt-toolkit.readthedocs.io/en/master/pages/advanced_topics/key_bindings.html
 @MENU_NAVIGATION_BINDINGS.add(Keys.Any)  # All keys except enter and arrows
 @END_GAME_BINDINGS.add(Keys.Any)  # End game listener
 @END_GAME_BINDINGS.add("enter")   # 'Enter' key press listener
