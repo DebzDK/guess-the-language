@@ -746,6 +746,7 @@ def can_get_hint() -> bool:
         difficulty_level != 3 and
         is_playing_game and
         enable_hints and answer_to_current_question is not None)
+# endregion
 
 
 # region Key press listeners
