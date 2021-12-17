@@ -30,8 +30,9 @@
 
             ![Screenshot of run.py test](documentation/screenshots/evidence/testing/run-test-updated.png)
 
-        2. This error occurred in [gamedictionary.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/gamedictionary.py#L25):
+        2. This error occurred in [gamedictionary.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/gamedictionary.py#L25) and [hintservice.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/services/hintservice.py#L23):
             ![Screenshot of gamedictionary.py error](documentation/screenshots/evidence/testing/gamedictionary-class-test.png)
+            ![Screenshot of hintservice.py error](documentation/screenshots/evidence/testing/hintservice-class-test.png)
 
             [PEP 526](https://www.python.org/dev/peps/pep-0526/#class-and-instance-variable-annotations) explains that this is valid form for variable annotations as can be seen here:
 
@@ -41,7 +42,7 @@
 
     * All other classes
         * classes/sentence.py - __Sentence()__
-            ![Screenshot of translationhelper.py class test](documentation/screenshots/evidence/testing/sentence-class-test.png)
+            ![Screenshot of sentence.py class test](documentation/screenshots/evidence/testing/sentence-class-test.png)
         * classes/translation.py - __Translation()__
             ![Screenshot of translation.py class test](documentation/screenshots/evidence/testing/translation-class-test.png)
         * classes/word.py - __Word()__
