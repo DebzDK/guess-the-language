@@ -21,7 +21,7 @@ Note
 .. 'Guess The Language' project README:
     https://github.com/DebzDK/guess-the-language#guess-the-language
 
-* # region comments are present to better separate code by their 
+* # region comments are present to better separate code by their
 concerns in order to navigate through the code.
 ----------------------------------------------------------------------
 """
