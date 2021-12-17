@@ -1,12 +1,6 @@
 Hello.
 How are you?
 Thank you.
-Welcome!
+Welcome
 Happy Birthday!
-Merry Christmas!
-Yes, please.
-No.
-Help!
-One.
-Two.
-Three.
+
