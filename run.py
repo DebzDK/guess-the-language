@@ -213,7 +213,10 @@ def get_toolbar_text() -> str:
     if viewing_game_options_menu:
         return f"{menu_default_text}\nPress ENTER to toggle a game option"
     if is_playing_game:
-        return "Press CTRL+C at any time to quit the game"
+        return (
+            "Press CTRL+H for hints (if enabled)\n"
+            "Press CTRL+C at any time to quit the game"
+        )
     return menu_default_text
 
 
