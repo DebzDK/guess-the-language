@@ -13,7 +13,7 @@
         Running the contents of [this](https://github.com/DebzDK/guess-the-language/blob/a5062a6b2b17af2659383b60a67ffa681555073a/run.py) file in the PEP8 online tool will produce the above results.
 
     * Potential non-error errors
-        1. The following errors occured in run.py, [requestservice.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/services/requestservice.py#L20), and [sentencegenerator.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/sentencegenerator.py#L178):
+        1. The following errors occured in run.py, [requestservice.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/services/requestservice.py#L20), and [sentencegenerator.py](https://github.com/DebzDK/guess-the-language/blob/main/classes/sentencegenerator.py#L197):
             ![Screenshot of run.py errors](documentation/screenshots/evidence/testing/run-test.png)
             ![Screenshot of requestservice.py error](documentation/screenshots/evidence/testing/requestservice-class-test.png)
             ![Screenshot of sentencegenerator.py error](documentation/screenshots/evidence/testing/sentencegenerator-class-test.png)
@@ -117,3 +117,14 @@ Here are some examples to show how user stories were tested in order to determin
     Commits can be seen [here](https://github.com/DebzDK/guess-the-language/commits/default-game-mode?after=18643a8928ae0964816f072bc7dd05ac5a3af653+209&branch=default-game-mode).
 
     ![GIF showing user input gameplay mode with translations](documentation/screenshots/evidence/design/user-input.gif)
+
+## Unfixed bugs
+
+1. When playing the game in with auto-generated sentences, it would sometimes hang. On closer inspection, it seems to always happen when ADVERB type parts of speech where added to the sentence structure. I was not able to replicate when I wanted to get a screenshot of it.
+
+    To avoid this, code was added to remove ADVERB from the list of choices when randomly generating a sentence structure but it's hard to know for sure that the bug doesn't occur with other types of words.
+    If the code hangs after displaying 'Question -question_num-', assume that it's this bug.
+
+1. Flickering of the bottom toolbar (although not visible at all on Heroku site)
+    
+    This [issue](https://github.com/prompt-toolkit/python-prompt-toolkit/issues/547) is one that belongs to the prompt-toolkit library itself and has already been mentioned in the README.
