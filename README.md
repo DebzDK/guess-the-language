@@ -165,6 +165,12 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
                 Even with this approach, more types of words have been defined in gamedictionary.py than have actually been used due to the complexity of trying to capture the logic of English grammar rules. I have left them in incase I decide to return to this project to finish the madness and to show the assessor how I was thinking.
 
+            One other feature, that was completely forgotten, and implemented on 17/12/21 was the ability to actually use hints while playing the game:
+            
+            ![GIF of using hints while playing](documentation/screenshots/evidence/design/hints.gif)
+
+            This is disabled automatically when playing the game at BEAST level difficulty.
+
         * Available translation languages
 
             As mentioned before, Duolingo was referred to in regards to what could be used to classify 'popular' languages and ultimately was used as a guideline to categorise what languages should play for which difficulty levels:
@@ -351,6 +357,12 @@ Since my work is in a publicly-accesible repository, it can be copied in 3 diffe
 ### Content
 
 The translations used in this application are thanks to [DeepL Translator](https://www.deepl.com/en/translator).
+
+All hint information has been derived from Google searches for each originating country of a given language of the form:
+
+    1. For first hint: "[country]", where country is the name of the originating country of a given language.
+    1. For second hint: either same as first hint to look at the country's flag or "what's [country] famous for"
+    1. For third hint: "capital of [country]"
 
 All other textual content in this application is written in my own words and of my own opinion.
 
