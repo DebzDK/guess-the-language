@@ -41,7 +41,7 @@
 
     * All other classes
         * classes/sentence.py - __Sentence()__
-            ![Screenshot of translationhelper.py class test](documentation/screenshots/evidence/testing/sentence-class-test.png)
+            ![Screenshot of sentence.py class test](documentation/screenshots/evidence/testing/sentence-class-test.png)
         * classes/translation.py - __Translation()__
             ![Screenshot of translation.py class test](documentation/screenshots/evidence/testing/translation-class-test.png)
         * classes/word.py - __Word()__
