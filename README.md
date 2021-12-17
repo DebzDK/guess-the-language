@@ -207,13 +207,13 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
 * Technologies
     * [EZGIF](https://ezgif.com/) - used to create the GIFs used in this README
-    * [Lucidchart](https://www.lucidchart.com/) - used to create a flow chart of the game's processes
+    * [Lucidchart](https://www.lucidchart.com/) - used to create a flow chart of the game's processes and a class diagram
     * [DeepL Translator](https://www.deepl.com/en/translator) - used to translate sentences in game
-    * [Regex101](https://regex101.com/) - used to create and test the regular expressions used in game for validation
+    * [Regex101](https://regex101.com/) - used to test the regular expressions used in game for validation
     * [num2words](https://github.com/savoirfairelinux/num2words#readme) - used library to convert numbers to their word equivalent
     * [Requests](https://docs.python-requests.org/en/latest/) - used library to make HTTP requests to DeepL Translator API
-    * [StackOverflow](https://stackoverflow.com/) - used to find answers to coding issues, specifically [how to get coloured text](https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal), [understand the python equivalent of getters and setters](https://stackoverflow.com/questions/2627002/whats-the-pythonic-way-to-use-getters-and-setters), and [the purpose of \__init__\.py](https://stackoverflow.com/questions/448271/what-is-init-py-for)
-    * [w3schools](https://www.w3schools.com/) - used to find Python functions to complete tasks
+    * [StackOverflow](https://stackoverflow.com/) - used to find answers to coding issues, specifically [how to get coloured text](https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal), [understand the python equivalent of getters and setters](https://stackoverflow.com/questions/2627002/whats-the-pythonic-way-to-use-getters-and-setters), [the purpose of \__init__\.py](https://stackoverflow.com/questions/448271/what-is-init-py-for), [how to make an enum in Python](https://stackoverflow.com/a/1695250), and [what the Python equivalent of JavaScript's setTimeout() function is](https://stackoverflow.com/a/15456828)
+    * [w3schools](https://www.w3schools.com/) - used to find Python functions to complete tasks, e.g. [learning how to make requests](https://www.w3schools.com/python/module_requests.asp) and [file handling](https://www.w3schools.com/python/python_file_handling.asp)
     * [Trello](https://trello.com/) - used to document planning/design and development project progress and steps
     * [Heroku](https://www.heroku.com/) - used to deploy project
     * [Git](https://git-scm.com/) - used for version control
@@ -222,6 +222,59 @@ Each feature listed below was chosen to provide users with a clear, logical path
         * The terminal was used to create branchs to work on before merging into the main branch. These branches have been preserved for the sake of the assessment, otherwise they would have been deleted after use.
 
         ![Screenshot of GitHub branches](documentation/screenshots/evidence/other/branches.png)
+
+### Rationale for library and API selection
+1. [DeepL Translator API](https://www.deepl.com/en/translator)
+    This API met the needs of the game perfectly because it's free to use (up to 500,000 characters) and covers a fair amount of languages in order to make this game fun to play.
+    
+    __Alternatives__
+     * [Google Translate's Cloud Translation API](https://cloud.google.com/translate/docs/reference/rest)
+
+        This was a tempting alternative since it's the most popular and used translation tool available but wasn't chosen due to the automatic billing that follows in the case of surpassing its free limit. To overcome this, (Google Translate via RapidAPI)[https://rapidapi.com/googlecloud/api/google-translate1/] was considered but on closer inspection it seemed to have the same issue of automatic billing so was dismissed as an option.
+
+     * [googletrans](https://pypi.org/project/googletrans/)
+
+        This looked like a good alternative for the alternative but due to the below note, an official translation service was preferred.
+            ![Screenshot of note from googletrans](documentation/screenshots/evidence/other/reason-to-not-use-googletrans.png)
+
+1. [num2words library](https://github.com/savoirfairelinux/num2words#readme)
+
+    This library was used in order to not reinvent the wheel by attempting to implement the desired functionality for this project. It was the first to come up after a quick search and there was no apparent reason not to use. In addition, this library is also able to turn numbers into words in languages other than English which is perfect given that this is a language-guessing game. However, this functionality of the library was not used because all translations are made on the basis that a given sentence is in English.
+
+1. [Requests: HTTP for Humans library](https://docs.python-requests.org/en/latest/)
+
+    This is first thing that comes up when running a Google search for 'python requests'. It's also shown as the [go-to way to make HTTP requests in w3schools](https://www.w3schools.com/python/module_requests.asp) so this is what was used.
+
+#### Shortcomings
+* Sadly, the [DeepL Translator API](https://www.deepl.com/en/translator) came with an unexpected, hard to predict bug.
+
+    This image shows an attempt to translate 'Hello, how are you?' from English to Japanese. (Email attachment: api-issue-1.png)
+    ![Screenshot of an example of DeepL Translator bug 1](documentation/screenshots/evidence/testing/api-issue-1.png)
+
+    This image shows an attempt to translate 'Hello.' from English too Italian. (Email attachment: api-issue-2.png)
+    ![Screenshot of an example of DeepL Translator bug 2](documentation/screenshots/evidence/testing/api-issue-2.png)
+
+* DeepL support was contacted as soon as the bug was discovered to find out if there was a potential workaround. They replied and suggested making use of the 'source_lang' parameter when making the request to ensure that the translator knows that it's translating from English.
+
+    Email to DeepL support:
+    ![Screenshot of email to DeepL support](documentation/screenshots/evidence/other/email-evidence-1.png)
+
+    Response from email support + attached image:
+    ![Screenshot of response from DeepL support](documentation/screenshots/evidence/other/email-evidence-2.png)
+    ![Screenshot of attachement in response from DeepL support](documentation/screenshots/evidence/other/email-evidence-3.png)
+
+* The code was updated to use the 'source_lang' parameter and no reoccurrences of the bug were spotted again... until the game attempted to translate 'Welcome!' into Japanese.
+
+    Recreation of bug using site's simulator:
+    ![Screenshot of presence of bug despite suggested fix](documentation/screenshots/evidence/other/evidence-of-bug-despite-param.png)
+
+    Which explains why the support response only contained Italian...
+    On the bright side, the issue only seems to occur with one word sentences due to lack of context as was stated by the DeepL support agent. This was verified with another quick test using their simulator, as show below:
+    
+    ![Screenshot of context making a difference](documentation/screenshots/evidence/other/evidence-of-context-making-a-difference.png)
+
+    So to make this bug less likely to appear when playing the game, it is necessary to use more than one word when giving a sentence for translation via user or file input.
+    
 
 ## Testing
 
