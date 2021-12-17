@@ -149,15 +149,19 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
             * *File input* - the same is true here but with the extra step of using auto-generated values in addition to those extracted from the file if there aren't enough viable sentences for translation. If there are more lines of text than required in the file, the rest are ignored.
                 
-                ![GIF of user-input game mode](documentation/screenshots/evidence/design/file-input.gif)
+                ![GIF of user input game mode](documentation/screenshots/evidence/design/file-input.gif)
 
                 Once this type of game is complete the user will be informed that the translations are being written to their file. This was initially supposed to be a future feature but has been implemented as of 16/12/21 for the sake of ensuring that LO7 of the pass criteria has been well met. LO7 of the pass criteria states 'Write code that queries and manipulates data to meet the identified vital project needs'.
                 
                 ![Screenshot of file after modification](documentation/screenshots/evidence/design/file-after-writing-translations.png)
 
             * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
-            
-                TODO: Add GIF once last bug is fixed
+
+                ![GIF of sentence auto-generation game mode](documentation/screenshots/evidence/design/auto-generation.gif)
+
+                As you can see, the generated sentences are a little... peculiar but they make enough sense. This feature was included in order to add some complexity to an otherwise fairly simple game.
+
+                The better approach would've been to use my knowledge of Natural Language Programming (NLP) to create and train model for a higher level of accuracy instead of used a fixed dictionary. I chose to use a fixed dictionary because I thought it would take longer to reacquaint myself with NLP and go well beyond the scope of this project.
 
         * Available translation languages
 
