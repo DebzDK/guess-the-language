@@ -34,6 +34,7 @@ from dotenv import load_dotenv
 from prompt_toolkit import prompt as toolkit_prompt
 from prompt_toolkit.application import get_app
 from prompt_toolkit.application import run_in_terminal
+from prompt_toolkit.filters import Condition
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
 from prompt_toolkit.completion import WordCompleter
@@ -41,8 +42,9 @@ from classes.translation import Translation
 from classes.enums.difficulty import Difficulty
 from classes.enums.inputmode import InputMode
 from classes.enums.language import Language
-from classes.sentencegenerator import SentenceGenerator
 from classes.helpers.translationhelper import TranslationHelper
+from classes.services.hintservice import HintService
+from classes.sentencegenerator import SentenceGenerator
 
 # region Constants
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 24]
@@ -64,6 +66,7 @@ UNICODES = {
     "reset": "\u001b[37;0m"
 }
 GAMEPLAY_BINDINGS = KeyBindings()
+END_GAME_BINDINGS = KeyBindings()
 MENU_NAVIGATION_BINDINGS = KeyBindings()
 TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
@@ -95,12 +98,14 @@ TITLE = """
 input_mode = InputMode.USER.value
 difficulty_level = Difficulty.EASY.value
 enable_hints = True
+hints_used = 0
 
 viewing_main_menu = True
 viewing_game_options_menu = False
 selected_main_menu_option_index = 0
 selected_game_option_index = 0
 is_playing_game = False
+answer_to_current_question = None
 # endregion
 
 
@@ -124,6 +129,23 @@ def display_main_menu():
             text += f"> {option}"
         text += "\n"
     print(text)
+
+
+def display_hint():
+    """Displays a hint to the user and increments number of hints used.
+
+    Prints out a hint for the answer to the current question and increments
+    the counter variable for number of hints used.
+    """
+    global answer_to_current_question, hints_used
+    hint = HintService.get_next_hint(answer_to_current_question, hints_used)
+    print(f"Hint: {hint}")
+    increment_hints_used_count()
+
+
+def display_time_up_message():
+    """Displays time up message."""
+    print("\nTime's up!")
 
 
 def display_error_message(error: Translation):
@@ -302,7 +324,10 @@ def get_game_option_description(index: int) -> str:
             " (" + Difficulty(difficulty_level).name + ")")
 
     if index == 2:
-        return str(enable_hints)
+        hint_message = str(enable_hints)
+        if difficulty_level == 3 and enable_hints:
+            hint_message += " (Ignored - No hints for BEAST level)"
+        return hint_message
     return ""
 
 
@@ -369,8 +394,12 @@ def end_prompt():
     Exits prompt after 5 seconds.
     """
     if difficulty_level == 3:
-        print("\nTime's up!")
+        display_time_up_message()
+
+    try:
         get_app().exit()
+    except Exception:  # Not best practice but this is what the library throws
+        pass
 
 
 def get_processed_user_input(
@@ -416,6 +445,7 @@ def get_processed_user_input(
         user_input = toolkit_prompt(
             prompt,
             completer=completer,
+            key_bindings=GAMEPLAY_BINDINGS,
             bottom_toolbar=get_toolbar_text) or ""
 
         if timer:
@@ -445,6 +475,13 @@ def get_user_answer() -> str:
     guess = get_processed_user_input(
         "", is_valid_answer, LANGUAGE_COMPLETER, difficulty_level == 3)
     return guess
+
+
+def increment_hints_used_count():
+    """Increments the number of hints used."""
+    global hints_used
+
+    hints_used += 1
 
 
 def end_question(guess: str, answer: Language):
@@ -618,7 +655,7 @@ def get_sentence_for_translation(
 
 def run_game():
     """Runs the game loop."""
-    global input_mode, is_playing_game
+    global input_mode, is_playing_game, answer_to_current_question, hints_used
 
     num_of_questions_asked = 0
     num_of_correct_answers = 0
@@ -632,6 +669,7 @@ def run_game():
 
     while (check_if_game_can_continue(
             num_of_questions_asked, file_sentences)):
+        hints_used = 0
         print(
             f"\n{UNICODES['underline']}"
             f"Question {num_of_questions_asked + 1}{UNICODES['reset']}\n"
@@ -646,6 +684,8 @@ def run_game():
         translation = TranslationHelper.translate_sentence(
                 sentence_to_translate, difficulty_level,
                 num_of_questions_asked == 0)
+
+        answer_to_current_question = translation.lang.value
 
         if input_mode == 2:
             translations[sentence_to_translate] = translation
@@ -665,6 +705,7 @@ def run_game():
             num_of_correct_answers += 1
 
         end_question(guess, translation.lang)
+        answer_to_current_question = None
 
     display_end_of_game_message(num_of_correct_answers, num_of_questions_asked)
 
@@ -679,7 +720,7 @@ def end_game():
     global is_playing_game
     toolkit_prompt(
         "Press any key to return to the main menu",
-        key_bindings=GAMEPLAY_BINDINGS
+        key_bindings=END_GAME_BINDINGS
     )
     is_playing_game = False
 
@@ -691,10 +732,26 @@ def quit_game():
 # endregion
 
 
+# region Key press conditions
+@Condition
+def can_get_hint() -> bool:
+    """Checks if hints are enabled.
+
+    Returns
+    -------
+    bool
+        Returns True if hints are enabled, otherwise False.
+    """
+    return (
+        difficulty_level != 3 and
+        is_playing_game and
+        enable_hints and answer_to_current_question is not None)
+
+
 # region Key press listeners
 @MENU_NAVIGATION_BINDINGS.add(Keys.Any)  # All keys except enter and arrows
-@GAMEPLAY_BINDINGS.add(Keys.Any)  # End game listener
-@GAMEPLAY_BINDINGS.add("enter")   # 'Enter' key press listener
+@END_GAME_BINDINGS.add(Keys.Any)  # End game listener
+@END_GAME_BINDINGS.add("enter")   # 'Enter' key press listener
 def _(event: KeyPressEvent):
     """Clears terminal on any key press and display main menu.
 
@@ -774,6 +831,20 @@ def _(event: KeyPressEvent):
     """
     event.app.exit()
     run_in_terminal(quit_game)
+
+
+# 'CTRL+H' key press listener for hints
+@GAMEPLAY_BINDINGS.add("c-h", filter=can_get_hint)
+def _(event: KeyPressEvent):
+    """Gets the next hint for language.
+
+    Parameters
+    ----------
+    event
+        The key press event.
+    """
+    event.app.exit()
+    run_in_terminal(display_hint)
 # endregion
 
 
