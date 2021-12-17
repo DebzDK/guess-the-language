@@ -93,7 +93,7 @@ Each feature listed below was chosen to provide users with a clear, logical path
 * Game options menu
     * Allows users to set options that effect gameplay
 
-        ![Game options menu GIF](documentation/screenshots/evidence/design/game-options.gif)
+        ![Game options menu GIF](documentation/screenshots/evidence/design/game-options-updated.gif)
 
         * Option 1 - 'Input mode' - controls what mode of input users will use to input sentences into the game.
         * Option 2 - 'Difficulty' - controls the amount of languages (and therefore questions) user will encounter per game.
