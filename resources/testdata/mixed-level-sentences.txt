@@ -4,15 +4,20 @@ You take the red pill - you stay in wonderland, and I show you how deep the rabb
 I think it's a half-gram heavy on the back end.
 Sister, they don't know what to do with just one of me.
 JARVIS, make a note. Remind me not to wake up in the morning ever again.
-
 You get hurt, hurt ’em back. You get killed… walk it off.
+
 // TOO LONG FOR EASY AND NORMAL MODE (> 30 chars)
 // VALID FOR HARD MODE
-What are you doing this weekend?
+Do you want to go on holiday together?
 I'm going to a birthday party tomorrow.
 I have plans with my family this week.
-Nevermind. We can find some time later.
+Nevermind. We will find some time later.
 Let's go have dinner at a restaurant.
+I couldn't be of any assistance.
+Come and dance the night away with me.
+Chocolate-covered strawberries. Tasty.
+Killing me softly with this song.
+You only live once, so try to live well.
 
 // VALID FOR ALL MODES
 Hello.
