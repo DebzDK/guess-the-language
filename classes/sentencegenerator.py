@@ -41,7 +41,11 @@ class SentenceGenerator():
         sentence_structure = cls._get_sentence_structure()
         words = []
         excluded_parts = {}
+        found_first_verb = False
         for count, part_of_speech in enumerate(sentence_structure):
+            if part_of_speech.is_a_verb():
+                found_first_verb = True
+
             has_suitable_word = False
             while not has_suitable_word:
                 # (only set to 'associative' when a preposition has been
@@ -63,6 +67,16 @@ class SentenceGenerator():
                 # If not looking at the first part of speech in
                 # sentence_structure,
                 if count > 0:
+                    if (not found_first_verb and
+                            len(sentence_structure) > 2 and
+                            specificity == "food"):
+                        value, specificity = (
+                            cls._select_word_for_part_of_speech(
+                                part_of_speech, character_limit,
+                                "people",
+                                excluded_parts)
+                        )
+
                     preceding_word = words[len(words) - 1]
                     # conjugate the word if the part of speech is a verb.
                     if part_of_speech.is_a_verb():
@@ -108,8 +122,6 @@ class SentenceGenerator():
                             count + 1, PartOfSpeech.PREPOSITION)
                 else:
                     excluded_parts.update(blacklist)
-                    if part_of_speech.is_an_adverb():
-                        sentence_structure[count] = PartOfSpeech.NOUN
 
         return Sentence(words, Language.ENGLISH)
 
@@ -132,6 +144,10 @@ class SentenceGenerator():
         list_of_choices = list(PartOfSpeech)
         temp_list_of_choices = list_of_choices.copy()
 
+        # For the sake of time, removing part of speech that causes
+        # game to stall when attempting to generate a sentence.
+        temp_list_of_choices.remove(PartOfSpeech.ADVERB)
+
         while not found_predicate:
             preceding_part_of_speech = sentence_structure[-1]
 
@@ -147,6 +163,9 @@ class SentenceGenerator():
 
                     sentence_structure.append(next_part)
                     temp_list_of_choices = list_of_choices.copy()
+                    # For the sake of time, removing part of speech that causes
+                    # game to stall when attempting to generate a sentence.
+                    temp_list_of_choices.remove(PartOfSpeech.ADVERB)
 
                     if not found_predicate:
                         found_predicate = cls._has_predicate(
@@ -360,8 +379,8 @@ class SentenceGenerator():
                 if ((preceding_word.is_an_adjective() or
                         preceding_word.is_a_noun()) and
                         word_to_add.is_a_noun() and
-                        preceding_word.specificity !=
-                        word_to_add.specificity):
+                        preceding_word.specificity == "food" and
+                        word_to_add.specificity == "people"):
                     add_to_blacklist = True
 
                 if (word_to_add.is_a_verb() and preceding_word.is_a_noun() and

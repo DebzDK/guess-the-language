@@ -316,7 +316,8 @@ class GameDictionary():
         random_word = None
 
         if part_of_speech == PartOfSpeech.ADVERB:
-            potential_adjectives = cls.WORDS["adjectives"].get("people")
+            potential_adjectives = cls.WORDS["adjectives"].get(
+                desired_type or "people")
             adjective = random.choice(potential_adjectives)
             while not random_word:
                 random_word = cls._get_adjective_in_adverb_form(adjective)
@@ -385,7 +386,7 @@ class GameDictionary():
         if letter_before_last != "l" and last_letter in ("edlsg"):
             adverb = adjective + "ly"
         elif last_letter == "y":
-            adverb = adjective[0:-2] + "ily"
+            adverb = adjective[0:-1] + "ily"
         elif last_letter == "c":
             adverb = adjective + "ally"
 
