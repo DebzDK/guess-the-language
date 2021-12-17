@@ -1,4 +1,5 @@
 """Class for getting game hints."""
+from typing import Dict, List
 
 
 class HintService():
@@ -19,7 +20,7 @@ class HintService():
         Rests counter to 0.
     """
 
-    HINTS_FOR_LANGS = {
+    HINTS_FOR_LANGS: Dict[str, List[str]] = {
         "BG": [
             (
                 "The originating country of this language is in the Balkans, "

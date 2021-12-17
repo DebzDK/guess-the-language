@@ -58,6 +58,8 @@ GAME_OPTIONS = [
     "Enable hints",
     "Return to main menu"
 ]
+# ..Found thanks to StackOverflow:
+#   https://stackoverflow.com/questions/287871/how-to-print-colored-text-to-the-terminal
 UNICODES = {
     "green": "\u001b[32;1m",
     "red": "\u001b[31;1m",
@@ -211,7 +213,10 @@ def get_toolbar_text() -> str:
     if viewing_game_options_menu:
         return f"{menu_default_text}\nPress ENTER to toggle a game option"
     if is_playing_game:
-        return "Press CTRL+C at any time to quit the game"
+        return (
+            "Press CTRL+H for hints (if enabled)\n"
+            "Press CTRL+C at any time to quit the game"
+        )
     return menu_default_text
 
 
@@ -637,7 +642,7 @@ def get_sentence_for_translation(
             (
                 "Enter a sentence"
                 f" (no longer than {char_limit} characters"
-                " long):\n"
+                " long and has more than one word):\n"
             ),
             is_viable_for_translation
         )
@@ -733,6 +738,7 @@ def quit_game():
 
 
 # region Key press conditions
+# Decorator from prompt-toolkit library
 @Condition
 def can_get_hint() -> bool:
     """Checks if hints are enabled.
@@ -746,9 +752,12 @@ def can_get_hint() -> bool:
         difficulty_level != 3 and
         is_playing_game and
         enable_hints and answer_to_current_question is not None)
+# endregion
 
 
 # region Key press listeners
+# ..As described in prompt-toolkit documentation:
+#   https://python-prompt-toolkit.readthedocs.io/en/master/pages/advanced_topics/key_bindings.html
 @MENU_NAVIGATION_BINDINGS.add(Keys.Any)  # All keys except enter and arrows
 @END_GAME_BINDINGS.add(Keys.Any)  # End game listener
 @END_GAME_BINDINGS.add("enter")   # 'Enter' key press listener
@@ -925,6 +934,7 @@ def is_viable_for_translation(user_input: str) -> bool:
     user_input = user_input.strip()
     str_len = len(user_input)
     if (str_len == 0 or
+            len(user_input.split()) == 1 or
             re.search("^[^A-Za-z0-9]+", user_input) or
             str_len > CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]):
         return False

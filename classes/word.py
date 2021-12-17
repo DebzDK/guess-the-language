@@ -26,6 +26,8 @@ class Word():
         Returns True if the word is an amount.
     is_an_article_or_amount() -> bool:
         Returns True if the word is an article or amount.
+    is_an_indefinte_article() -> bool:
+        Returns True if the word is an indefinite article.
     is_a_being_verb() -> bool:
         Returns True if the word is a being verb (i.e. 'is').
     is_a_name() -> bool:
@@ -138,6 +140,16 @@ class Word():
         -------
         bool
             Returns True if the given word is an article or amount.
+        """
+        return self._part_of_speech.is_an_article_or_amount()
+
+    def is_an_indefinte_article(self) -> bool:
+        """Checks if the given word is an indefinite article.
+
+        Returns
+        -------
+        bool
+            Returns True if the given word is an indefinite article.
         """
         return self._part_of_speech.is_an_article_or_amount()
 
