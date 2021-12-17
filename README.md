@@ -149,15 +149,27 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
             * *File input* - the same is true here but with the extra step of using auto-generated values in addition to those extracted from the file if there aren't enough viable sentences for translation. If there are more lines of text than required in the file, the rest are ignored.
                 
-                ![GIF of user-input game mode](documentation/screenshots/evidence/design/file-input.gif)
+                ![GIF of user input game mode](documentation/screenshots/evidence/design/file-input.gif)
 
                 Once this type of game is complete the user will be informed that the translations are being written to their file. This was initially supposed to be a future feature but has been implemented as of 16/12/21 for the sake of ensuring that LO7 of the pass criteria has been well met. LO7 of the pass criteria states 'Write code that queries and manipulates data to meet the identified vital project needs'.
                 
                 ![Screenshot of file after modification](documentation/screenshots/evidence/design/file-after-writing-translations.png)
 
             * *Auto-generated input* - sentences are validated as they're being generated until the right combination of words fits into the character limit.
+
+                ![GIF of sentence auto-generation game mode](documentation/screenshots/evidence/design/auto-generation.gif)
+
+                As you can see, the generated sentences are a little... peculiar but they make enough sense. This feature was included in order to add some complexity to an otherwise fairly simple game.
+
+                The better approach would've been to use my knowledge of Natural Language Programming (NLP) to create and train model for a higher level of accuracy instead of used a fixed dictionary. I chose to use a fixed dictionary because I thought it would take longer to reacquaint myself with NLP and go well beyond the scope of this project.
+
+                Even with this approach, more types of words have been defined in gamedictionary.py than have actually been used due to the complexity of trying to capture the logic of English grammar rules. I have left them in incase I decide to return to this project to finish the madness and to show the assessor how I was thinking.
+
+            One other feature, that was completely forgotten, and implemented on 17/12/21 was the ability to actually use hints while playing the game:
             
-                TODO: Add GIF once last bug is fixed
+            ![GIF of using hints while playing](documentation/screenshots/evidence/design/hints.gif)
+
+            This is disabled automatically when playing the game at BEAST level difficulty.
 
         * Available translation languages
 
@@ -345,6 +357,12 @@ Since my work is in a publicly-accesible repository, it can be copied in 3 diffe
 ### Content
 
 The translations used in this application are thanks to [DeepL Translator](https://www.deepl.com/en/translator).
+
+All hint information has been derived from Google searches for each originating country of a given language of the form:
+
+    1. For first hint: "[country]", where country is the name of the originating country of a given language.
+    1. For second hint: either same as first hint to look at the country's flag or "what's [country] famous for"
+    1. For third hint: "capital of [country]"
 
 All other textual content in this application is written in my own words and of my own opinion.
 
