@@ -43,11 +43,18 @@ from classes.enums.language import Language
 from classes.sentencegenerator import SentenceGenerator
 from classes.helpers.translationhelper import TranslationHelper
 
+# region Constants
 NUM_OF_QS_PER_DIFFICULTY_LEVEL = [5, 5, 10, 24]
 CHAR_LIMIT_PER_DIFFICULTY_LEVEL = [30, 30, 40, 20]
 ALL_LANGUAGES = [lang.get_user_friendly_name() for lang in Language]
 LANGUAGE_COMPLETER = WordCompleter(ALL_LANGUAGES, ignore_case=True)
-QUIT_COMMANDS = ["q", "quit"]
+MAIN_MENU_OPTIONS = ["PLAY", "GAME OPTIONS", "QUIT"]
+GAME_OPTIONS = [
+    "Input mode",
+    "Difficulty",
+    "Enable hints",
+    "Return to main menu"
+]
 UNICODES = {
     "green": "\u001b[32;1m",
     "red": "\u001b[31;1m",
@@ -82,6 +89,8 @@ TITLE = """
 ////////////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////////////
 """
+# endregion
+# region Globals
 input_mode = InputMode.USER.value
 difficulty_level = Difficulty.EASY.value
 enable_hints = True
@@ -89,15 +98,9 @@ enable_hints = True
 viewing_main_menu = True
 viewing_game_options_menu = False
 selected_main_menu_option_index = 0
-main_menu_options = ["PLAY", "GAME OPTIONS", "QUIT"]
 selected_game_option_index = 0
-game_options = [
-    "Input mode",
-    "Difficulty",
-    "Enable hints",
-    "Return to main menu"
-]
 is_playing_game = False
+# endregion
 
 
 # region Display functions
@@ -113,7 +116,7 @@ def display_main_menu():
     viewing_main_menu = True
     viewing_game_options_menu = False
     text = ""
-    for i, option in enumerate(main_menu_options):
+    for i, option in enumerate(MAIN_MENU_OPTIONS):
         if i == selected_main_menu_option_index:
             text += f"{UNICODES['white-bg']}> {option} <{UNICODES['reset']}"
         else:
@@ -144,9 +147,9 @@ def get_toolbar_text() -> str:
     return menu_default_text
 
 
-# Code from StackOverflow L150 - https://stackoverflow.com/a/684344
 def clear_terminal():
     """Clears the terminal."""
+    # Line of code from StackOverflow - https://stackoverflow.com/a/684344
     os.system('cls' if os.name == 'nt' else 'clear')
     display_title()
 
@@ -159,7 +162,7 @@ def select_next_main_menu_option():
     """
     global selected_main_menu_option_index
 
-    if selected_main_menu_option_index == len(main_menu_options) - 1:
+    if selected_main_menu_option_index == len(MAIN_MENU_OPTIONS) - 1:
         clear_terminal()
         display_main_menu()
         return
@@ -218,14 +221,14 @@ def display_game_options_menu():
     viewing_game_options_menu = True
 
     text = ""
-    for i, option in enumerate(game_options):
+    for i, option in enumerate(GAME_OPTIONS):
         if i == selected_game_option_index:
             text += f"{UNICODES['white-bg']}> {option}"
-            text += ": " if i != len(game_options) - 1 else ""
+            text += ": " if i != len(GAME_OPTIONS) - 1 else ""
             text += f"{get_game_option_description(i)} <{UNICODES['reset']}"
         else:
             text += f"> {option}"
-            text += ": " if i != len(game_options) - 1 else ""
+            text += ": " if i != len(GAME_OPTIONS) - 1 else ""
             text += get_game_option_description(i)
         text += "\n"
     print(text)
@@ -265,7 +268,7 @@ def select_next_game_option():
     """
     global selected_game_option_index
 
-    if selected_game_option_index == len(game_options) - 1:
+    if selected_game_option_index == len(GAME_OPTIONS) - 1:
         return
 
     selected_game_option_index += 1
