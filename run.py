@@ -37,6 +37,7 @@ from prompt_toolkit.application import run_in_terminal
 from prompt_toolkit.keys import Keys
 from prompt_toolkit.key_binding import KeyBindings, KeyPressEvent
 from prompt_toolkit.completion import WordCompleter
+from classes.translation import Translation
 from classes.enums.difficulty import Difficulty
 from classes.enums.inputmode import InputMode
 from classes.enums.language import Language
@@ -123,6 +124,51 @@ def display_main_menu():
             text += f"> {option}"
         text += "\n"
     print(text)
+
+
+def display_error_message(error: Translation):
+    """Displays an informative error message.
+
+    Parameters
+    ----------
+    error
+        The error in the form of a Translation object.
+    """
+    print(
+        f"{error}\n"
+        "You will now be returned to the main menu..."
+        "If it's a connection or HTTP issue, please try again."
+        "\nOtherwise, please contact the developer to report a "
+        "potential bug.\n"
+    )
+
+
+def display_end_of_game_message(
+        num_of_correct_answers: int, num_of_questions_asked: int):
+    """Displays a message to signal the end of the game.
+
+    Prints out how many questions the user answered correctly along with
+    an encouraging statement.
+
+    Parameters
+    ----------
+    num_of_correct_answers
+        The number of questions the user answered correctly.
+    num_of_questions_asked
+        The number of questions asked during the game.
+    """
+    extra_text = ""
+    if num_of_correct_answers < (num_of_questions_asked / 2):
+        extra_text = "..\nBetter luck next time"
+    elif num_of_correct_answers == num_of_questions_asked:
+        extra_text = "\nPerfect score"
+    else:
+        extra_text = "\nWell done"
+
+    print(
+        f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
+        f" languages correctly.{extra_text}!\n"
+    )
 
 
 def get_toolbar_text() -> str:
@@ -401,17 +447,6 @@ def get_user_answer() -> str:
     return guess
 
 
-def is_guess_correct(guess: str, answer: Language) -> bool:
-    """Checks if the guess is correct.
-
-    Returns
-    -------
-    bool
-        Returns True if the guess matches the answer, otherwise False.
-    """
-    return guess.lower() == answer.name.lower()
-
-
 def end_question(guess: str, answer: Language):
     """Ends question by printing a statemtn to inform the user as to whether
     they were right or not.
@@ -423,7 +458,7 @@ def end_question(guess: str, answer: Language):
     answer
         The correct answer.
     """
-    if is_guess_correct(guess, answer):
+    if is_correct_guess(guess, answer):
         result_indicator = UNICODES['green']
     else:
         result_indicator = UNICODES['red']
@@ -462,6 +497,11 @@ def read_from_file() -> Tuple[str, Tuple[str, bool]]:
     question_limit = NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
     char_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
 
+    print((
+        "\nSince you've chosen to play with file input,"
+        " please make sure that each sentence\n in your file"
+        " is on a new line.\n"))
+
     while len(sentences) == 0:
         path_or_filename = toolkit_prompt(
             "\nEnter the name or path of the file you wish to read from: ")
@@ -493,7 +533,7 @@ def read_from_file() -> Tuple[str, Tuple[str, bool]]:
     return (path_or_filename, sentences)
 
 
-def write_to_file(
+def write_translations_to_file(
         path_or_filename: str, original_values: Tuple[str, bool],
         content: Dict[str, str]):
     """Writes translations to a file.
@@ -534,52 +574,71 @@ def write_to_file(
     print("All done!\n")
 
 
+def get_sentence_for_translation(
+        file_sentences: Tuple[str, bool],
+        num_of_questions_asked: int) -> str:
+    """Gets sentence for translation.
+
+    Parameters
+    ----------
+    file_sentences
+        The sentences extracted from file (only for file input game mode).
+    num_of_questions_asked
+        The number of questions asked in the game so far.
+
+    Returns
+    -------
+    str
+        The sentence for translation.
+    """
+    global input_mode, difficulty_level
+
+    sentence_to_translate = ""
+    if input_mode == 1:
+        char_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
+        sentence_to_translate = get_processed_user_input(
+            (
+                "Enter a sentence"
+                f" (no longer than {char_limit} characters"
+                " long):\n"
+            ),
+            is_viable_for_translation
+        )
+    else:
+        is_viable = None
+        if input_mode == 2:
+            sentence_to_translate, is_viable = (
+                file_sentences[num_of_questions_asked]
+            )
+        if (not is_viable and is_viable is not None) or input_mode == 3:
+            sentence_to_translate = SentenceGenerator.generate_sentence(
+                CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level])
+    return sentence_to_translate
+
+
 def run_game():
     """Runs the game loop."""
     global input_mode, is_playing_game
+
     num_of_questions_asked = 0
     num_of_correct_answers = 0
-    character_limit = CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level]
     file_name = ""
-    sentences_from_file = None
+    file_sentences = None
     sentence_to_translate = None
     translations = {}
 
     if input_mode == 2:
-        print((
-            "\nSince you've chosen to play with file input,"
-            " please make sure that each sentence in your file"
-            " is on a new line.\n"))
-        file_name, sentences_from_file = read_from_file()
+        file_name, file_sentences = read_from_file()
 
-    while (not is_game_over(num_of_questions_asked) and
-            ((input_mode != 2) or
-                (input_mode == 2 and
-                    num_of_questions_asked < len(sentences_from_file)))):
+    while (check_if_game_can_continue(
+            num_of_questions_asked, file_sentences)):
         print(
             f"\n{UNICODES['underline']}"
             f"Question {num_of_questions_asked + 1}{UNICODES['reset']}\n"
         )
 
-        if input_mode == 1:
-            sentence_to_translate = get_processed_user_input(
-                (
-                    "Enter a sentence"
-                    f" (no longer than {character_limit} characters"
-                    " long):\n"
-                ),
-                is_viable_for_translation
-            )
-        elif input_mode == 2:
-            sentence_to_translate, is_viable = (
-                sentences_from_file[num_of_questions_asked]
-            )
-            if not is_viable:
-                sentence_to_translate = SentenceGenerator.generate_sentence(
-                    CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level])
-        elif input_mode == 3:
-            sentence_to_translate = SentenceGenerator.generate_sentence(
-                CHAR_LIMIT_PER_DIFFICULTY_LEVEL[difficulty_level])
+        sentence_to_translate = get_sentence_for_translation(
+            file_sentences, num_of_questions_asked)
 
         if input_mode != 1:
             print(sentence_to_translate)
@@ -592,13 +651,8 @@ def run_game():
             translations[sentence_to_translate] = translation
 
         if "Error: " in translation.text:
-            print(f"{translation}\n")
-            print("You will now be returned to the main menu...")
-            print(
-                "If it's a connection or HTTP issue, please try again."
-                "\nOtherwise, please contact the developer to report a "
-                "potential bug.\n"
-            )
+            display_error_message(translation)
+            end_game()
             return
 
         num_of_questions_asked += 1
@@ -607,31 +661,26 @@ def run_game():
         ask_question()
         guess = get_user_answer()
 
-        if is_guess_correct(guess, translation.lang):
+        if is_correct_guess(guess, translation.lang):
             num_of_correct_answers += 1
 
         end_question(guess, translation.lang)
 
-    if num_of_correct_answers < (num_of_questions_asked / 2):
-        extra_text = "..\nBetter luck next time"
-    elif num_of_correct_answers == num_of_questions_asked:
-        extra_text = "\nPerfect score"
-    else:
-        extra_text = "\nWell done"
-
-    print(
-        f"\nYou guessed {num_of_correct_answers}/{num_of_questions_asked}"
-        f" languages correctly.{extra_text}!\n"
-    )
+    display_end_of_game_message(num_of_correct_answers, num_of_questions_asked)
 
     if input_mode == 2:
-        write_to_file(file_name, sentences_from_file, translations)
+        write_translations_to_file(file_name, file_sentences, translations)
 
+    end_game()
+
+
+def end_game():
+    """Ends the game."""
+    global is_playing_game
     toolkit_prompt(
         "Press any key to return to the main menu",
         key_bindings=GAMEPLAY_BINDINGS
     )
-
     is_playing_game = False
 
 
@@ -729,6 +778,60 @@ def _(event: KeyPressEvent):
 
 
 # region Validation functions
+def check_if_game_can_continue(
+        num_of_questions_asked: int,
+        file_sentences: Tuple[str, bool]) -> bool:
+    """Checks if the game can continue.
+
+    Returns
+    -------
+    bool
+        Returns True is the game can continue, otherwise False.
+    """
+    global input_mode
+    return (not is_game_over(num_of_questions_asked) and
+            ((input_mode != 2) or
+                (input_mode == 2 and
+                    num_of_questions_asked < len(file_sentences))))
+
+
+def is_correct_guess(guess: str, answer: Language) -> bool:
+    """Checks if the guess is correct.
+
+    Returns
+    -------
+    bool
+        Returns True if the guess matches the answer, otherwise False.
+    """
+    return guess.lower() == answer.name.lower()
+
+
+def is_game_over(question_count: int) -> bool:
+    """Checks if the game is over.
+
+    Determines whether or not the game is over based on the game's
+    difficulty level (easy, normal, hard or beast):
+        - Easy and normal difficulty level = 5 questions
+        - Hard difficulty level = 10 questions
+        - BEAST difficulty level = 24 questions (all available languages in
+            chosen API minus English)
+
+    A detailed explanation can be found at:
+        https://github.com/DebzDK/guess-the-language#features
+
+    Parameters
+    ----------
+    question_count
+        The number of questions that have been asked so far in the game
+
+    Returns
+    ----------
+    bool
+        True if all questions have been asked
+    """
+    return question_count == NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
+
+
 def is_viable_for_translation(user_input: str) -> bool:
     """Checks if user input are viable for translation.
 
@@ -793,32 +896,6 @@ def is_valid_answer(user_input: str) -> bool:
     """
     user_input = user_input.strip()
     return user_input and len(user_input) > 1
-
-
-def is_game_over(question_count: int) -> bool:
-    """Checks if the game is over.
-
-    Determines whether or not the game is over based on the game's
-    difficulty level (easy, normal, hard or beast):
-        - Easy and normal difficulty level = 5 questions
-        - Hard difficulty level = 10 questions
-        - BEAST difficulty level = 24 questions (all available languages in
-            chosen API minus English)
-
-    A detailed explanation can be found at:
-        https://github.com/DebzDK/guess-the-language#features
-
-    Parameters
-    ----------
-    question_count
-        The number of questions that have been asked so far in the game
-
-    Returns
-    ----------
-    bool
-        True if all questions have been asked
-    """
-    return question_count == NUM_OF_QS_PER_DIFFICULTY_LEVEL[difficulty_level]
 # endregion
 
 
