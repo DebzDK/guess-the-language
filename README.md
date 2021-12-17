@@ -163,6 +163,8 @@ Each feature listed below was chosen to provide users with a clear, logical path
 
                 The better approach would've been to use my knowledge of Natural Language Programming (NLP) to create and train model for a higher level of accuracy instead of used a fixed dictionary. I chose to use a fixed dictionary because I thought it would take longer to reacquaint myself with NLP and go well beyond the scope of this project.
 
+                Even with this approach, more types of words have been defined in gamedictionary.py than have actually been used due to the complexity of trying to capture the logic of English grammar rules. I have left them in incase I decide to return to this project to finish the madness and to show the assessor how I was thinking.
+
         * Available translation languages
 
             As mentioned before, Duolingo was referred to in regards to what could be used to classify 'popular' languages and ultimately was used as a guideline to categorise what languages should play for which difficulty levels:
