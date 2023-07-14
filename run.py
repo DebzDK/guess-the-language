@@ -44,6 +44,7 @@ from classes.enums.inputmode import InputMode
 from classes.enums.language import Language
 from classes.helpers.translationhelper import TranslationHelper
 from classes.services.hintservice import HintService
+from classes.services.texttospeechservice import TextToSpeechService
 from classes.sentencegenerator import SentenceGenerator
 
 # region Constants
@@ -108,6 +109,7 @@ selected_main_menu_option_index = 0
 selected_game_option_index = 0
 is_playing_game = False
 answer_to_current_question = None
+current_translation = None
 # endregion
 
 
@@ -133,15 +135,19 @@ def display_main_menu():
     print(text)
 
 
-def display_hint():
+def display_or_play_hint():
     """Displays a hint to the user and increments number of hints used.
 
     Prints out a hint for the answer to the current question and increments
     the counter variable for number of hints used.
     """
-    global answer_to_current_question, hints_used
+    global answer_to_current_question, hints_used, current_translation
     hint = HintService.get_next_hint(answer_to_current_question, hints_used)
     print(f"Hint: {hint}")
+    if "Listen" in hint:
+        TextToSpeechService.play_audio_for_text(
+            current_translation.text,
+            current_translation.lang.get_language_abbreviation().lower())
     increment_hints_used_count()
 
 
@@ -500,7 +506,7 @@ def end_question(guess: str, answer: Language):
     answer
         The correct answer.
     """
-    if is_correct_guess(guess, answer):
+    if is_correct_guess(guess, answer.name):
         result_indicator = UNICODES['green']
     else:
         result_indicator = UNICODES['red']
@@ -661,6 +667,7 @@ def get_sentence_for_translation(
 def run_game():
     """Runs the game loop."""
     global input_mode, is_playing_game, answer_to_current_question, hints_used
+    global current_translation
 
     num_of_questions_asked = 0
     num_of_correct_answers = 0
@@ -686,30 +693,30 @@ def run_game():
         if input_mode != 1:
             print(sentence_to_translate)
 
-        translation = TranslationHelper.translate_sentence(
+        current_translation = TranslationHelper.translate_sentence(
                 sentence_to_translate, difficulty_level,
                 num_of_questions_asked == 0)
 
-        answer_to_current_question = translation.lang.value
+        answer_to_current_question = current_translation.lang.value
 
         if input_mode == 2:
-            translations[sentence_to_translate] = translation
+            translations[sentence_to_translate] = current_translation
 
-        if "Error: " in translation.text:
-            display_error_message(translation)
+        if "Error: " in current_translation.text:
+            display_error_message(current_translation)
             end_game()
             return
 
         num_of_questions_asked += 1
 
-        print(f"\nTranslation: {translation}\n")
+        print(f"\nTranslation: {current_translation}\n")
         ask_question()
         guess = get_user_answer()
 
-        if is_correct_guess(guess, translation.lang):
+        if is_correct_guess(guess, current_translation.lang.name):
             num_of_correct_answers += 1
 
-        end_question(guess, translation.lang)
+        end_question(guess, current_translation.lang)
         answer_to_current_question = None
 
     display_end_of_game_message(num_of_correct_answers, num_of_questions_asked)
@@ -853,7 +860,7 @@ def _(event: KeyPressEvent):
         The key press event.
     """
     event.app.exit()
-    run_in_terminal(display_hint)
+    run_in_terminal(display_or_play_hint)
 # endregion
 
 
@@ -875,7 +882,7 @@ def check_if_game_can_continue(
                     num_of_questions_asked < len(file_sentences))))
 
 
-def is_correct_guess(guess: str, answer: Language) -> bool:
+def is_correct_guess(guess: str, answer: str) -> bool:
     """Checks if the guess is correct.
 
     Returns
@@ -883,7 +890,7 @@ def is_correct_guess(guess: str, answer: Language) -> bool:
     bool
         Returns True if the guess matches the answer, otherwise False.
     """
-    return guess.lower() == answer.name.lower()
+    return guess.lower() == answer.lower()
 
 
 def is_game_over(question_count: int) -> bool:

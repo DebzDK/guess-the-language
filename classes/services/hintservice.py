@@ -248,9 +248,12 @@ class HintService():
         str
             The next hint.
         """
+        hints = cls.HINTS_FOR_LANGS[lang_code]
         if (lang_code in cls.HINTS_FOR_LANGS and
-                index < len(cls.HINTS_FOR_LANGS[lang_code])):
-            hint = cls.HINTS_FOR_LANGS[lang_code][index]
+                index < len(hints)):
+            hint = hints[index]
+        elif index == len(hints):
+            hint = "Listen carefully..."
         else:
             hint = "No more hints."
         return hint
